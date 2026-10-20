@@ -1,0 +1,15 @@
+{% load i18n wcd %}
+<section class="flex flex-col items-center text-center gap-4 pt-6 animate-fade-up">
+  <div class="relative">{% include "partials/logo_mark.html" with size=72 %}<span class="absolute -right-2 -bottom-2 grid place-items-center w-8 h-8 rounded-full bg-[#2AABEE] text-white">{% social_icon "telegram" "w-4 h-4" %}</span></div>
+  <h2 class="text-2xl font-semibold">{% trans "Xush kelibsiz!" %}</h2>
+  <p class="text-ink-2 max-w-xs">{% trans "Kurslarni ko'rish va progressni saqlash uchun bir marta telefon raqamingizni ulashing." %}</p>
+  <ul class="glass glass--sm w-full text-left text-sm divide-y divide-ink/10">
+    <li class="flex items-center gap-3 p-3.5"><i data-lucide="shield-check" class="w-5 h-5 text-ok"></i>{% trans "Raqam Telegram tomonidan tasdiqlanadi" %}</li>
+    <li class="flex items-center gap-3 p-3.5"><i data-lucide="key-round" class="w-5 h-5 text-accent"></i>{% trans "Parol kerak emas" %}</li>
+    <li class="flex items-center gap-3 p-3.5"><i data-lucide="graduation-cap" class="w-5 h-5 text-violet"></i>{% trans "Sayt va ilovada bitta hisob" %}</li>
+  </ul>
+  <button type="button" class="btn btn-primary w-full py-3.5 text-base" onclick="tmaShareContact(this)" data-bot="https://t.me/{{ bot_username }}?start=register">
+    <i data-lucide="phone"></i>{% trans "Raqamni ulashish" %}
+  </button>
+  <p class="text-[11px] text-ink-3">{% trans "Ism va familiyangiz Telegram profilingizdan olinadi, keyin profilda o'zgartirishingiz mumkin." %}</p>
+</section>

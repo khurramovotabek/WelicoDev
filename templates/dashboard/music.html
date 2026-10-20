@@ -1,0 +1,30 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Musiqa" %}{% endblock %}
+{% block dash %}
+{% trans "Musiqa" as t %}{% trans "Yoqtirgan musiqalaringiz: saytdagi Media → Musiqa bo'limida pleyer bilan ko'rinadi." as st %}{% trans "Trek qo'shish" as al %}{% url 'dashboard:track_add' as au %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st action_url=au action_label=al %}
+<section class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Treklar" %}</div><div class="stat-num">{{ stats.tracks }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Sevimlilar" %}</div><div class="stat-num text-danger">{{ stats.favorites }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Pleylistlar" %}</div><div class="stat-num">{{ stats.playlists }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Tashqi havolalar" %}</div><div class="stat-num">{{ stats.external }}</div></div>
+</section>
+<section class="grid xl:grid-cols-[1fr_340px] gap-4">
+  <div class="glass p-4 min-w-0" x-data="audioPlayer('')">
+    <form class="flex flex-wrap gap-2 mb-3">
+      <label class="field-icon flex-1 min-w-[200px]"><i data-lucide="search"></i><input name="q" value="{{ q }}" class="field" placeholder="{% trans 'Nomi yoki ijrochi...' %}"></label>
+      <a href="?{% if not fav %}fav=1{% endif %}" class="chip-btn {% if fav %}is-active{% endif %}"><i data-lucide="heart" class="w-4 h-4"></i>{% trans "Sevimlilar" %}</a>
+    </form>
+    <ul class="flex flex-col gap-1.5">
+      {% for t in tracks %}{% include "dashboard/partials/track_row.html" %}{% empty %}<li class="text-center text-ink-3 py-12 text-sm">{% trans "Hali trek yo'q" %}</li>{% endfor %}
+    </ul>
+  </div>
+  <aside class="panel h-fit">
+    <div class="panel-title"><h2 class="!text-lg">{% trans "Pleylistlar" %}</h2><a href="{% url 'dashboard:playlist_add' %}" class="btn btn-glass btn-sm"><i data-lucide="plus"></i>{% trans "Yangi" %}</a></div>
+    <div class="grid grid-cols-2 gap-2">
+      {% for pl in playlists %}<a href="{% url 'dashboard:playlist_edit' pl.pk %}" class="relative rounded-xl overflow-hidden aspect-square group">{% if pl.cover %}<img src="{{ pl.cover.url }}" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition">{% else %}<span class="absolute inset-0 bg-gradient-to-br from-accent-strong/60 to-violet/50"></span>{% endif %}<span class="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/75 to-transparent"><span class="block text-sm font-semibold">{{ pl.title }}</span><span class="text-[11px] text-ink-2">{{ pl.n }} {% trans "trek" %}</span></span></a>{% empty %}<p class="col-span-2 text-sm text-ink-3">{% trans "Pleylist yo'q" %}</p>{% endfor %}
+    </div>
+  </aside>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load i18n %}
+<article class="flex flex-col gap-4">
+  <img src="{{ article.cover.url }}" alt="" class="w-full aspect-[16/9] object-cover rounded-2xl">
+  <div>
+    <div class="text-xs text-ink-3 flex gap-3">{% if article.category %}<span>#{{ article.category.name }}</span>{% endif %}<span>{{ article.published_at|date:"d.m.Y" }}</span><span>{{ article.reading_minutes }} {% trans "daqiqa o'qish" %}</span></div>
+    <h2 class="text-2xl font-semibold leading-tight mt-2">{{ article.title }}</h2>
+    <p class="text-ink-2 mt-2">{{ article.excerpt }}</p>
+  </div>
+  <div class="glass glass--sm p-4"><div class="richtext">{{ article.content|safe }}</div></div>
+  <div class="flex flex-wrap gap-2">{% for t in article.tags.all %}<span class="chip">#{{ t.name }}</span>{% endfor %}</div>
+  <div class="grid grid-cols-2 gap-3">
+    <a href="#" data-external="{{ site_url }}#comments" class="btn btn-glass"><i data-lucide="message-circle"></i>{% trans "Izohlar" %}</a>
+    <a href="#" data-external="https://t.me/share/url?url={{ site_url|urlencode }}&text={{ article.title|urlencode }}" class="btn btn-primary"><i data-lucide="share-2"></i>{% trans "Ulashish" %}</a>
+  </div>
+</article>

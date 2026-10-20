@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% load i18n wcd static %}
+{% block head %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}" media="print" onload="this.media='all'">{% endblock %}
+{% block scripts %}<script defer src="{% static 'vendor/leaflet/leaflet.js' %}"></script><script defer src="{% static 'js/map.js' %}?v={{ ASSET_V }}"></script>{% endblock %}
+
+{% block content %}
+{# ============================================================== Hero #}
+<section class="grid lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-10 items-center pt-6 lg:pt-12">
+  <div class="flex flex-col gap-6 animate-fade-up order-2 lg:order-1">
+    <div class="flex flex-wrap items-center gap-2">
+      {% if site.available_for_work %}<span class="chip chip-lg text-ink"><span class="dot"></span>{% trans "Yangi loyihalarga ochiqman" %}</span>{% endif %}
+      <span class="chip chip-lg text-ink-2 hidden sm:inline-flex"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>{{ site.location }}</span>
+    </div>
+    <h1 class="text-[44px] leading-[1.02] sm:text-6xl xl:text-7xl font-semibold">
+      {% if hero %}{{ hero.title }}{% else %}{% blocktrans with name=site.owner_name %}Salom, men {{ name }}.{% endblocktrans %}{% endif %}
+    </h1>
+    {% if roles %}
+      <div class="text-xl sm:text-3xl font-display font-semibold leading-tight flex flex-wrap items-baseline gap-x-3"
+           x-data="{ i: 0, words: {{ roles|role_titles_json }}, init() { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; setInterval(() => this.i = (this.i + 1) % this.words.length, 2600) } }">
+        <span class="text-ink-2">{% trans "Men —" %}</span>
+        <span class="relative inline-grid">
+          <template x-for="(w, k) in words" :key="k">
+            <span class="col-start-1 row-start-1 bg-gradient-to-r from-accent via-violet to-accent bg-clip-text text-transparent transition-all duration-500"
+                  :class="k === i ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-3 blur-sm'" x-text="w"></span>
+          </template>
+          <span class="invisible col-start-1 row-start-1" aria-hidden="true">{{ roles.0.title }}</span>
+        </span>
+      </div>
+    {% endif %}
+    <p class="text-base sm:text-lg text-ink-2 max-w-[54ch] leading-relaxed">
+      {% if hero.subtitle %}{{ hero.subtitle }}{% else %}{{ site.owner_bio|default:_("Dasturlar yarataman, g'oyalarni o'rganaman va yo'limni hujjatlashtiraman.") }}{% endif %}
+    </p>
+    <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+      <a href="{% url 'portfolio:project_list' %}" class="btn btn-light px-6 py-3 text-[15px]">{% trans "Ishlarimni ko'ring" %}<i data-lucide="arrow-right"></i></a>
+      <a href="{% url 'education:course_list' %}" class="btn btn-glass px-5 py-3 text-[15px]"><i data-lucide="graduation-cap"></i>{% trans "Kurslar" %}</a>
+      {% if site.intro_video_url %}
+        <a href="{{ site.intro_video_url }}" target="_blank" rel="noopener" class="flex items-center gap-3 group">
+          <span class="btn-icon w-12 h-12 group-hover:scale-105 transition"><i data-lucide="play" class="fill-current"></i></span>
+          <span class="leading-tight text-sm"><span class="block font-medium">{% trans "Intro videoni ko'rish" %}</span><span class="text-ink-3">{{ site.intro_video_duration }}</span></span>
+        </a>
+      {% endif %}
+    </div>
+    {% if socials %}
+      <div class="flex flex-wrap items-center gap-2">
+        {% for s in socials %}{% if s.show_in_header %}<a href="{{ s.url }}" target="_blank" rel="noopener me" class="btn-icon w-10 h-10" aria-label="{{ s.display_name }}" title="{{ s.display_name }}">{% social_icon s.platform "w-[18px] h-[18px]" %}</a>{% endif %}{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {# Portret #}
+  <div class="relative order-1 lg:order-2 mx-auto w-full max-w-[280px] sm:max-w-[360px] lg:max-w-[420px] animate-fade-up" style="animation-delay:.1s">
+    <div class="absolute -inset-8 rounded-[48px] bg-gradient-to-br from-accent-strong/40 via-violet/25 to-transparent blur-3xl opacity-80" aria-hidden="true"></div>
+    <div class="relative glass glass--strong p-2.5 rounded-[34px]">
+      {% if site.portrait %}
+        <img src="{% thumb site.portrait 900 90 %}" alt="{{ site.owner_name }}" class="w-full aspect-[4/5] object-cover rounded-[26px]" fetchpriority="high">
+      {% else %}
+        <div class="w-full aspect-[4/5] rounded-[26px] relative overflow-hidden bg-gradient-to-b from-[#1d2d63] via-[#24407e] to-[#0b1530] grid place-items-center">
+          {% if site.avatar %}<img src="{% thumb site.avatar 600 90 %}" alt="{{ site.owner_name }}" class="w-40 h-40 rounded-full object-cover ring-4 ring-white/20">
+          {% else %}<span class="font-display text-[120px] font-semibold text-white/90 leading-none">{{ site.owner_name|slice:":1" }}</span>{% endif %}
+          {% if user.is_staff %}<a href="{% url 'dashboard:settings' %}" class="absolute bottom-4 inset-x-4 btn btn-glass btn-sm !text-white"><i data-lucide="image-plus"></i>{% trans "Rasmingizni yuklang" %}</a>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+    {# Suzuvchi kartochkalar #}
+    <div class="absolute -left-2 sm:-left-8 top-6 sm:top-10 glass glass--sm px-3.5 py-2.5 flex items-center gap-2.5 shadow-xl animate-float">
+      <span class="grid place-items-center w-9 h-9 rounded-xl bg-accent-strong/30 text-accent"><i data-lucide="code-xml" class="w-4 h-4"></i></span>
+      <div class="leading-tight"><div class="font-display font-semibold tabular">{{ site.years_experience }}+</div><div class="text-[11px] text-ink-3">{% trans "yil tajriba" %}</div></div>
+    </div>
+    <div class="absolute -right-2 sm:-right-6 top-1/2 glass glass--sm px-3.5 py-2.5 flex items-center gap-2.5 shadow-xl animate-float [animation-delay:1.2s]">
+      <span class="grid place-items-center w-9 h-9 rounded-xl bg-violet/25 text-violet"><i data-lucide="rocket" class="w-4 h-4"></i></span>
+      <div class="leading-tight"><div class="font-semibold text-sm">NutriZone</div><div class="text-[11px] text-ink-3">StartUp CEO</div></div>
+    </div>
+    <div class="absolute left-4 right-4 -bottom-5 glass glass--sm px-4 py-2.5 flex items-center gap-3 shadow-xl" x-data="localClock('{{ site.timezone_name }}')">
+      <span class="relative flex w-2.5 h-2.5"><span class="absolute inline-flex w-full h-full rounded-full bg-ok opacity-75 animate-ping"></span><span class="relative inline-flex w-2.5 h-2.5 rounded-full bg-ok"></span></span>
+      <span class="text-sm truncate">{{ site.location }}</span>
+      <span class="ml-auto font-display font-semibold tabular" x-text="time">--:--</span>
+    </div>
+  </div>
+</section>
+
+{# ============================================================== Statistika va musiqa #}
+<section class="grid lg:grid-cols-[1.45fr_1fr] gap-4 mt-14">
+  <div class="glass grid grid-cols-2 sm:grid-cols-4 divide-ink/10 sm:divide-x">
+    <div class="flex items-center gap-3 p-5"><span class="icon-tile"><i data-lucide="folder-kanban"></i></span><div><div class="stat-num">{{ projects_count }}+</div><div class="stat-label">{% trans "Loyihalar" %}</div></div></div>
+    <div class="flex items-center gap-3 p-5"><span class="icon-tile"><i data-lucide="file-badge"></i></span><div><div class="stat-num">{{ site.years_experience }}+</div><div class="stat-label">{% trans "Yillik tajriba" %}</div></div></div>
+    <div class="flex items-center gap-3 p-5"><span class="icon-tile"><i data-lucide="graduation-cap"></i></span><div><div class="stat-num">{{ courses_count }}</div><div class="stat-label">{% trans "Kurslar" %}</div></div></div>
+    <div class="flex items-center gap-3 p-5"><span class="icon-tile"><i data-lucide="building-2"></i></span><div><div class="stat-num">{{ companies_count }}</div><div class="stat-label">{% trans "Kompaniyalar" %}</div></div></div>
+  </div>
+  {% if track %}
+    {% include "gallery/partials/mini_player.html" with track=track tracks_queue=home_tracks %}
+  {% else %}
+    <a href="{% url 'gallery:music' %}" class="glass glass--hover flex items-center gap-4 p-4"><span class="icon-tile w-14 h-14"><i data-lucide="music"></i></span><div><div class="font-semibold">{% trans "Sevimli musiqalarim" %}</div><div class="text-xs text-ink-3">{% trans "Ishlayotganda nima tinglayman" %}</div></div><i data-lucide="arrow-right" class="ml-auto"></i></a>
+  {% endif %}
+</section>
+
+{# ============================================================== Rollar #}
+{# Tailwind uchun: role-card--blue role-card--violet role-card--green role-card--orange #}
+{% if roles %}
+<section class="mt-4">
+  <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    {% for r in roles %}
+      {% site_link r.link as href %}
+      <a {% if href %}href="{{ href }}"{% if href|slice:":4" == "http" %} target="_blank" rel="noopener"{% endif %}{% endif %} class="role-card role-card--{{ r.color }} glass glass--hover p-5 flex flex-col gap-3 min-h-[190px]">
+        <div class="flex items-center justify-between"><span class="role-card__icon"><i data-lucide="{{ r.icon }}"></i></span><span class="text-xs text-ink-3 tabular">0{{ forloop.counter }}</span></div>
+        <div>
+          <h2 class="text-xl font-semibold">{{ r.title }}</h2>
+          {% if r.subtitle %}<div class="text-sm text-accent mt-0.5">{{ r.subtitle }}</div>{% endif %}
+        </div>
+        {% if r.description %}<p class="text-sm text-ink-2 leading-relaxed">{{ r.description }}</p>{% endif %}
+        {% if href %}<span class="mt-auto text-sm text-ink-3 flex items-center gap-1.5 group-hover:text-ink">{% trans "Batafsil" %}<i data-lucide="arrow-up-right" class="w-4 h-4"></i></span>{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ============================================================== Tanlangan loyihalar #}
+{% if featured_projects %}
+<section class="grid lg:grid-cols-[1fr_280px] gap-4 mt-4">
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Tanlangan loyihalar" %}</h2><a href="{% url 'portfolio:project_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+    <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+      {% for p in featured_projects %}
+        <a href="{{ p.get_absolute_url }}" class="glass glass--sm glass--hover p-3 flex gap-3 items-center">
+          <img src="{% thumb p.cover 400 %}" alt="" class="w-28 h-20 sm:w-32 sm:h-24 rounded-xl object-cover shrink-0" loading="lazy">
+          <div class="min-w-0">
+            <h3 class="text-base font-semibold truncate">{{ p.title }}</h3>
+            <p class="text-xs text-ink-3 truncate">{{ p.subtitle|default:p.short_description }}</p>
+            <div class="flex flex-wrap gap-1.5 mt-2">{% for t in p.tags.all|slice:":3" %}<span class="chip !text-[10px] !px-2 !py-0.5">{{ t.name }}</span>{% endfor %}</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel flex flex-col justify-center gap-4">
+    <div class="flex -space-x-2">
+      {% for s in socials|slice:":4" %}<span class="grid place-items-center w-10 h-10 rounded-full glass glass--pill">{% social_icon s.platform "w-4 h-4" %}</span>{% endfor %}
+    </div>
+    <p class="font-display text-xl leading-snug">{% trans "Keling, birga ma'noli narsa quramiz." %}</p>
+    <a href="{% url 'core:contact' %}" class="btn btn-light w-fit">{% trans "Bog'lanish" %}<i data-lucide="arrow-right"></i></a>
+  </div>
+</section>
+{% endif %}
+
+{# ============================================================== Karyera va joylashuv #}
+<section class="grid lg:grid-cols-[1.1fr_0.9fr] gap-4 mt-4">
+  {% if career %}
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Karyera yo'li" %}</h2><a href="{% url 'portfolio:experience_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+    <ol class="relative flex flex-col gap-1 before:absolute before:left-[23px] before:top-3 before:bottom-3 before:w-px before:bg-ink/15">
+      {% for e in career %}
+        <li><a href="{{ e.get_absolute_url }}" class="relative flex items-start gap-4 rounded-2xl p-2 hover:bg-ink/5 transition">
+          <span class="relative z-[1] shrink-0">{% if e.logo %}<img src="{% thumb e.logo 120 %}" alt="" class="w-[30px] h-[30px] m-2 rounded-lg object-cover ring-2 ring-[var(--page-bg)]">{% else %}<span class="grid place-items-center w-[30px] h-[30px] m-2 rounded-lg bg-accent-strong/30 text-xs font-semibold">{{ e.company|slice:":1" }}</span>{% endif %}</span>
+          <span class="min-w-0 flex-1 py-1">
+            <span class="flex flex-wrap items-center gap-2"><span class="font-semibold">{{ e.company }}</span>{% if e.is_current %}<span class="badge badge-ok !py-0">{% trans "Hozir" %}</span>{% endif %}{% if e.kind == "startup" %}<span class="badge badge-violet !py-0">{% trans "Startap" %}</span>{% endif %}</span>
+            <span class="block text-sm text-ink-2">{{ e.role }}</span>
+          </span>
+          <span class="text-xs text-ink-3 tabular whitespace-nowrap py-1.5">{{ e.start_date|date:"M Y" }} — {% if e.is_current %}{% trans "hozir" %}{% else %}{{ e.end_date|date:"M Y" }}{% endif %}</span>
+        </a></li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% endif %}
+  <div class="panel flex flex-col gap-3 !p-3">
+    <div class="map-frame relative h-64 lg:h-auto lg:flex-1 min-h-[240px] rounded-[20px] overflow-hidden">
+      <div data-map data-lat="{{ site.latitude|stringformat:'f' }}" data-lng="{{ site.longitude|stringformat:'f' }}" data-zoom="{{ site.map_zoom }}" class="absolute inset-0" role="img" aria-label="{% blocktrans with place=site.location %}Xarita: {{ place }}{% endblocktrans %}"></div>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 px-2 pb-1" x-data="localClock('{{ site.timezone_name }}')">
+      <span class="icon-tile"><i data-lucide="map-pin"></i></span>
+      <div class="min-w-0"><div class="font-semibold truncate">{{ site.location }}</div><div class="text-xs text-ink-3">{% trans "Mahalliy vaqt" %} · <b class="tabular text-ink-2" x-text="time">--:--</b> · {{ site.timezone_label }}</div></div>
+      <a href="{% if site.map_url %}{{ site.map_url }}{% else %}https://www.google.com/maps?q={{ site.latitude|stringformat:'f' }},{{ site.longitude|stringformat:'f' }}{% endif %}" target="_blank" rel="noopener" class="btn btn-glass btn-sm ml-auto"><i data-lucide="navigation"></i>{% trans "Xaritada" %}</a>
+    </div>
+  </div>
+</section>
+
+{# ============================================================== Ko'nikmalar lentasi #}
+{% if skills %}
+{% trans "Ko'nikmalar" as skills_label %}
+<section class="mt-4 glass py-4 overflow-hidden marquee" aria-label="{{ skills_label }}">
+  <div class="marquee__track">
+    {% for loop in "ab" %}
+      <ul class="flex items-center gap-3 pr-3 shrink-0" {% if forloop.last %}aria-hidden="true"{% endif %}>
+        {% for s in skills %}<li class="chip chip-lg whitespace-nowrap !py-2">{% if s.icon_url %}<img src="{{ s.icon_url }}" alt="" class="w-5 h-5" loading="lazy">{% endif %}{{ s.name }}</li>{% endfor %}
+      </ul>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ============================================================== Kurslar va blog #}
+{% if latest_articles or courses %}
+<section class="grid lg:grid-cols-2 gap-4 mt-4">
+  {% if courses %}
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Kurslar" %}</h2><a href="{% url 'education:course_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+    <div class="flex flex-col gap-3">
+      {% for c in courses %}
+        <a href="{{ c.get_absolute_url }}" class="glass glass--sm glass--hover p-3 flex gap-3 items-center">
+          <img src="{% thumb c.cover 400 %}" alt="" class="w-24 h-16 rounded-xl object-cover shrink-0" loading="lazy">
+          <div class="min-w-0">
+            <h3 class="text-[15px] font-semibold truncate">{{ c.title }}</h3>
+            <p class="text-xs text-ink-3 line-clamp-1">{{ c.subtitle }}</p>
+            <div class="mt-1">{% if c.is_free %}<span class="badge badge-ok !py-0 !text-[10px]">{% trans "Bepul" %}</span>{% else %}<span class="badge badge-warn !py-0 !text-[10px] tabular">{{ c.price|money }} {% trans "so'm" %}</span>{% endif %}</div>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-ink-3 shrink-0"></i>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if latest_articles %}
+  <div class="panel">
+    <div class="panel-title"><h2>Blog</h2><a href="{% url 'blog:article_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+    <div class="flex flex-col gap-3">
+      {% for a in latest_articles %}
+        <a href="{{ a.get_absolute_url }}" class="glass glass--sm glass--hover p-3 flex gap-3 items-center">
+          <img src="{% thumb a.cover 400 %}" alt="" class="w-24 h-16 rounded-xl object-cover shrink-0" loading="lazy">
+          <div class="min-w-0">
+            <h3 class="text-[15px] font-semibold truncate">{{ a.title }}</h3>
+            <p class="text-xs text-ink-3">{{ a.published_at|date:"M d, Y" }} · {{ a.reading_minutes }} {% trans "daq" %}</p>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-ink-3 shrink-0"></i>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+
+{# ============================================================== Hozir #}
+{% if statuses or hero.quote %}
+<section class="grid md:grid-cols-[1fr_1.2fr] gap-4 mt-4">
+  {% if hero.quote %}
+    <figure class="quote-card flex flex-col justify-center">
+      <div class="mark">“</div>
+      <blockquote class="font-display text-2xl leading-snug mt-2">{{ hero.quote }}</blockquote>
+      <div class="rule"></div>
+    </figure>
+  {% endif %}
+  {% if statuses %}
+    <div class="panel">
+      <div class="panel-title !mb-3"><h3 class="!text-base">{% trans "Hozir" %}</h3><i data-lucide="send" class="w-4 h-4 text-ink-3"></i></div>
+      <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
+        {% for s in statuses %}
+          <li class="grid grid-cols-[auto_1fr_1.2fr] items-center gap-3">
+            {% include "partials/status_dot.html" with color=s.color %}
+            <span class="font-medium">{{ s.label }}</span>
+            <span class="text-ink-3 truncate">{{ s.value }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load i18n wcd %}
+<section class="glass p-5 flex items-center gap-4">
+  {% include "partials/avatar.html" with u=user size="w-16 h-16 text-lg" %}
+  <div class="min-w-0"><h2 class="text-xl font-semibold truncate">{{ user.display_name }}</h2><div class="text-sm text-ink-3">{{ user.phone }}</div>{% if user.telegram_username %}<div class="text-xs text-accent">@{{ user.telegram_username }}</div>{% endif %}</div>
+</section>
+<section class="flex flex-col gap-2">
+  <h3 class="tma-section-title">{% trans "Kurslarim" %}</h3>
+  {% for e, pct in items %}
+    <a href="#" data-go="{% url 'miniapp:course' e.course.slug %}" class="tma-card flex items-center gap-3"><img src="{% thumb e.course.cover 160 %}" alt="" class="w-14 h-14 rounded-xl object-cover"><div class="flex-1 min-w-0"><div class="font-semibold text-sm truncate">{{ e.course.title }}</div><div class="h-1.5 rounded-full bg-ink/15 mt-2"><div class="h-full rounded-full bg-accent" style="width:{{ pct }}%"></div></div></div><span class="text-sm font-semibold tabular">{{ pct }}%</span></a>
+  {% empty %}<a href="#" data-go="{% url 'miniapp:courses' %}" class="tma-card text-sm text-ink-2 text-center">{% trans "Hali kursga yozilmagansiz." %} <span class="text-accent">{% trans "Kurslarni ko'rish" %}</span></a>{% endfor %}
+</section>
+{% if requests %}
+<section class="flex flex-col gap-2">
+  <h3 class="tma-section-title">{% trans "Xaridlar" %}</h3>
+  <div class="glass glass--sm p-1.5">
+    {% for r in requests %}
+      <a href="#" data-go="{% url 'miniapp:course' r.course.slug %}" class="tma-list-item">
+        <span class="grid place-items-center w-9 h-9 rounded-xl shrink-0 {% if r.status == 'approved' %}bg-ok/15 text-ok{% elif r.status == 'rejected' %}bg-danger/15 text-danger{% else %}bg-warn/15 text-warn{% endif %}"><i data-lucide="{% if r.status == 'approved' %}badge-check{% elif r.status == 'rejected' %}circle-x{% else %}hourglass{% endif %}" class="w-4 h-4"></i></span>
+        <div class="min-w-0 flex-1"><div class="text-sm font-medium truncate">{{ r.course.title }}</div><div class="text-[11px] text-ink-3 tabular">{{ r.reference }} · {{ r.get_status_display }}</div></div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-ink-3"></i>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% if certificates %}<section class="flex flex-col gap-2"><h3 class="tma-section-title">{% trans "Sertifikatlar" %}</h3>{% for c in certificates %}<a href="#" data-external="{{ SITE_URL }}{% url 'education:certificate' c.code %}" class="tma-card flex items-center gap-3"><i data-lucide="award" class="w-6 h-6 text-warn"></i><div class="text-sm"><div class="font-semibold">{{ c.enrollment.course.title }}</div><div class="text-[11px] text-ink-3 font-mono">{{ c.code }}</div></div></a>{% endfor %}</section>{% endif %}
+<section class="flex flex-col gap-2">
+  <h3 class="tma-section-title">{% trans "Til" %}</h3>
+  <div class="grid grid-cols-3 gap-2">{% for code, name in languages %}<button class="chip-btn justify-center !py-2.5 {% if code == user.language %}is-active{% endif %}" hx-post="{% url 'miniapp:language' %}" hx-vals='{"lang": "{{ code }}"}'>{{ name }}</button>{% endfor %}</div>
+</section>
+<section class="glass glass--sm p-1.5">
+  <a href="#" data-external="{{ SITE_URL }}" class="tma-list-item text-sm"><i data-lucide="globe" class="w-5 h-5"></i>{% trans "Saytni ochish" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-ink-3"></i></a>
+  <a href="#" data-external="https://t.me/{{ bot_username }}" class="tma-list-item text-sm">{% social_icon "telegram" "w-5 h-5" %}{% trans "Botga yozish" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-ink-3"></i></a>
+  {% for s in socials|slice:":4" %}<a href="#" data-external="{{ s.url }}" class="tma-list-item text-sm">{% social_icon s.platform "w-5 h-5" %}{{ s.display_name }}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto text-ink-3"></i></a>{% endfor %}
+</section>

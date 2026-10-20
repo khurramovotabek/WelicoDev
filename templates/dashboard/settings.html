@@ -1,0 +1,176 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd static %}
+{% block head %}{{ block.super }}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
+{% block scripts %}{{ block.super }}<script defer src="{% static 'vendor/leaflet/leaflet.js' %}"></script><script defer src="{% static 'js/map.js' %}?v={{ ASSET_V }}"></script>{% endblock %}
+{% block dash_title %}{% trans "Sozlamalar" %}{% endblock %}
+{% block dash %}
+{% trans "Sayt sozlamalari" as t %}{% trans "Brend, shaxsiy ma'lumotlar, aloqa va ijtimoiy tarmoqlar." as st %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st %}
+{% if form.errors or formset.total_error_count %}<div class="glass glass--sm p-3 text-sm text-danger">{% trans "Formada xatolar bor. Belgilangan maydonlarni tekshiring." %}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="flex flex-col gap-4 pb-24" x-data="{ tab: new URLSearchParams(location.search).get('tab') || 'profile' }">
+  {% csrf_token %}
+  <div class="flex gap-2 overflow-x-auto">
+    <button type="button" class="chip-btn" :class="tab === 'profile' && 'is-active'" @click="tab = 'profile'"><i data-lucide="user-round" class="w-4 h-4"></i>{% trans "Profil" %}</button>
+    <button type="button" class="chip-btn" :class="tab === 'look' && 'is-active'" @click="tab = 'look'"><i data-lucide="image" class="w-4 h-4"></i>{% trans "Ko'rinish va fon" %}</button>
+    <button type="button" class="chip-btn" :class="tab === 'social' && 'is-active'" @click="tab = 'social'"><i data-lucide="share-2" class="w-4 h-4"></i>{% trans "Ijtimoiy tarmoqlar" %}</button>
+    <button type="button" class="chip-btn" :class="tab === 'contact' && 'is-active'" @click="tab = 'contact'"><i data-lucide="phone" class="w-4 h-4"></i>{% trans "Aloqa" %}</button>
+    <button type="button" class="chip-btn" :class="tab === 'payments' && 'is-active'" @click="tab = 'payments'"><i data-lucide="wallet" class="w-4 h-4"></i>{% trans "Kurs to'lovlari" %}</button>
+    <button type="button" class="chip-btn" :class="tab === 'brand' && 'is-active'" @click="tab = 'brand'"><i data-lucide="palette" class="w-4 h-4"></i>{% trans "Brend va SEO" %}</button>
+  </div>
+
+  <section x-show="tab === 'profile'" class="grid xl:grid-cols-2 gap-4">
+    <div class="panel flex flex-col gap-4">
+      <h2 class="text-lg font-semibold">{% trans "Shaxsiy ma'lumotlar" %}</h2>
+      {% include "dashboard/partials/field.html" with field=form.owner_name %}
+      {% trans "Lavozim" as l %}{% include "dashboard/partials/tr_field.html" with name="owner_role" label=l %}
+      {% trans "Bio" as l %}{% include "dashboard/partials/tr_field.html" with name="owner_bio" label=l %}
+      {% trans "Hero teglar (vergul bilan)" as l %}{% include "dashboard/partials/tr_field.html" with name="hero_badges" label=l %}
+    </div>
+    <div class="panel flex flex-col gap-4">
+      <h2 class="text-lg font-semibold">{% trans "Media va statistika" %}</h2>
+      <div class="grid sm:grid-cols-[120px_1fr] gap-4 items-start">
+        <div class="aspect-[3/4] rounded-2xl overflow-hidden glass glass--sm grid place-items-center">{% if form.instance.portrait %}<img src="{{ form.instance.portrait.url }}" alt="" class="w-full h-full object-cover">{% else %}<i data-lucide="user-round" class="w-8 h-8 text-ink-3"></i>{% endif %}</div>
+        {% trans "Shaxsiy rasm (bosh sahifa)" as l %}{% include "dashboard/partials/field.html" with field=form.portrait label=l %}
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.avatar %}{% include "dashboard/partials/field.html" with field=form.cv_file %}</div>
+      <div class="grid sm:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.intro_video_url %}{% include "dashboard/partials/field.html" with field=form.intro_video_duration %}</div>
+      <div class="grid sm:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.years_experience %}{% include "dashboard/partials/field.html" with field=form.people_impacted %}</div>
+      {% trans "Ishga ochiqman" as l %}{% trans "Saytda yashil “Available” belgisi" as h %}{% include "dashboard/partials/toggle.html" with field=form.available_for_work label=l hint=h %}
+    </div>
+  </section>
+
+  <section x-show="tab === 'look'" x-cloak class="grid xl:grid-cols-[1fr_420px] gap-4"
+           x-data="{ preset: '{{ form.background_preset.value }}', dim: {{ form.background_dim.value|default:35 }}, blur: {{ form.background_blur.value|default:0 }}, upload: '{% if form.instance.background_image %}{{ form.instance.background_image.url }}{% endif %}',
+                     src() { if (this.upload) return this.upload; return {'dawn': '{% static "img/bg/dawn-sm.webp" %}', 'dusk': '{% static "img/bg/dusk-sm.webp" %}', 'night': '{% static "img/bg/night-sm.webp" %}'}[this.preset] || '' } }">
+    <div class="panel flex flex-col gap-4">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="image"></i></span><div><h2 class="text-lg font-semibold">{% trans "Sayt foni" %}</h2><p class="text-xs text-ink-3">{% trans "Tayyor fonlardan birini tanlang yoki o'zingiznikini yuklang. Sahifalar uchun alohida fonni «Sahifa sarlavhalari» bo'limida berish mumkin." %}</p></div></div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {% for radio in form.background_preset %}
+          <label class="relative cursor-pointer rounded-2xl overflow-hidden glass glass--sm p-1.5 flex flex-col gap-1.5 transition" :class="preset === '{{ radio.data.value }}' && !upload ? 'ring-2 ring-accent' : ''">
+            <input type="radio" name="{{ radio.data.name }}" value="{{ radio.data.value }}" class="sr-only" x-model="preset" {% if radio.data.selected %}checked{% endif %}>
+            {% if radio.data.value == "scene" %}<span class="aspect-[16/10] rounded-xl bg-gradient-to-b from-[#1b2a5c] via-[#2c4a8a] to-[#0b1530] grid place-items-center"><i data-lucide="mountain-snow" class="w-7 h-7 text-white/80"></i></span>
+            {% else %}<img src="{% static 'img/bg/' %}{{ radio.data.value }}-sm.webp" alt="" class="aspect-[16/10] w-full rounded-xl object-cover" loading="lazy">{% endif %}
+            <span class="text-xs font-medium px-1 pb-0.5 truncate">{{ radio.choice_label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      <div class="grid sm:grid-cols-[1fr_auto] gap-3 items-end">
+        {% include "dashboard/partials/field.html" with field=form.background_image %}
+      </div>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <label class="flex flex-col gap-2"><span class="field-label !mb-0 flex justify-between">{% trans "Qoraytirish" %}<b class="tabular" x-text="dim + '%'"></b></span><input type="range" name="background_dim" min="0" max="80" x-model.number="dim" class="w-full accent-[rgb(var(--accent-strong))]"></label>
+        <label class="flex flex-col gap-2"><span class="field-label !mb-0 flex justify-between">{% trans "Xiralashtirish" %}<b class="tabular" x-text="blur + 'px'"></b></span><input type="range" name="background_blur" min="0" max="24" x-model.number="blur" class="w-full accent-[rgb(var(--accent-strong))]"></label>
+      </div>
+      {% trans "Fonda yengil harakat" as l %}{% trans "Rasm sekin yaqinlashadi (qurilmada «kam harakat» yoqilgan bo'lsa o'chadi)" as h %}{% include "dashboard/partials/toggle.html" with field=form.background_motion label=l hint=h %}
+    </div>
+    <div class="panel flex flex-col gap-3">
+      <h2 class="font-semibold">{% trans "Oldindan ko'rish" %}</h2>
+      <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#0b1530]">
+        <div class="absolute inset-[-4%] bg-cover bg-center" :style="`background-image:url('${src()}');filter:blur(${blur}px)`" x-show="src()"></div>
+        <div class="absolute inset-0" :style="`background:linear-gradient(180deg, rgba(6,12,32,${dim/100*0.55}), rgba(6,12,32,${dim/100+0.2}) 70%, rgba(6,12,32,${dim/100+0.35}))`"></div>
+        <div class="absolute inset-0 p-5 flex flex-col gap-3 text-white">
+          <span class="chip w-fit !text-[10px] !text-white"><span class="dot"></span>{{ form.instance.owner_role }}</span>
+          <div class="font-display text-3xl font-semibold leading-tight">{{ form.instance.owner_name }}</div>
+          <div class="mt-auto grid grid-cols-3 gap-2">{% for i in "123" %}<div class="h-14 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md"></div>{% endfor %}</div>
+        </div>
+      </div>
+      <p class="text-[11px] text-ink-3">{% trans "Tavsiya: 2560×1440 yoki kattaroq JPG/WebP. Yuklangan rasm sifati o'zgartirilmaydi; mobil uchun yengil nusxa avtomatik ishlatiladi." %}</p>
+    </div>
+  </section>
+
+  <section x-show="tab === 'payments'" x-cloak class="grid xl:grid-cols-2 gap-4">
+    <div class="panel flex flex-col gap-4">
+      <div class="flex items-center gap-3"><span class="icon-tile bg-ok/15 text-ok"><i data-lucide="wallet"></i></span><div><h2 class="text-lg font-semibold">{% trans "Pullik kurslar" %}</h2><p class="text-xs text-ink-3">{% trans "O'quvchi «Sotib olish» tugmasini bossa, tayyor xabar bilan shu Telegram akkauntga o'tadi." %}</p></div></div>
+      {% trans "To'lov uchun Telegram username" as l %}{% include "dashboard/partials/field.html" with field=form.payment_telegram label=l %}
+      {% trans "To'lov bo'yicha izoh" as l %}{% include "dashboard/partials/tr_field.html" with name="payment_note" label=l %}
+    </div>
+    <div class="panel flex flex-col gap-3 text-sm">
+      <h2 class="font-semibold text-base">{% trans "Qanday ishlaydi" %}</h2>
+      <ol class="flex flex-col gap-3 text-ink-2">
+        <li class="flex gap-3"><span class="chip !px-2.5 shrink-0">1</span>{% trans "Kursni pullik qiling: Kurslar → kurs → Qoidalar → «bepul»ni o'chiring va narx kiriting. «Yopiq kurs» belgilansa, kursni faqat siz ruxsat berganlar ko'radi." %}</li>
+        <li class="flex gap-3"><span class="chip !px-2.5 shrink-0">2</span>{% trans "O'quvchi so'rov qoldiradi va Telegram'da sizga yozadi. Sizga bot orqali xabar keladi." %}</li>
+        <li class="flex gap-3"><span class="chip !px-2.5 shrink-0">3</span>{% trans "To'lov kelgach Dashboard → Kursga ruxsatlar → «To'landi, ruxsat berish». O'quvchiga bot xabar yuboradi." %}</li>
+      </ol>
+      <a href="{% url 'dashboard:access' %}" class="btn btn-glass w-fit mt-2"><i data-lucide="key-round"></i>{% trans "Kursga ruxsatlar" %}</a>
+    </div>
+  </section>
+
+  <section x-show="tab === 'social'" x-cloak class="panel flex flex-col gap-4">
+    <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="share-2"></i></span><div><h2 class="text-lg font-semibold">{% trans "Ijtimoiy tarmoqlar" %}</h2><p class="text-xs text-ink-3">{% trans "O'z profillaringizni qo'shing. Footer, Contact va hero bloklarida qayerda ko'rinishini tanlang." %}</p></div></div>
+    {{ formset.management_form }}
+    <div class="table-wrap">
+      <table class="dtable">
+        <thead><tr><th>{% trans "Platforma" %}</th><th>{% trans "Nomi" %}</th><th>{% trans "Havola" %}</th><th>{% trans "Tartib" %}</th><th>{% trans "Faol" %}</th><th>Hero</th><th>Footer</th><th>Contact</th><th>{% trans "O'chirish" %}</th></tr></thead>
+        <tbody>
+          {% for f in formset %}
+            <tr>{% for h in f.hidden_fields %}{{ h }}{% endfor %}
+              <td class="min-w-[150px]"><div class="flex items-center gap-2">{% if f.instance.pk %}{% social_icon f.instance.platform "w-5 h-5 shrink-0" %}{% endif %}{{ f.platform }}</div></td>
+              <td class="min-w-[120px]">{{ f.label }}</td>
+              <td class="min-w-[240px]">{{ f.url }}{% for e in f.url.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</td>
+              <td class="w-20">{{ f.order }}</td>
+              <td>{{ f.is_active }}</td><td>{{ f.show_in_header }}</td><td>{{ f.show_in_footer }}</td><td>{{ f.show_in_contact }}</td>
+              <td>{% if f.instance.pk %}{{ f.DELETE }}{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-ink-3">{% trans "Yangi tarmoq qo'shish uchun oxirgi bo'sh qatorni to'ldiring va saqlang. Saqlangandan keyin yana bo'sh qator paydo bo'ladi." %}</p>
+  </section>
+
+  <section x-show="tab === 'contact'" x-cloak class="grid xl:grid-cols-2 gap-4">
+    <div class="panel flex flex-col gap-4">
+      <div class="grid sm:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.email %}{% include "dashboard/partials/field.html" with field=form.phone %}</div>
+      {% trans "Manzil" as l %}{% include "dashboard/partials/tr_field.html" with name="location" label=l %}
+      {% include "dashboard/partials/field.html" with field=form.map_url %}
+    </div>
+    <div class="panel flex flex-col gap-4 xl:col-span-2" x-data="mapPicker({{ form.instance.latitude|stringformat:'f' }}, {{ form.instance.longitude|stringformat:'f' }}, {{ form.instance.map_zoom }})">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="map-pin"></i></span><div><h2 class="text-lg font-semibold">{% trans "Xaritadagi joylashuv" %}</h2><p class="text-xs text-ink-3">{% trans "Xaritani bosing yoki markerni suring: koordinatalar avtomatik yoziladi. Bosh sahifa va Aloqa sahifasida ko'rinadi." %}</p></div></div>
+      <div class="grid lg:grid-cols-[1fr_280px] gap-4">
+        <div x-ref="map" class="h-72 rounded-2xl overflow-hidden glass glass--sm"></div>
+        <div class="flex flex-col gap-3">
+          {% include "dashboard/partials/field.html" with field=form.latitude %}
+          {% include "dashboard/partials/field.html" with field=form.longitude %}
+          <div class="grid grid-cols-2 gap-3">{% include "dashboard/partials/field.html" with field=form.map_zoom %}{% include "dashboard/partials/field.html" with field=form.timezone_name %}</div>
+          <button type="button" class="btn btn-glass btn-sm" @click="locate()"><i data-lucide="locate-fixed"></i>{% trans "Hozirgi joyim" %}</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel flex flex-col gap-4">
+      {% trans "Ish vaqti" as l %}{% include "dashboard/partials/tr_field.html" with name="working_hours" label=l %}
+      {% include "dashboard/partials/field.html" with field=form.timezone_label %}
+      {% trans "Javob berish vaqti" as l %}{% include "dashboard/partials/tr_field.html" with name="response_time" label=l %}
+    </div>
+  </section>
+
+  <section x-show="tab === 'brand'" x-cloak class="grid xl:grid-cols-2 gap-4">
+    <div class="panel flex flex-col gap-4">
+      {% include "dashboard/partials/field.html" with field=form.brand_name %}
+      {% trans "Shior" as l %}{% include "dashboard/partials/tr_field.html" with name="brand_tagline" label=l %}
+      <div class="grid sm:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.logo %}{% include "dashboard/partials/field.html" with field=form.favicon %}</div>
+    </div>
+    <div class="panel flex flex-col gap-4">
+      {% include "dashboard/partials/tr_field.html" with name="meta_description" label="Meta description" %}
+      {% trans "Footer matni" as l %}{% include "dashboard/partials/tr_field.html" with name="footer_text" label=l %}
+      {% include "dashboard/partials/field.html" with field=form.og_image %}
+      <a href="{% url 'admin:core_pagehero_changelist' %}" class="btn btn-glass w-fit"><i data-lucide="layout-template"></i>{% trans "Sahifa sarlavhalari va iqtiboslar" %}</a>
+    </div>
+    <div class="panel flex flex-col gap-4 xl:col-span-2">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="radar"></i></span><div><h2 class="text-lg font-semibold">{% trans "Qidiruv tizimlari va statistika" %}</h2><p class="text-xs text-ink-3">{% trans "Google Search Console, Yandex Webmaster va Bing'da saytni tasdiqlash kodlari; Umami statistikasi." %}</p></div></div>
+      <div class="grid md:grid-cols-3 gap-4">{% include "dashboard/partials/field.html" with field=form.google_verification %}{% include "dashboard/partials/field.html" with field=form.yandex_verification %}{% include "dashboard/partials/field.html" with field=form.bing_verification %}</div>
+      <div class="grid md:grid-cols-3 gap-4">{% include "dashboard/partials/field.html" with field=form.indexnow_key %}{% include "dashboard/partials/field.html" with field=form.umami_script_url %}{% include "dashboard/partials/field.html" with field=form.umami_website_id %}</div>
+      <div class="glass glass--sm p-4 text-sm text-ink-2 flex flex-col gap-1.5">
+        <div class="font-semibold text-ink">{% trans "Saytga chiqqandan keyin:" %}</div>
+        <div>1. Google Search Console → Sitemaps → <code class="chip !py-0">{{ SITE_URL }}/sitemap.xml</code></div>
+        <div>2. Yandex Webmaster → Indeksirovaniye → Fayly Sitemap → {% trans "shu manzilni qo'shing" %}</div>
+        <div>3. {% trans "IndexNow kaliti: istalgan 32 belgili tasodifiy matn. Yangi maqola va kurslar Yandex va Bing'ga darhol yuboriladi." %}</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="fixed bottom-4 left-4 right-4 lg:left-[290px] z-30 glass glass--strong flex flex-wrap items-center gap-2 sm:gap-3 p-3">
+    <span class="text-xs text-ink-3">{% trans "Barcha tablardagi o'zgarishlar birga saqlanadi" %}</span>
+    <button class="btn btn-primary sm:px-8 ml-auto"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+  </div>
+</form>
+{% endblock %}

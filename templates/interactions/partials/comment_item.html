@@ -1,0 +1,20 @@
+{% load i18n %}{% trans "Izohni o'chirasizmi?" as confirm_text %}{% trans "O'chirish" as delete_text %}
+<div class="flex gap-3">
+  {% include "partials/avatar.html" with u=c.user size=small|yesno:"w-8 h-8,w-10 h-10" %}
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2 text-sm">
+      <span class="font-semibold">{{ c.user.display_name }}</span>
+      {% if c.user.is_staff %}<span class="badge badge-info">{% trans "Muallif" %}</span>{% endif %}
+      {% if c.is_pinned %}<i data-lucide="pin" class="w-3.5 h-3.5 text-warn"></i>{% endif %}
+      <span class="text-xs text-ink-3">{{ c.created_at|timesince }} {% trans "oldin" %}</span>
+      {% if user == c.user or user.is_staff %}
+        <button class="ml-auto text-ink-3 hover:text-danger" hx-post="{% url 'interactions:comment_delete' c.pk %}" hx-target="closest {% if small %}.flex{% else %}li{% endif %}" hx-swap="outerHTML" hx-confirm="{{ confirm_text }}" aria-label="{{ delete_text }}"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+      {% endif %}
+    </div>
+    <p class="text-sm text-ink-2 mt-1 whitespace-pre-line break-words">{{ c.body }}</p>
+    <div class="flex items-center gap-4 mt-2 text-xs text-ink-3">
+      {% if c.pk in liked %}{% include "interactions/partials/comment_like.html" with c=c is_liked=True %}{% else %}{% include "interactions/partials/comment_like.html" with c=c is_liked=False %}{% endif %}
+      {% if not small %}<button type="button" class="flex items-center gap-1 hover:text-ink" @click="reply = !reply"><i data-lucide="reply" class="w-3.5 h-3.5"></i>{% trans "Javob" %}</button>{% endif %}
+    </div>
+  </div>
+</div>

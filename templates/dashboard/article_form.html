@@ -1,0 +1,68 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% if article %}{% trans "Maqolani tahrirlash" %}{% else %}{% trans "Yangi maqola" %}{% endif %}{% endblock %}
+{% block dash %}
+{% trans "Maqolalar" as parent %}{% url 'dashboard:articles' as parent_url %}
+{% if article %}{% trans "Maqolani tahrirlash" as t %}{% else %}{% trans "Yangi maqola qo'shish" as t %}{% endif %}{% trans "Bilim, g'oya va tajribangizni dunyo bilan ulashing." as st %}
+<div class="flex flex-wrap items-end gap-3"><div class="flex-1">{% include "dashboard/partials/page_head.html" with title=t subtitle=st parent=parent parent_url=parent_url %}</div>{% if article %}<a href="{{ article.get_absolute_url }}" target="_blank" class="btn btn-glass"><i data-lucide="eye"></i>{% trans "Saytda ko'rish" %}</a>{% endif %}</div>
+{% if form.non_field_errors %}<div class="glass glass--sm p-3 text-sm text-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_380px] gap-4 pb-28" x-data="{ cover: '{% if article %}{{ article.cover.url }}{% endif %}' }">
+  {% csrf_token %}
+  <div class="flex flex-col gap-4 min-w-0">
+    <section class="panel flex flex-col gap-4">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="file-text"></i></span><div><h2 class="text-lg font-semibold">{% trans "Asosiy ma'lumot" %}</h2><p class="text-xs text-ink-3">{% trans "Sarlavha, qisqa mazmun va matn" %}</p></div></div>
+      {% trans "Sarlavha" as l %}{% include "dashboard/partials/tr_field.html" with name="title" label=l required=True %}
+      <div><label class="field-label" for="{{ form.slug.id_for_label }}">Slug (URL)</label><div class="field-icon"><i data-lucide="link"></i>{{ form.slug }}</div><p class="text-[11px] text-ink-3 mt-1">{% trans "Bo'sh qoldirsangiz inglizcha sarlavhadan avtomatik yaratiladi" %}</p></div>
+      {% trans "Qisqa mazmun" as l %}{% include "dashboard/partials/tr_field.html" with name="excerpt" label=l required=True %}
+      {% trans "Matn" as l %}{% include "dashboard/partials/tr_field.html" with name="content" label=l required=True %}
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="image"></i></span><div><h2 class="text-lg font-semibold">{% trans "Muqova rasmi" %}</h2><p class="text-xs text-ink-3">JPG, PNG, WEBP · 10 MB</p></div></div>
+      <div class="grid md:grid-cols-2 gap-4 items-stretch">
+        <label class="dropzone min-h-[160px]"><input type="file" name="cover" accept="image/*" class="sr-only" @change="const f = $event.target.files[0]; if (f) cover = URL.createObjectURL(f)"><span><span class="icon-tile mx-auto mb-2"><i data-lucide="upload"></i></span><span class="block text-sm font-semibold">{% trans "Yuklash uchun bosing" %}</span>{% for e in form.cover.errors %}<span class="block text-xs text-danger mt-1">{{ e }}</span>{% endfor %}</span></label>
+        <div class="rounded-2xl overflow-hidden bg-ink/5 min-h-[160px]"><img :src="cover" x-show="cover" alt="" class="w-full h-full object-cover"></div>
+      </div>
+    </section>
+  </div>
+  <aside class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="settings"></i></span><h2 class="text-lg font-semibold">{% trans "Nashr sozlamalari" %}</h2></div>
+      <div class="grid grid-cols-2 gap-3">{% include "dashboard/partials/field.html" with field=form.category %}{% include "dashboard/partials/field.html" with field=form.status %}</div>
+      {% include "dashboard/partials/field.html" with field=form.published_at %}
+      {% trans "Izohlarga ruxsat" as l %}{% trans "O'quvchilar izoh yozishi mumkin" as h %}{% include "dashboard/partials/toggle.html" with field=form.allow_comments label=l hint=h %}
+      {% trans "Tanlangan maqola" as l %}{% trans "Blog sahifasining tepasida" as h %}{% include "dashboard/partials/toggle.html" with field=form.is_featured label=l hint=h %}
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="tags"></i></span><h2 class="text-lg font-semibold">{% trans "Teglar" %}</h2></div>
+      {% include "dashboard/partials/field.html" with field=form.tags %}
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="search"></i></span><h2 class="text-lg font-semibold mr-auto">SEO</h2>{% if seo %}<span class="grid place-items-center w-14 h-14 rounded-full font-display font-semibold text-lg tabular border-4 {% if seo.score >= 80 %}border-ok text-ok{% elif seo.score >= 50 %}border-warn text-warn{% else %}border-danger text-danger{% endif %}">{{ seo.score }}</span>{% endif %}</div>
+      {% include "dashboard/partials/field.html" with field=form.focus_keyword %}
+      {% if seo %}
+        <ul class="flex flex-col gap-1.5 text-xs">{% for c in seo.checks %}<li class="flex gap-2 {% if c.ok %}text-ink-2{% else %}text-warn{% endif %}"><i data-lucide="{% if c.ok %}circle-check{% else %}circle-alert{% endif %}" class="w-3.5 h-3.5 shrink-0 mt-0.5 {% if c.ok %}text-ok{% endif %}"></i>{{ c.text }}</li>{% endfor %}</ul>
+        <p class="text-[11px] text-ink-3">{% trans "Tekshiruv o'zbekcha matn bo'yicha, saqlagandan keyin yangilanadi." %}</p>
+      {% else %}<p class="text-xs text-ink-3">{% trans "SEO tekshiruvi maqola saqlangandan keyin ko'rinadi." %}</p>{% endif %}
+      {% include "dashboard/partials/tr_field.html" with name="meta_title" label="Meta title" %}
+      {% include "dashboard/partials/tr_field.html" with name="meta_description" label="Meta description" %}
+    </section>
+    {% if article and article.status == "published" %}
+    <section class="panel flex flex-col gap-2">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="radio-tower"></i></span><div><h2 class="text-lg font-semibold">{% trans "Telegram kanal" %}</h2><p class="text-xs text-ink-3">{% if article.posted_to_channel_at %}{% trans "Kanalga joylangan" %}: {{ article.posted_to_channel_at|date:"d.m.Y H:i" }}{% else %}{% trans "Hali kanalga joylanmagan" %}{% endif %}</p></div></div>
+      <div class="grid grid-cols-2 gap-2">
+        <button form="channel-form" name="mode" value="draft" class="btn btn-glass btn-sm"><i data-lucide="pencil"></i>{% trans "Tahrirlab" %}</button>
+        <button form="channel-form" name="mode" value="send" class="btn btn-primary btn-sm"><i data-lucide="send"></i>{% trans "Hozir joylash" %}</button>
+      </div>
+    </section>
+    {% endif %}
+    {% if article %}<div x-data="{ c: false }"><button type="button" class="btn btn-danger w-full" x-show="!c" @click="c = true"><i data-lucide="trash-2"></i>{% trans "Maqolani o'chirish" %}</button><button form="delete-form" class="btn btn-danger w-full !bg-danger !text-white" x-show="c" x-cloak>{% trans "Ha, butunlay o'chirish" %}</button></div>{% endif %}
+  </aside>
+  <div class="fixed bottom-4 left-4 right-4 lg:left-[290px] z-30 glass glass--strong flex flex-wrap items-center gap-2 sm:gap-3 p-3">
+    <a href="{% url 'dashboard:articles' %}" class="btn btn-glass max-sm:hidden">{% trans "Bekor qilish" %}</a>
+    <button name="draft" value="1" class="btn btn-glass ml-auto"><i data-lucide="file"></i>{% trans "Qoralama" %}</button>
+    <button class="btn btn-primary sm:px-8"><i data-lucide="send"></i>{% trans "Saqlash" %}</button>
+  </div>
+</form>
+{% if article %}<form id="channel-form" method="post" action="{% url 'dashboard:channel_from' 'article' article.pk %}" hidden>{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}"></form>{% endif %}
+{% if article %}<form id="delete-form" method="post" action="{% url 'dashboard:article_delete' article.pk %}" hidden>{% csrf_token %}</form>{% endif %}
+{% endblock %}

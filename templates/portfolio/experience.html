@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{% trans "Tajriba" %}{% endblock %}
+{% block content %}
+{% include "partials/page_hero.html" %}
+
+<section class="grid lg:grid-cols-[1fr_300px] gap-4">
+  <div class="glass p-4 sm:p-5 min-w-0">
+    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-4">
+      <a href="?" class="chip-btn {% if not active_kind %}is-active{% endif %}">{% trans "Barchasi" %}</a>
+      {% for value, label in kinds %}<a href="?kind={{ value }}" class="chip-btn {% if active_kind == value %}is-active{% endif %}">{{ label }}</a>{% endfor %}
+    </div>
+    <ol class="relative flex flex-col gap-4">
+      <span class="absolute left-[78px] top-4 bottom-4 w-px bg-gradient-to-b from-accent/70 via-accent/30 to-transparent hidden sm:block" aria-hidden="true"></span>
+      {% for e in items %}
+        <li class="grid sm:grid-cols-[64px_30px_1fr] gap-3 items-start">
+          <div class="hidden sm:block text-right pt-4 leading-tight"><div class="font-semibold text-sm tabular">{{ e.start_date|date:"Y" }}</div><div class="text-xs text-ink-3">{% if e.is_current %}{% trans "Hozir" %}{% else %}{{ e.end_date|date:"Y" }}{% endif %}</div></div>
+          <span class="hidden sm:grid place-items-center mt-5 w-[18px] h-[18px] mx-auto rounded-full border-2 {% if e.is_current %}border-accent bg-accent/40 shadow-[0_0_14px_rgb(var(--accent))]{% else %}border-accent/60 bg-sky-950{% endif %}"></span>
+          <a href="{{ e.get_absolute_url }}" class="glass glass--sm glass--hover p-4 sm:p-5 block {% if e.is_current %}glow-accent{% endif %}">
+            <div class="flex flex-wrap items-start gap-3">
+              {% if e.logo %}<img src="{{ e.logo.url }}" alt="" class="w-12 h-12 rounded-xl object-cover">{% else %}<span class="icon-tile w-12 h-12"><i data-lucide="{% if e.kind == 'freelance' %}laptop{% elif e.kind == 'personal' %}box{% elif e.kind == 'education' %}book-open{% elif e.kind == 'achievement' %}trophy{% else %}briefcase{% endif %}"></i></span>{% endif %}
+              <div class="flex-1 min-w-0"><h2 class="text-xl font-semibold">{{ e.company }}</h2><p class="text-sm text-ink-2">{{ e.role }}</p></div>
+              <div class="text-right text-xs text-ink-3 flex flex-col items-end gap-1">
+                <span class="flex items-center gap-2">{{ e.start_date|date:"M Y" }} – {% if e.is_current %}{% trans "Hozir" %}{% else %}{{ e.end_date|date:"M Y" }}{% endif %}{% if e.is_current %}<span class="badge badge-ok">{% trans "Hozirgi" %}</span>{% endif %}</span>
+                {% if e.location %}<span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>{{ e.location }}</span>{% endif %}
+              </div>
+            </div>
+            <p class="text-sm text-ink-2 mt-3">{{ e.summary }}</p>
+            <div class="flex flex-wrap gap-1.5 mt-3">{% for t in e.technologies.all %}<span class="chip">{{ t.name }}</span>{% endfor %}</div>
+          </a>
+        </li>
+      {% empty %}<li class="text-center text-ink-3 py-10">{% trans "Hech narsa topilmadi" %}</li>{% endfor %}
+    </ol>
+  </div>
+
+  <aside class="flex flex-col gap-4">
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="user-round"></i></span><h2 class="text-lg font-semibold">{% trans "Karyera" %}</h2></div>
+      <ul class="flex flex-col gap-2">
+        <li class="glass glass--sm flex items-center gap-3 p-3"><i data-lucide="calendar-days" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ site.years_experience }}+</div><div class="text-xs text-ink-3">{% trans "Yillik tajriba" %}</div></div></li>
+        <li class="glass glass--sm flex items-center gap-3 p-3"><i data-lucide="package-check" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ projects_count }}+</div><div class="text-xs text-ink-3">{% trans "Topshirilgan loyihalar" %}</div></div></li>
+        <li class="glass glass--sm flex items-center gap-3 p-3"><i data-lucide="cpu" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ tech_count }}+</div><div class="text-xs text-ink-3">{% trans "Texnologiyalar" %}</div></div></li>
+        <li class="glass glass--sm flex items-center gap-3 p-3"><i data-lucide="globe" class="w-5 h-5"></i><div><div class="font-semibold">{% trans "Butun dunyo" %}</div><div class="text-xs text-ink-3">{% trans "Masofaviy va ofisda" %}</div></div></li>
+      </ul>
+    </div>
+    {% if distribution %}
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-3">{% trans "Turlar bo'yicha" %}</h2>
+      <div class="flex items-center gap-4">
+        <div class="relative w-28 h-28 shrink-0">{% include "partials/donut.html" with segments=distribution stroke=6 %}<div class="absolute inset-0 grid place-items-center text-center"><div><div class="font-display font-semibold text-xl">{{ site.years_experience }}+</div><div class="text-[10px] text-ink-3">{% trans "yil" %}</div></div></div></div>
+        <ul class="flex-1 flex flex-col gap-2 text-sm">{% for s in distribution %}<li class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:{{ s.color }}"></span>{{ s.label }}<span class="ml-auto tabular text-ink-3">{{ s.pct }}%</span></li>{% endfor %}</ul>
+      </div>
+    </div>
+    {% endif %}
+    {% if hero.quote %}<figure class="quote-card"><div class="mark">“</div><blockquote class="font-display text-lg leading-snug">{{ hero.quote }}</blockquote><div class="rule"></div></figure>{% endif %}
+  </aside>
+</section>
+
+
+{% if education %}
+<section id="education" class="mt-6 scroll-mt-24">
+  <div class="flex items-end justify-between gap-3 mb-4">
+    <div><span class="eyebrow"><span class="dot"></span>{% trans "Ta'lim" %}</span><h2 class="text-3xl sm:text-4xl font-semibold mt-3">{% trans "O'qish joylarim" %}</h2></div>
+  </div>
+  <ol class="relative grid gap-4 lg:grid-cols-2">
+    {% for e in education %}
+      <li class="glass p-5 sm:p-6 flex flex-col gap-4 relative overflow-hidden {% if e.is_current %}glow-accent{% endif %}">
+        <span class="absolute -right-8 -top-8 font-display text-[120px] leading-none font-bold text-ink/[.04] select-none" aria-hidden="true">{{ e.start_date|date:"Y" }}</span>
+        <div class="flex items-start gap-4">
+          {% if e.logo %}<img src="{% thumb e.logo 160 %}" alt="" class="w-16 h-16 rounded-2xl object-cover shrink-0" loading="lazy">{% else %}<span class="icon-tile w-16 h-16"><i data-lucide="graduation-cap"></i></span>{% endif %}
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2 text-sm"><span class="font-display font-semibold tabular text-accent">{{ e.start_date|date:"Y" }} — {% if e.is_current %}{% trans "hozir" %}{% else %}{{ e.end_date|date:"Y" }}{% endif %}</span>{% if e.degree %}<span class="badge badge-info">{{ e.degree }}</span>{% endif %}{% if e.grade %}<span class="badge badge-ok">GPA {{ e.grade }}</span>{% endif %}</div>
+            <h3 class="text-xl font-semibold leading-snug mt-1">{{ e.company }}</h3>
+            {% if e.field_of_study %}<p class="text-ink-2">{{ e.field_of_study }}</p>{% endif %}
+            {% if e.location %}<p class="text-xs text-ink-3 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>{{ e.location }}</p>{% endif %}
+          </div>
+        </div>
+        <p class="text-sm text-ink-2">{{ e.summary }}</p>
+        {% if e.achievements %}<div class="richtext !text-sm">{{ e.achievements|safe }}</div>{% endif %}
+        {% if e.technologies.all %}<div class="flex flex-wrap gap-1.5">{% for t in e.technologies.all %}<span class="chip">{% if t.icon_url %}<img src="{{ t.icon_url }}" alt="" class="w-3.5 h-3.5" loading="lazy">{% endif %}{{ t.name }}</span>{% endfor %}</div>{% endif %}
+        <a href="{{ e.get_absolute_url }}" class="btn btn-glass btn-sm w-fit mt-auto">{% trans "Batafsil" %}<i data-lucide="arrow-right"></i></a>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
+<section class="panel mt-4" x-data="{ tab: '{{ skill_categories.0.slug|default:'' }}' }">
+  <div class="panel-title flex-wrap">
+    <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="chart-no-axes-column"></i></span><h2>{% trans "Ko'nikmalar va texnologiyalar" %}</h2></div>
+    <a href="{% url 'portfolio:skills' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a>
+  </div>
+  <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-4">{% for c in skill_categories %}<button type="button" class="chip-btn" :class="tab === '{{ c.slug }}' && 'is-active'" @click="tab = '{{ c.slug }}'">{{ c.name }}</button>{% endfor %}</div>
+  {% for c in skill_categories %}
+    <div x-show="tab === '{{ c.slug }}'" {% if not forloop.first %}x-cloak{% endif %} class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+      {% for sk in c.skills.all %}<div class="glass glass--sm p-3 flex flex-col items-center gap-2 text-sm">{% if sk.icon_url %}<img src="{{ sk.icon_url }}" alt="" class="w-8 h-8" loading="lazy">{% else %}<span class="grid place-items-center w-8 h-8 rounded-lg bg-accent-strong/30 font-display font-semibold">{{ sk.name|slice:":1" }}</span>{% endif %}{{ sk.name }}</div>{% endfor %}
+    </div>
+  {% endfor %}
+</section>
+
+<section class="glass flex flex-col sm:flex-row items-center gap-4 p-5 mt-4">
+  <span class="icon-tile"><i data-lucide="briefcase"></i></span>
+  <div class="flex-1"><h2 class="text-lg font-semibold">{% trans "Keling, ajoyib narsa quramiz" %}</h2><p class="text-sm text-ink-2">{% trans "Yangi imkoniyatlar, hamkorlik va qiziqarli loyihalarga ochiqman." %}</p></div>
+  <a href="{% url 'core:contact' %}" class="btn btn-light">{% trans "Bog'lanish" %}<i data-lucide="arrow-right"></i></a>
+</section>
+{% endblock %}

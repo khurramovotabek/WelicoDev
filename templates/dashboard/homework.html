@@ -1,0 +1,12 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Uyga vazifalar" %}{% endblock %}
+{% block dash %}
+{% trans "Uyga vazifalar" as t %}{% trans "Kurslar" as parent %}{% url 'dashboard:courses' as parent_url %}{% trans "Qabul qilsangiz yoki qaytarsangiz, o'quvchiga bot orqali xabar boradi." as st %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st parent=parent parent_url=parent_url %}
+<div class="flex gap-2 overflow-x-auto"><a href="?status=" class="chip-btn {% if not status %}is-active{% endif %}">{% trans "Barchasi" %}</a>{% for v, l in statuses %}<a href="?status={{ v }}" class="chip-btn {% if status == v %}is-active{% endif %}">{{ l }}</a>{% endfor %}</div>
+<div class="flex flex-col gap-3">
+  {% for s in page %}{% include "dashboard/partials/homework_row.html" %}{% empty %}<div class="glass p-10 text-center text-ink-3"><i data-lucide="party-popper" class="w-8 h-8 mx-auto mb-2"></i>{% trans "Tekshiriladigan vazifa yo'q" %}</div>{% endfor %}
+</div>
+{% include "dashboard/partials/pagination.html" %}
+{% endblock %}

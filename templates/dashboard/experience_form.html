@@ -1,0 +1,64 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Tajriba" %}{% endblock %}
+{% block dash %}
+{% trans "Tajriba va ta'lim" as parent %}{% url 'dashboard:experience' as parent_url %}{% if obj %}{% trans "Tahrirlash" as t %}{% else %}{% trans "Yangi yozuv" as t %}{% endif %}
+<div class="flex flex-wrap items-end gap-3"><div class="flex-1">{% include "dashboard/partials/page_head.html" with title=t parent=parent parent_url=parent_url %}</div>{% if obj %}<a href="{{ obj.get_absolute_url }}" target="_blank" class="btn btn-glass"><i data-lucide="eye"></i>{% trans "Saytda ko'rish" %}</a>{% endif %}</div>
+{% if form.errors %}<div class="glass glass--sm p-3 text-sm text-danger">{% trans "Formada xatolar bor. Belgilangan maydonlarni tekshiring." %}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_360px] gap-4 pb-28" x-data="{ kind: '{{ form.kind.value|default:'work' }}' }">
+  {% csrf_token %}
+  <div class="flex flex-col gap-4 min-w-0">
+    <section class="panel flex flex-col gap-4">
+      <div class="grid md:grid-cols-[200px_1fr] gap-4">
+        <div><label class="field-label">{% trans "Turi" %}</label><select name="kind" class="field" x-model="kind">{% for v, l in form.fields.kind.choices %}<option value="{{ v }}" {% if form.kind.value == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+        <div><label class="field-label" for="{{ form.company.id_for_label }}"><span x-show="kind === 'education'">{% trans "O'quv muassasasi" %}</span><span x-show="kind !== 'education'">{% trans "Kompaniya / joy" %}</span> <span class="text-danger">*</span></label>{{ form.company }}{% for e in form.company.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+      </div>
+      <div x-show="kind === 'education'" x-cloak class="grid md:grid-cols-2 gap-4">
+        {% trans "Yo'nalish / fakultet" as l %}{% include "dashboard/partials/tr_field.html" with name="field_of_study" label=l %}
+        {% trans "Daraja (Bakalavr, o'rta ma'lumot...)" as l %}{% include "dashboard/partials/tr_field.html" with name="degree" label=l %}
+        {% include "dashboard/partials/field.html" with field=form.grade %}
+      </div>
+      {% trans "Lavozim / maqom" as l %}{% include "dashboard/partials/tr_field.html" with name="role" label=l required=True %}
+      <div class="grid md:grid-cols-3 gap-4">
+        {% include "dashboard/partials/field.html" with field=form.start_date %}
+        <div x-data="{ cur: {{ form.is_current.value|yesno:'true,false' }} }"><label class="field-label">{% trans "Tugagan" %}</label><input type="date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d'|default:form.end_date.value|default:'' }}" class="field" :disabled="cur"><label class="flex items-center gap-2 text-xs mt-2"><input type="checkbox" name="is_current" x-model="cur" {% if form.is_current.value %}checked{% endif %}>{% trans "Hozir shu yerda" %}</label></div>
+        {% trans "Joylashuv" as l %}{% include "dashboard/partials/tr_field.html" with name="location" label=l %}
+      </div>
+      {% trans "Qisqa tavsif" as l %}{% include "dashboard/partials/tr_field.html" with name="summary" label=l required=True %}
+      {% trans "Batafsil" as l %}{% include "dashboard/partials/tr_field.html" with name="description" label=l %}
+      {% trans "Yutuqlar, olimpiadalar, faoliyat" as l %}{% include "dashboard/partials/tr_field.html" with name="achievements" label=l %}
+      {% trans "Iqtibos" as l %}{% include "dashboard/partials/tr_field.html" with name="quote" label=l %}
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <h2 class="text-lg font-semibold">{% trans "Texnologiyalar / fanlar" %}</h2>
+      <div class="flex flex-wrap gap-2 max-h-52 overflow-y-auto">{% for cb in form.technologies %}<label class="cursor-pointer">{{ cb.tag }}<span class="chip chip-lg select-none">{{ cb.choice_label }}</span></label>{% endfor %}</div>
+    </section>
+  </div>
+  <aside class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-3">
+      <span class="field-label">{% trans "Logo / gerb" %}</span>
+      {% if obj.logo %}<img src="{{ obj.logo.url }}" alt="" class="w-24 h-24 rounded-2xl object-cover">{% endif %}
+      <input type="file" name="logo" accept="image/*" class="field">
+      <div><label class="field-label">Slug</label>{{ form.slug }}</div>
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <h2 class="text-lg font-semibold" x-text="kind === 'education' ? '{% trans "Muassasa haqida" %}' : '{% trans "Kompaniya haqida" %}'"></h2>
+      {% trans "Tavsif" as l %}{% include "dashboard/partials/tr_field.html" with name="company_description" label=l %}
+      {% trans "Soha" as l %}{% include "dashboard/partials/tr_field.html" with name="company_industry" label=l %}
+      {% include "dashboard/partials/field.html" with field=form.website %}
+      {% include "dashboard/partials/field.html" with field=form.map_url %}
+      <div class="grid grid-cols-2 gap-3" x-show="kind !== 'education'">{% include "dashboard/partials/field.html" with field=form.team_size %}{% include "dashboard/partials/field.html" with field=form.products_count %}</div>
+    </section>
+    <section class="panel flex flex-col gap-1">
+      {% trans "Saytda ko'rinadi" as l %}{% include "dashboard/partials/toggle.html" with field=form.is_published label=l %}
+      {% include "dashboard/partials/field.html" with field=form.order %}
+    </section>
+    {% if obj %}<div x-data="{ c: false }"><button type="button" class="btn btn-danger w-full" x-show="!c" @click="c = true"><i data-lucide="trash-2"></i>{% trans "O'chirish" %}</button><button form="delete-form" class="btn btn-danger w-full !bg-danger !text-white" x-show="c" x-cloak>{% trans "Ha, o'chirish" %}</button></div>{% endif %}
+  </aside>
+  <div class="fixed bottom-4 left-4 right-4 lg:left-[290px] z-30 glass glass--strong flex flex-wrap items-center gap-2 sm:gap-3 p-3">
+    <a href="{% url 'dashboard:experience' %}" class="btn btn-glass max-sm:hidden">{% trans "Bekor qilish" %}</a>
+    <button class="btn btn-primary sm:px-8 ml-auto"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+  </div>
+</form>
+{% if obj %}<form id="delete-form" method="post" action="{% url 'dashboard:experience_delete' obj.pk %}" hidden>{% csrf_token %}</form>{% endif %}
+{% endblock %}

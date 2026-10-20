@@ -1,0 +1,6161 @@
+#
+msgid ""
+msgstr ""
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/dashboard/partials/pagination.html:4
+#, python-format
+msgid "%(a)s–%(b)s / %(n)s"
+msgstr "%(a)s–%(b)s / %(n)s"
+
+#: apps/core/seo_audit.py:51
+#, python-format
+msgid "%(n)s ta rasmga alt matn yozing"
+msgstr "Добавьте alt-текст к %(n)s изображениям"
+
+#: templates/education/buy.html:59
+#, python-format
+msgid "%(n)s ta video dars, konspekt va kodlar"
+msgstr "%(n)s видеоуроков, конспекты и код"
+
+#: templates/accounts/profile.html:37
+#, python-format
+msgid "%(n)s-daraja"
+msgstr "Уровень %(n)s"
+
+#: templates/education/buy.html:4
+#, python-format
+msgid "%(t)s — sotib olish"
+msgstr "%(t)s — покупка"
+
+#: apps/dashboard/views_content.py:321
+#, python-format
+msgid "%(user)s uchun «%(course)s» ochildi"
+msgstr "Для %(user)s открыт «%(course)s»"
+
+#: apps/core/models.py:303
+msgid "/uz/projects/ yoki https://..."
+msgstr "/ru/projects/ или https://..."
+
+#: apps/accounts/views.py:229
+msgid "10 ta dars tugating"
+msgstr "Пройдите 10 уроков"
+
+#: apps/accounts/views.py:232
+msgid "3 ta kursga yoziling"
+msgstr "Запишитесь на 3 курса"
+
+#: apps/accounts/views.py:233
+msgid "5 ta izoh qoldiring"
+msgstr "Оставьте 5 комментариев"
+
+#: apps/accounts/views.py:234
+msgid "5 ta narsani saqlang"
+msgstr "Сохраните 5 материалов"
+
+#: apps/accounts/views.py:230
+msgid "50 ta dars tugating"
+msgstr "Пройдите 50 уроков"
+
+#: apps/accounts/views.py:107
+msgid "6 xonali kodni kiriting"
+msgstr "Введите 6-значный код"
+
+#: templates/dashboard/bot.html:25
+msgid "7 kunda faol"
+msgstr "Активны за 7 дней"
+
+#: templates/accounts/login.html:73
+#, python-format
+msgid "@%(bot)s botini oching"
+msgstr "Откройте бота @%(bot)s"
+
+#: templates/dashboard/bot.html:18
+msgid ""
+"@BotFather'dan olingan tokenni loyihadagi <code class=\"chip "
+"!py-0\">.env</code> fayliga <code class=\"chip "
+"!py-0\">TELEGRAM_BOT_TOKEN=...</code> qilib yozing, so'ng <code class=\"chip"
+" !py-0\">python manage.py runbot</code> buyrug'i bilan botni ishga "
+"tushiring."
+msgstr ""
+"Запишите токен от @BotFather в файл <code class=\"chip !py-0\">.env</code> "
+"как <code class=\"chip !py-0\">TELEGRAM_BOT_TOKEN=...</code>, затем "
+"запустите бота командой <code class=\"chip !py-0\">python manage.py "
+"runbot</code>."
+
+#: templates/accounts/profile.html:182
+msgid "@welicodevbot orqali yangiliklar"
+msgstr "Новости через @welicodevbot"
+
+#: templates/accounts/profile.html:32
+msgid "A'zo bo'lgan"
+msgstr "С нами с"
+
+#: templates/dashboard/bot.html:41
+msgid "Admin chatlar"
+msgstr "Чаты админов"
+
+#: templates/miniapp/lesson.html:38 templates/education/lesson_detail.html:91
+msgid "Admin qabul qilishi kerak"
+msgstr "Требуется проверка админом"
+
+#: apps/education/models.py:131
+msgid "Admin qabul qilishi shart"
+msgstr "Требуется одобрение админа"
+
+#: templates/accounts/admin_2fa.html:4
+msgid "Admin: tasdiqlash"
+msgstr "Админ: подтверждение"
+
+#: templates/dashboard/bot_settings.html:22
+msgid "Adminga bildirishnomalar"
+msgstr "Уведомления админу"
+
+#: templates/portfolio/projects.html:36
+msgid "Ajoyib g'oyalar"
+msgstr "Отличные идеи"
+
+#: config/settings/unfold.py:101
+msgid "Albomlar"
+msgstr "Альбомы"
+
+#: templates/404.html:17 templates/core/contact.html:3
+#: templates/dashboard/settings.html:16
+msgid "Aloqa"
+msgstr "Контакты"
+
+#: templates/dashboard/bot_settings.html:26
+msgid "Aloqa formasi va botga xabarlar"
+msgstr "Форма связи и сообщения боту"
+
+#: templates/core/contact.html:24
+msgid "Aloqa ma'lumotlari"
+msgstr "Контактная информация"
+
+#: templates/accounts/profile.html:117
+msgid "Amal qiladi"
+msgstr "Действует до"
+
+#: templates/dashboard/articles.html:17
+msgid "Amallar"
+msgstr "Действия"
+
+#: templates/dashboard/base.html:40 templates/dashboard/analytics.html:3
+#: templates/dashboard/analytics.html:5
+msgid "Analitika"
+msgstr "Аналитика"
+
+#: apps/core/models.py:86
+msgid "Animatsion tog'lar"
+msgstr "Анимированные горы"
+
+#: templates/dashboard/projects.html:17 templates/dashboard/projects.html:31
+#: templates/dashboard/articles.html:11
+msgid "Arxiv"
+msgstr "Архив"
+
+#: templates/dashboard/skills.html:9 templates/dashboard/skills.html:25
+#: config/settings/unfold.py:56
+msgid "Asosiy"
+msgstr "Основное"
+
+#: templates/portfolio/project_detail.html:72
+msgid "Asosiy imkoniyatlar"
+msgstr "Ключевые возможности"
+
+#: apps/core/seo_audit.py:37
+msgid "Asosiy kalit so'z kiritilmagan (masalan: docker darslari)"
+msgstr "Не указано ключевое слово (например: уроки docker)"
+
+#: apps/core/seo_audit.py:37
+#, python-format
+msgid "Asosiy kalit so'z tanlangan: “%(kw)s”"
+msgstr "Ключевое слово: «%(kw)s»"
+
+#: templates/dashboard/skill_form.html:24
+msgid "Asosiy ko'nikma"
+msgstr "Основной навык"
+
+#: templates/portfolio/skills.html:29
+msgid "Asosiy ko'nikmalar"
+msgstr "Основные навыки"
+
+#: templates/dashboard/article_form.html:13
+msgid "Asosiy ma'lumot"
+msgstr "Основная информация"
+
+#: templates/dashboard/project_form.html:17
+msgid "Asosiy ma'lumotlar (har bir til uchun alohida)"
+msgstr "Основные данные (отдельно для каждого языка)"
+
+#: templates/miniapp/shell.html:46 templates/partials/header.html:12
+msgid "Asosiy menyu"
+msgstr "Главное меню"
+
+#: templates/404.html:14
+msgid "Asosiy sahifaga qaytish"
+msgstr "Вернуться на главную"
+
+#: templates/portfolio/experience_detail.html:52
+msgid "Asosiy vazifalar"
+msgstr "Основные обязанности"
+
+#: apps/education/views.py:154
+#, python-format
+msgid ""
+"Assalomu alaykum! «%(course)s» kursini sotib olmoqchiman (%(price)s so'm). "
+"So'rov: %(ref)s, ism: %(name)s"
+msgstr ""
+"Здравствуйте! Хочу купить курс «%(course)s» (%(price)s сум). Заявка: "
+"%(ref)s, имя: %(name)s"
+
+#: templates/dashboard/track_form.html:13
+msgid "Audio fayl"
+msgstr "Аудиофайл"
+
+#: apps/dashboard/forms.py:287
+msgid "Audio fayl 30 MB dan oshmasin"
+msgstr "Аудиофайл не более 30 МБ"
+
+#: apps/dashboard/forms.py:295
+msgid "Audio fayl yuklang yoki tashqi havola kiriting"
+msgstr "Загрузите аудиофайл или укажите внешнюю ссылку"
+
+#: templates/dashboard/articles.html:5
+msgid "Auditoriyangiz uchun kontent yarating va nashr qiling."
+msgstr "Создавайте и публикуйте контент для своей аудитории."
+
+#: templates/accounts/profile.html:176
+msgid "Avatar"
+msgstr "Аватар"
+
+#: templates/dashboard/channel.html:56
+msgid "Avtomatik joylash"
+msgstr "Автопубликация"
+
+#: templates/core/contact.html:75
+msgid "Ba'zan tezkor suhbat eng yaxshi boshlanish. Telegram orqali yozing."
+msgstr "Иногда быстрый разговор — лучшее начало. Напишите в Telegram."
+
+#: templates/education/courses.html:44
+msgid "Barcha darajalar"
+msgstr "Все уровни"
+
+#: apps/telegram_bot/models.py:59
+msgid "Barcha foydalanuvchilar"
+msgstr "Все пользователи"
+
+#: templates/dashboard/projects.html:17 templates/dashboard/articles.html:40
+#: templates/dashboard/users.html:18
+msgid "Barcha holatlar"
+msgstr "Все статусы"
+
+#: templates/dashboard/access.html:22
+msgid "Barcha kurslar"
+msgstr "Все курсы"
+
+#: templates/blog/article_detail.html:17
+msgid "Barcha maqolalar"
+msgstr "Все статьи"
+
+#: templates/dashboard/articles.html:41
+msgid "Barcha mualliflar"
+msgstr "Все авторы"
+
+#: apps/core/seo_audit.py:51
+msgid "Barcha rasmlarda alt matn bor"
+msgstr "У всех изображений есть alt-текст"
+
+#: templates/dashboard/settings.html:172
+msgid "Barcha tablardagi o'zgarishlar birga saqlanadi"
+msgstr "Изменения на всех вкладках сохраняются вместе"
+
+#: templates/portfolio/skills.html:45
+msgid "Barcha texnologiyalar"
+msgstr "Все технологии"
+
+#: templates/dashboard/projects.html:18 templates/dashboard/articles.html:39
+msgid "Barcha turkumlar"
+msgstr "Все категории"
+
+#: templates/gallery/index.html:27 templates/gallery/index.html:30
+#: templates/gallery/index.html:40
+msgid "Barchasi"
+msgstr "Все"
+
+#: templates/miniapp/project.html:25 templates/core/home.html:110
+#: templates/dashboard/experience_form.html:28
+msgid "Batafsil"
+msgstr "Подробнее"
+
+#: templates/dashboard/partials/user_panel.html:34
+msgid "Batafsil ko'rish uchun foydalanuvchini tanlang"
+msgstr "Выберите пользователя для просмотра"
+
+#: templates/dashboard/access.html:61
+msgid "Bekor"
+msgstr "Отмена"
+
+#: templates/dashboard/access.html:119
+msgid "Bekor qilingan"
+msgstr "Отменён"
+
+#: templates/dashboard/experience_form.html:59
+#: templates/dashboard/article_form.html:61
+#: templates/dashboard/project_form.html:96
+msgid "Bekor qilish"
+msgstr "Отмена"
+
+#: templates/dashboard/skill_form.html:20
+msgid "Belgi devicon.dev nomidan avtomatik olinadi"
+msgstr "Иконка подставляется по имени devicon.dev"
+
+#: templates/miniapp/course.html:5 templates/miniapp/home.html:49
+#: templates/miniapp/courses.html:6
+msgid "Bepul"
+msgstr "Бесплатно"
+
+#: templates/education/buy.html:83
+msgid "Bepul darslar"
+msgstr "Бесплатные уроки"
+
+#: templates/education/course_detail.html:41
+#: templates/education/course_detail.html:47
+msgid "Bepul darsni ko'rish"
+msgstr "Смотреть бесплатный урок"
+
+#: templates/miniapp/course.html:44
+#: templates/education/partials/lesson_row.html:14
+msgid "Bepul ko'rish"
+msgstr "Бесплатный просмотр"
+
+#: templates/dashboard/access.html:111
+msgid "Berilgan"
+msgstr "Выдан"
+
+#: templates/dashboard/base.html:74 apps/telegram_bot/admin.py:16
+msgid "Bildirishnomalar"
+msgstr "Уведомления"
+
+#: templates/dashboard/skill_form.html:12
+msgid "Bilim darajasi"
+msgstr "Уровень владения"
+
+#: templates/dashboard/article_form.html:6
+msgid "Bilim, g'oya va tajribangizni dunyo bilan ulashing."
+msgstr "Делитесь знаниями, идеями и опытом с миром."
+
+#: templates/dashboard/articles.html:50
+msgid "Bilimingizni ulashing"
+msgstr "Поделитесь знаниями"
+
+#: apps/core/models.py:270 apps/core/models.py:294
+msgid "Binafsha"
+msgstr "Фиолетовый"
+
+#: apps/core/models.py:161
+msgid "Bing Webmaster kodi"
+msgstr "Код Bing Webmaster"
+
+#: templates/dashboard/settings.html:26 templates/accounts/profile.html:173
+msgid "Bio"
+msgstr "О себе"
+
+#: templates/dashboard/channel.html:48
+msgid "Bir bosishda post qiling yoki avval tahrirlang."
+msgstr "Опубликуйте в один клик или сначала отредактируйте."
+
+#: templates/accounts/login.html:22
+msgid "Bir martalik kod, 2 daqiqa"
+msgstr "Одноразовый код, 2 минуты"
+
+#: templates/portfolio/skills.html:94
+msgid "Birga ishlash yoki texnologiya haqida suhbatlashishni xohlaysizmi?"
+msgstr "Хотите поработать вместе или обсудить технологии?"
+
+#: templates/dashboard/partials/homework_row.html:9
+msgid "Biriktirilgan fayl"
+msgstr "Прикреплённый файл"
+
+#: templates/miniapp/home.html:33
+msgid "Birinchi dars"
+msgstr "Первый урок"
+
+#: apps/accounts/views.py:228
+msgid "Birinchi darsni tugating"
+msgstr "Пройдите первый урок"
+
+#: apps/accounts/views.py:231
+msgid "Birinchi kursni tugating"
+msgstr "Завершите первый курс"
+
+#: apps/accounts/views.py:228
+msgid "Birinchi qadam"
+msgstr "Первый шаг"
+
+#: templates/404.html:19
+msgid "Biror narsa qidirib ko'ring..."
+msgstr "Попробуйте что-нибудь найти..."
+
+#: config/settings/unfold.py:88 apps/blog/apps.py:9
+msgid "Blog"
+msgstr "Блог"
+
+#: templates/dashboard/article_form.html:33
+msgid "Blog sahifasining tepasida"
+msgstr "Вверху страницы блога"
+
+#: templates/blog/article_detail.html:14
+msgid "Blogga qaytish"
+msgstr "Назад в блог"
+
+#: apps/dashboard/views.py:214
+msgid "Blok olib tashlandi"
+msgstr "Блокировка снята"
+
+#: templates/dashboard/partials/user_panel.html:30
+msgid "Blokdan chiqarish"
+msgstr "Разблокировать"
+
+#: templates/dashboard/users.html:11 templates/dashboard/users.html:21
+#: templates/dashboard/users.html:36
+msgid "Bloklangan"
+msgstr "Заблокирован"
+
+#: templates/dashboard/partials/user_panel.html:30
+msgid "Bloklash"
+msgstr "Заблокировать"
+
+#: apps/education/models.py:232
+msgid "Bo'sh bo'lsa muddatsiz"
+msgstr "Пусто — бессрочно"
+
+#: templates/dashboard/article_form.html:15
+msgid "Bo'sh qoldirsangiz inglizcha sarlavhadan avtomatik yaratiladi"
+msgstr "Если оставить пустым, будет создан из английского заголовка"
+
+#: apps/core/models.py:242
+msgid "Bo'sh qolsa platforma nomi olinadi"
+msgstr "Если пусто — используется название платформы"
+
+#: templates/404.html:17 templates/gallery/index.html:65
+#: templates/core/home.html:140
+msgid "Bog'lanish"
+msgstr "Связаться"
+
+#: apps/portfolio/admin.py:139
+msgid "Bog'liqlar"
+msgstr "Связи"
+
+#: templates/404.html:14 templates/miniapp/shell.html:47
+#: templates/partials/header.html:13
+msgid "Bosh sahifa"
+msgstr "Главная"
+
+#: templates/dashboard/project_form.html:83
+msgid "Bosh sahifada ko'rsatiladi"
+msgstr "Показывается на главной"
+
+#: apps/core/models.py:106
+msgid ""
+"Bosh sahifadagi katta rasm. Vertikal (3:4) va kamida 1200px bo'lsa yaxshi "
+"ko'rinadi."
+msgstr "Большое фото на главной. Лучше вертикальное (3:4), от 1200px."
+
+#: templates/portfolio/skills.html:72 apps/portfolio/models.py:37
+#: apps/education/models.py:36
+msgid "Boshlang'ich"
+msgstr "Начальный"
+
+#: templates/accounts/partials/course_row.html:6
+msgid "Boshlanmagan"
+msgstr "Не начат"
+
+#: templates/miniapp/course.html:12 templates/education/course_detail.html:25
+msgid "Boshlash"
+msgstr "Начать"
+
+#: apps/interactions/models.py:98
+msgid "Boshqa"
+msgstr "Другое"
+
+#: apps/core/seo_audit.py:52
+msgid "Boshqa maqola yoki kursga ichki havola qo'shing"
+msgstr "Добавьте внутреннюю ссылку на статью или курс"
+
+#: templates/portfolio/experience_detail.html:89
+msgid "Boshqa tajribalar"
+msgstr "Другой опыт"
+
+#: templates/gallery/video_detail.html:29
+msgid "Boshqa videolar"
+msgstr "Другие видео"
+
+#: templates/dashboard/articles.html:45
+msgid "Boshqarish"
+msgstr "Управлять"
+
+#: templates/dashboard/access.html:81
+msgid "Boshqasini tanlash"
+msgstr "Выбрать другого"
+
+#: templates/dashboard/base.html:37 templates/dashboard/bot.html:39
+msgid "Bot"
+msgstr "Бот"
+
+#: templates/accounts/profile.html:181
+msgid "Bot bildirishnomalari"
+msgstr "Уведомления бота"
+
+#: templates/dashboard/users.html:10
+msgid "Bot faol"
+msgstr "Бот активен"
+
+#: templates/dashboard/bot.html:33
+msgid "Bot faolligi"
+msgstr "Активность бота"
+
+#: templates/dashboard/bot.html:23
+msgid "Bot foydalanuvchilari"
+msgstr "Пользователи бота"
+
+#: templates/dashboard/broadcast_form.html:5
+msgid ""
+"Bot foydalanuvchilariga xabar yuborish. Avval o'zingizga test qilib ko'ring."
+msgstr "Рассылка пользователям бота. Сначала отправьте тест себе."
+
+#: config/settings/unfold.py:135
+msgid "Bot hodisalari"
+msgstr "События бота"
+
+#: templates/dashboard/home.html:73
+#: templates/dashboard/partials/user_panel.html:23
+msgid "Bot orqali xabar"
+msgstr "Сообщение через бота"
+
+#: apps/accounts/models.py:30
+msgid "Bot orqali yangi kontent haqida xabar olish"
+msgstr "Получать уведомления о новом контенте через бота"
+
+#: templates/dashboard/inbox.html:5
+msgid "Bot orqali yozishmalar va saytdagi aloqa formasi."
+msgstr "Переписка в боте и форма связи на сайте."
+
+#: templates/dashboard/bot_settings.html:3
+#: templates/dashboard/bot_settings.html:5 templates/dashboard/bot.html:11
+msgid "Bot sozlamalari"
+msgstr "Настройки бота"
+
+#: apps/dashboard/views.py:581
+msgid "Bot sozlamalari saqlandi"
+msgstr "Настройки бота сохранены"
+
+#: templates/dashboard/inbox.html:8
+msgid "Bot suhbatlari"
+msgstr "Чаты бота"
+
+#: templates/dashboard/bot.html:18
+msgid "Bot tokeni hali kiritilmagan"
+msgstr "Токен бота ещё не указан"
+
+#: apps/dashboard/views.py:227 apps/dashboard/views.py:554
+msgid "Bot tokeni sozlanmagan (.env → TELEGRAM_BOT_TOKEN)"
+msgstr "Токен бота не настроен (.env → TELEGRAM_BOT_TOKEN)"
+
+#: templates/dashboard/bot_settings.html:18
+msgid "Bot yoqilgan"
+msgstr "Бот включён"
+
+#: config/settings/unfold.py:134
+msgid "Bot yozishmalari"
+msgstr "Переписка бота"
+
+#: templates/dashboard/partials/user_panel.html:16
+msgid "Botda"
+msgstr "В боте"
+
+#: apps/accounts/models.py:23
+msgid "Botda ism, familiya va telefonni to'liq kiritgan"
+msgstr "Указал в боте имя, фамилию и телефон"
+
+#: templates/accounts/login.html:48
+msgid "Botdan tasdiq kutilmoqda"
+msgstr "Ожидаем подтверждения в боте"
+
+#: templates/dashboard/inbox.html:48
+msgid "Botga yozilgan xabarlar shu yerda ko'rinadi."
+msgstr "Здесь появятся сообщения, отправленные боту."
+
+#: templates/miniapp/profile.html:33
+msgid "Botga yozish"
+msgstr "Написать боту"
+
+#: templates/dashboard/bot.html:27
+#: templates/dashboard/partials/user_panel.html:8
+msgid "Botni to'xtatgan"
+msgstr "Остановил бота"
+
+#: apps/core/admin.py:12
+msgid "Brend"
+msgstr "Бренд"
+
+#: templates/dashboard/settings.html:18
+msgid "Brend va SEO"
+msgstr "Бренд и SEO"
+
+#: templates/dashboard/settings.html:7
+msgid "Brend, shaxsiy ma'lumotlar, aloqa va ijtimoiy tarmoqlar."
+msgstr "Бренд, личные данные, контакты и соцсети."
+
+#: templates/miniapp/shell.html:60
+msgid "Bu Mini App faqat Telegram orqali ishlaydi."
+msgstr "Это Mini App работает только в Telegram."
+
+#: templates/miniapp/locked.html:4
+msgid "Bu dars hali yopiq"
+msgstr "Урок пока закрыт"
+
+#: apps/education/views.py:171
+msgid "Bu dars hali yopiq. Avval oldingi darsni tugating."
+msgstr "Урок пока закрыт. Сначала завершите предыдущий."
+
+#: templates/education/courses.html:74
+msgid "Bu filtr bo'yicha kurs topilmadi"
+msgstr "По этому фильтру курсов нет"
+
+#: apps/accounts/admin_security.py:119
+msgid ""
+"Bu hisob uchun Telegram ulanmagan. Saytga Telegram orqali kiring — admin "
+"panel o'zi ochiladi."
+msgstr ""
+"К этому аккаунту не привязан Telegram. Войдите на сайт через Telegram — "
+"админка откроется сама."
+
+#: templates/accounts/login.html:76
+msgid "Bu sahifa avtomatik yangilanadi"
+msgstr "Страница обновится автоматически"
+
+#: apps/interactions/forms.py:39 apps/education/forms.py:25
+msgid "Bu turdagi fayl qabul qilinmaydi"
+msgstr "Этот тип файла не принимается"
+
+#: templates/interactions/comments.html:25
+msgid "Bu yerda izohlar yopilgan."
+msgstr "Комментарии здесь закрыты."
+
+#: templates/dashboard/home.html:91
+msgid "Bugun"
+msgstr "Сегодня"
+
+#: templates/miniapp/home.html:5
+msgid "Bugun nimani o'rganamiz?"
+msgstr "Что изучим сегодня?"
+
+#: apps/core/models.py:83
+msgid "Bulutlar ustida tong"
+msgstr "Рассвет над облаками"
+
+#: templates/portfolio/experience.html:43
+msgid "Butun dunyo"
+msgstr "По всему миру"
+
+#: apps/core/models.py:108
+msgid "CV fayli"
+msgstr "Файл CV"
+
+#: templates/portfolio/about.html:43
+msgid "CV yuklab olish"
+msgstr "Скачать CV"
+
+#: templates/partials/header.html:50 templates/accounts/profile.html:14
+#: templates/accounts/profile.html:14
+msgid "Chiqish"
+msgstr "Выйти"
+
+#: apps/telegram_bot/models.py:102
+msgid "Chiquvchi"
+msgstr "Исходящее"
+
+#: templates/dashboard/skills.html:15 templates/accounts/profile.html:21
+msgid "Daraja"
+msgstr "Уровень"
+
+#: templates/dashboard/experience_form.html:18
+msgid "Daraja (Bakalavr, o'rta ma'lumot...)"
+msgstr "Степень (бакалавр, среднее образование...)"
+
+#: templates/dashboard/courses.html:26 apps/telegram_bot/models.py:156
+msgid "Dars"
+msgstr "Урок"
+
+#: templates/accounts/profile.html:39
+msgid "Dars, sertifikat va izohlar uchun XP to'planadi"
+msgstr "XP начисляется за уроки, сертификаты и комментарии"
+
+#: templates/miniapp/course.html:36 templates/dashboard/courses.html:25
+#: templates/accounts/profile.html:44
+msgid "Darslar"
+msgstr "Уроки"
+
+#: templates/education/courses.html:83
+msgid ""
+"Darslar ketma-ket ochiladi. Hammasini tugatsangiz — tekshiriladigan "
+"sertifikat."
+msgstr ""
+"Уроки открываются по порядку. Пройдёте все — получите проверяемый "
+"сертификат."
+
+#: templates/dashboard/bot_settings.html:33
+msgid "Darslarni avtomatik joylash"
+msgstr "Автопубликация уроков"
+
+#: apps/education/views.py:169
+msgid "Darslarni ko'rish uchun avval kursga yoziling"
+msgstr "Чтобы смотреть уроки, запишитесь на курс"
+
+#: config/settings/unfold.py:58 apps/dashboard/apps.py:9
+msgid "Dashboard"
+msgstr "Панель"
+
+#: templates/miniapp/course.html:12 templates/miniapp/home.html:27
+#: templates/education/course_detail.html:25
+msgid "Davom ettirish"
+msgstr "Продолжить"
+
+#: templates/miniapp/project.html:17 templates/dashboard/project_form.html:52
+#: templates/portfolio/project_detail.html:86
+msgid "Davomiyligi"
+msgstr "Длительность"
+
+#: templates/dashboard/home.html:87
+msgid "Disk"
+msgstr "Диск"
+
+#: templates/portfolio/skills.html:16
+msgid "Doimo"
+msgstr "Всегда"
+
+#: templates/dashboard/skills.html:10 templates/portfolio/skills.html:69
+#: apps/portfolio/models.py:40
+msgid "Ekspert"
+msgstr "Эксперт"
+
+#: templates/partials/player_dock.html:12
+msgid "Ekvalayzer"
+msgstr "Эквалайзер"
+
+#: apps/blog/views.py:91
+msgid "Email manzil noto'g'ri"
+msgstr "Неверный email"
+
+#: templates/blog/articles.html:68
+msgid "Email manzilingiz"
+msgstr "Ваш email"
+
+#: templates/dashboard/inbox.html:33
+msgid "Email orqali javob"
+msgstr "Ответить по email"
+
+#: templates/portfolio/skills.html:29
+msgid "Eng ko'p ishlaydigan texnologiyalarim"
+msgstr "Технологии, с которыми я работаю чаще всего"
+
+#: templates/core/share.html:45
+msgid "Eng mashhur platforma"
+msgstr "Самая популярная платформа"
+
+#: templates/portfolio/projects.html:18
+msgid "Eski"
+msgstr "Старые"
+
+#: templates/dashboard/projects.html:19 templates/interactions/comments.html:6
+msgid "Eskilari"
+msgstr "Сначала старые"
+
+#: config/settings/unfold.py:70 apps/core/models.py:357
+#: apps/core/models.py:358
+msgid "FAQ"
+msgstr "FAQ"
+
+#: templates/accounts/profile.html:171
+msgid "Familiya"
+msgstr "Фамилия"
+
+#: templates/dashboard/access.html:119 templates/dashboard/settings.html:103
+#: templates/dashboard/bot.html:43
+msgid "Faol"
+msgstr "Активен"
+
+#: apps/accounts/views.py:233
+msgid "Faol a'zo"
+msgstr "Активный участник"
+
+#: templates/dashboard/home.html:91
+msgid "Faol sessiyalar"
+msgstr "Активные сессии"
+
+#: templates/accounts/profile.html:58
+msgid "Faolligim"
+msgstr "Моя активность"
+
+#: templates/dashboard/base.html:33 config/settings/unfold.py:120
+#: apps/interactions/apps.py:9
+msgid "Faollik"
+msgstr "Активность"
+
+#: apps/dashboard/forms.py:220
+msgid "Faqat Telegram username: harf, raqam va _"
+msgstr "Только Telegram username: буквы, цифры и _"
+
+#: apps/telegram_bot/models.py:63
+msgid "Faqat adminlar (test)"
+msgstr "Только админы (тест)"
+
+#: templates/dashboard/broadcast_form.html:53
+msgid "Faqat adminlarga test"
+msgstr "Тест только админам"
+
+#: templates/accounts/login.html:75
+msgid "Faqat birinchi marta. Telefon Telegram tugmasi orqali tasdiqlanadi"
+msgstr "Только в первый раз. Номер подтверждается кнопкой Telegram"
+
+#: apps/education/models.py:59
+msgid ""
+"Faqat siz ruxsat bergan foydalanuvchilar ko'radi; ro'yxatlarda va qidiruvda "
+"chiqmaydi"
+msgstr ""
+"Видят только пользователи с вашим доступом; не показывается в списках и "
+"поиске"
+
+#: templates/education/buy.html:78
+msgid "Faqat so'rov qoldirish"
+msgstr "Только оставить заявку"
+
+#: apps/education/models.py:203
+msgid "Fayl"
+msgstr "Файл"
+
+#: templates/education/lesson_detail.html:118
+msgid "Fayl (ixtiyoriy, 20 MB gacha)"
+msgstr "Файл (необязательно, до 20 МБ)"
+
+#: templates/core/partials/contact_form.html:12
+msgid "Fayl biriktirish (ixtiyoriy)"
+msgstr "Прикрепить файл (необязательно)"
+
+#: apps/interactions/forms.py:37
+msgid "Fayl hajmi 10 MB dan oshmasin"
+msgstr "Размер файла не более 10 МБ"
+
+#: apps/education/forms.py:23
+msgid "Fayl hajmi 20 MB dan oshmasin"
+msgstr "Размер файла не более 20 МБ"
+
+#: apps/education/models.py:143
+msgid "Fayl o'rniga YouTube (unlisted) yoki boshqa havola"
+msgstr "Вместо файла — YouTube (unlisted) или другая ссылка"
+
+#: templates/interactions/reviews.html:19 apps/interactions/forms.py:62
+msgid "Fikringizni yozing..."
+msgstr "Напишите ваше мнение..."
+
+#: templates/dashboard/articles.html:37
+msgid "Filtrlar"
+msgstr "Фильтры"
+
+#: apps/core/admin.py:24
+msgid "Fon"
+msgstr "Фон"
+
+#: templates/dashboard/settings.html:64
+msgid "Fonda yengil harakat"
+msgstr "Лёгкое движение фона"
+
+#: templates/dashboard/settings.html:154
+msgid "Footer matni"
+msgstr "Текст футера"
+
+#: templates/dashboard/experience_form.html:7
+#: templates/dashboard/settings.html:9
+msgid "Formada xatolar bor. Belgilangan maydonlarni tekshiring."
+msgstr "В форме есть ошибки. Проверьте отмеченные поля."
+
+#: templates/core/contact.html:19
+msgid "Formani to'ldiring, imkon qadar tez javob beraman."
+msgstr "Заполните форму, и я отвечу как можно скорее."
+
+#: templates/gallery/photo_detail.html:9 apps/gallery/models.py:11
+#: apps/accounts/views.py:177
+msgid "Foto"
+msgstr "Фото"
+
+#: templates/gallery/photo_detail.html:31
+msgid "Foto haqida"
+msgstr "О фото"
+
+#: templates/dashboard/base.html:32
+msgid "Foto va video"
+msgstr "Фото и видео"
+
+#: templates/gallery/index.html:64
+msgid ""
+"Foto, video yoki qo'shiq tavsiyangiz bormi? Ko'rishdan xursand bo'laman!"
+msgstr "Есть фото, видео или песня для меня? Буду рад!"
+
+#: templates/gallery/index.html:17 templates/gallery/index.html:25
+#: templates/gallery/photo_list.html:3
+msgid "Fotolar"
+msgstr "Фото"
+
+#: templates/dashboard/access.html:111 templates/dashboard/users.html:27
+#: templates/dashboard/home.html:44
+msgid "Foydalanuvchi"
+msgstr "Пользователь"
+
+#: apps/dashboard/views.py:214
+msgid "Foydalanuvchi bloklandi"
+msgstr "Пользователь заблокирован"
+
+#: templates/dashboard/inbox.html:61
+msgid "Foydalanuvchi botni to'xtatgan — xabar yetib bormaydi."
+msgstr "Пользователь остановил бота — сообщение не дойдёт."
+
+#: apps/accounts/models.py:27
+msgid "Foydalanuvchi botni to'xtatgan, xabar yetib bormaydi"
+msgstr "Пользователь остановил бота, сообщения не доходят"
+
+#: templates/dashboard/users.html:39
+msgid "Foydalanuvchi topilmadi"
+msgstr "Пользователь не найден"
+
+#: templates/dashboard/access.html:77
+msgid "Foydalanuvchi: ism, telefon, @username"
+msgstr "Пользователь: имя, телефон, @username"
+
+#: templates/dashboard/base.html:23 templates/dashboard/users.html:3
+#: templates/dashboard/users.html:5
+msgid "Foydalanuvchilar"
+msgstr "Пользователи"
+
+#: apps/portfolio/models.py:229
+msgid "Frilans"
+msgstr "Фриланс"
+
+#: templates/blog/article_detail.html:15
+msgid "G'oyalar, tajribalar va ular orasidagi hamma narsa."
+msgstr "Идеи, опыт и всё, что между ними."
+
+#: templates/portfolio/projects.html:27
+msgid "G'oyangiz bormi?"
+msgstr "Есть идея?"
+
+#: templates/portfolio/project_detail.html:56
+msgid "Galereya"
+msgstr "Галерея"
+
+#: templates/dashboard/project_form.html:35
+msgid "Galereya (bir nechta fayl)"
+msgstr "Галерея (несколько файлов)"
+
+#: templates/portfolio/skills.html:95
+msgid "Gaplashamiz"
+msgstr "Поговорим"
+
+#: templates/education/courses.html:82
+msgid ""
+"GitHub havolasi yoki faylni yuboring. Tekshirilgach Telegram'ga xabar "
+"keladi."
+msgstr ""
+"Отправьте ссылку на GitHub или файл. После проверки придёт сообщение в "
+"Telegram."
+
+#: apps/education/models.py:306
+msgid "GitHub repo yoki boshqa havola"
+msgstr "Репозиторий GitHub или другая ссылка"
+
+#: apps/core/models.py:126
+msgid "Google Maps'da joyni o'ng tugma bilan bosing va birinchi raqamni oling"
+msgstr ""
+"В Google Maps кликните правой кнопкой по месту и возьмите первое число"
+
+#: templates/core/contact.html:46
+msgid "Google Maps'da ochish"
+msgstr "Открыть в Google Maps"
+
+#: apps/core/models.py:158
+msgid "Google Search Console kodi"
+msgstr "Код Google Search Console"
+
+#: templates/dashboard/settings.html:159
+msgid ""
+"Google Search Console, Yandex Webmaster va Bing'da saytni tasdiqlash "
+"kodlari; Umami statistikasi."
+msgstr ""
+"Коды подтверждения сайта в Google Search Console, Яндекс.Вебмастере и Bing; "
+"статистика Umami."
+
+#: config/settings/unfold.py:143
+msgid "Guruhlar"
+msgstr "Группы"
+
+#: templates/dashboard/bot.html:43
+msgid "HTTPS kerak"
+msgstr "Нужен HTTPS"
+
+#: templates/dashboard/article_form.html:58
+msgid "Ha, butunlay o'chirish"
+msgstr "Да, удалить навсегда"
+
+#: templates/dashboard/experience_form.html:56
+#: templates/dashboard/skill_form.html:26
+#: templates/dashboard/channel_form.html:60
+msgid "Ha, o'chirish"
+msgstr "Да, удалить"
+
+#: templates/gallery/photo_detail.html:38
+msgid "Hajmi"
+msgstr "Размер"
+
+#: templates/dashboard/home.html:64
+msgid "Hali faollik yo'q"
+msgstr "Пока нет активности"
+
+#: templates/gallery/photo_list.html:8
+#: templates/gallery/partials/photos-grid.html:8
+msgid "Hali foto yo'q"
+msgstr "Пока нет фото"
+
+#: templates/dashboard/home.html:56
+msgid "Hali foydalanuvchi yo'q. Bot ulanishi bilan shu yerda paydo bo'ladi."
+msgstr "Пока нет пользователей. Они появятся после подключения бота."
+
+#: templates/dashboard/access.html:132
+msgid "Hali hech kimga ruxsat berilmagan"
+msgstr "Доступ ещё никому не выдан"
+
+#: templates/interactions/comments.html:44
+msgid "Hali izoh yo'q. Birinchi bo'ling!"
+msgstr "Комментариев пока нет. Будьте первым!"
+
+#: templates/accounts/profile.html:162
+msgid "Hali izoh yozmagansiz"
+msgstr "Вы ещё не оставляли комментариев"
+
+#: templates/dashboard/article_form.html:51
+msgid "Hali kanalga joylanmagan"
+msgstr "Ещё не опубликовано в канале"
+
+#: templates/dashboard/courses.html:30
+msgid "Hali kurs yo'q"
+msgstr "Курсов пока нет"
+
+#: templates/miniapp/profile.html:10 templates/accounts/profile.html:69
+#: templates/accounts/profile.html:141
+msgid "Hali kursga yozilmagansiz."
+msgstr "Вы ещё не записались на курсы."
+
+#: templates/dashboard/bot.html:59
+msgid "Hali ommaviy xabar yuborilmagan"
+msgstr "Рассылок пока не было"
+
+#: templates/dashboard/channel.html:42
+msgid "Hali post yo'q"
+msgstr "Постов пока нет"
+
+#: templates/accounts/profile.html:123
+msgid "Hali premium kurs yo'q"
+msgstr "Пока нет премиум-курсов"
+
+#: templates/interactions/reviews.html:32
+msgid "Hali sharh yo'q."
+msgstr "Отзывов пока нет."
+
+#: templates/gallery/music.html:83 templates/dashboard/music.html:20
+#: templates/gallery/partials/music-list.html:37
+msgid "Hali trek yo'q"
+msgstr "Треков пока нет"
+
+#: templates/accounts/profile.html:77
+msgid "Hali tugatilgan dars yo'q"
+msgstr "Пока нет завершённых уроков"
+
+#: templates/gallery/partials/videos-grid.html:12
+msgid "Hali video yo'q"
+msgstr "Видео пока нет"
+
+#: templates/dashboard/experience.html:14
+#: templates/dashboard/experience.html:18
+msgid "Hali yo'q"
+msgstr "Пока нет"
+
+#: templates/portfolio/projects.html:34
+msgid "Hamkorlik"
+msgstr "Сотрудничество"
+
+#: templates/dashboard/home.html:82
+msgid "Hammasi ishlayapti"
+msgstr "Все системы работают"
+
+#: templates/education/courses.html:80
+msgid ""
+"Har bir dars qisqa va amaliy. Progress avtomatik saqlanadi, to'xtagan joydan"
+" davom etasiz."
+msgstr ""
+"Каждый урок короткий и практичный. Прогресс сохраняется автоматически."
+
+#: templates/dashboard/home.html:10
+msgid "Har kuni bir qadam."
+msgstr "Шаг за шагом."
+
+#: templates/dashboard/settings.html:103 apps/education/models.py:202
+msgid "Havola"
+msgstr "Ссылка"
+
+#: templates/education/lesson_detail.html:116
+msgid "Havola (GitHub)"
+msgstr "Ссылка (GitHub)"
+
+#: apps/dashboard/forms.py:236
+msgid "Havola https://, mailto: yoki tel: bilan boshlanishi kerak"
+msgstr "Ссылка должна начинаться с https://, mailto: или tel:"
+
+#: apps/interactions/models.py:96
+msgid "Havola nusxasi"
+msgstr "Копия ссылки"
+
+#: templates/dashboard/channel_form.html:29
+msgid "Havola preview'ini o'chirish"
+msgstr "Отключить превью ссылок"
+
+#: templates/dashboard/project_form.html:77
+msgid "Havolalar"
+msgstr "Ссылки"
+
+#: templates/miniapp/lesson.html:31 templates/education/lesson_detail.html:73
+msgid "Havolalar va materiallar"
+msgstr "Ссылки и материалы"
+
+#: templates/core/share.html:22
+msgid "Havolani nusxalab, istalgan joyga yuboring."
+msgstr "Скопируйте ссылку и отправьте куда угодно."
+
+#: templates/education/certificate.html:19
+msgid "Havolani nusxalash"
+msgstr "Скопировать ссылку"
+
+#: config/settings/unfold.py:83
+msgid "Hayot yo'li"
+msgstr "Жизненный путь"
+
+#: templates/gallery/index.html:25
+msgid "Hayotim, sayohatlarim va ishimning vizual kundaligi."
+msgstr "Визуальный дневник моей жизни, путешествий и работы."
+
+#: templates/portfolio/skills.html:51 templates/portfolio/experience.html:32
+#: templates/dashboard/partials/search_results.html:5
+msgid "Hech narsa topilmadi"
+msgstr "Ничего не найдено"
+
+#: templates/dashboard/comments.html:13
+msgid "Hech narsa yo'q"
+msgstr "Пусто"
+
+#: templates/miniapp/projects.html:12
+#: templates/portfolio/partials/project_grid.html:45
+msgid "Hech qanday loyiha topilmadi"
+msgstr "Проекты не найдены"
+
+#: templates/dashboard/settings.html:27
+msgid "Hero teglar (vergul bilan)"
+msgstr "Теги в hero (через запятую)"
+
+#: templates/portfolio/about.html:18
+msgid "Hikoyamni ko'ring"
+msgstr "Моя история"
+
+#: templates/blog/articles.html:52
+msgid "Hikoyangiz bormi?"
+msgstr "Есть история?"
+
+#: apps/accounts/admin_security.py:169
+msgid "Hisob topilmadi"
+msgstr "Аккаунт не найден"
+
+#: apps/accounts/views.py:121
+msgid "Hisobingiz bloklangan. Admin bilan bog'laning."
+msgstr "Ваш аккаунт заблокирован. Свяжитесь с админом."
+
+#: templates/dashboard/bot.html:66
+msgid "Hodisalar yo'q"
+msgstr "Событий нет"
+
+#: templates/dashboard/skills.html:15 templates/dashboard/articles.html:17
+#: templates/dashboard/bot_settings.html:17
+msgid "Holat"
+msgstr "Статус"
+
+#: templates/dashboard/access.html:111
+#: templates/dashboard/project_form.html:97 apps/blog/admin.py:51
+msgid "Holati"
+msgstr "Статус"
+
+#: templates/core/home.html:155 templates/core/home.html:243
+#: templates/portfolio/about.html:50
+msgid "Hozir"
+msgstr "Сейчас"
+
+#: templates/dashboard/article_form.html:54
+#: templates/dashboard/channel_form.html:49
+#: templates/dashboard/partials/project_panel.html:25
+msgid "Hozir joylash"
+msgstr "Опубликовать сейчас"
+
+#: templates/dashboard/skill_form.html:14
+msgid "Hozir o'rganilmoqda"
+msgstr "Изучаю сейчас"
+
+#: templates/portfolio/skills.html:84
+msgid "Hozir o'rganyapman"
+msgstr "Сейчас изучаю"
+
+#: templates/dashboard/experience_form.html:24
+msgid "Hozir shu yerda"
+msgstr "Сейчас здесь"
+
+#: templates/gallery/music.html:18
+#: templates/gallery/partials/mini_player.html:7
+msgid "Hozir tinglayapman"
+msgstr "Сейчас слушаю"
+
+#: templates/dashboard/broadcast_form.html:54
+msgid "Hozir yuborish"
+msgstr "Отправить сейчас"
+
+#: templates/miniapp/lesson.html:21
+msgid "Hozircha konspekt va uyga vazifa bilan o'rganing."
+msgstr "Пока изучайте по конспекту и домашнему заданию."
+
+#: templates/education/lesson_detail.html:53
+msgid ""
+"Hozircha konspekt, kodlar va uyga vazifa bilan o'rganing. Video chiqqanda "
+"Telegram kanalda e'lon qilinadi."
+msgstr ""
+"Пока изучайте по конспекту, коду и домашнему заданию. О выходе видео сообщим"
+" в Telegram-канале."
+
+#: templates/portfolio/experience_detail.html:19
+#: templates/portfolio/experience.html:24
+#: templates/dashboard/partials/experience_row.html:5
+msgid "Hozirgi"
+msgstr "Текущее"
+
+#: config/settings/unfold.py:69
+msgid "Hozirgi holat"
+msgstr "Сейчас"
+
+#: templates/dashboard/settings.html:135
+msgid "Hozirgi joyim"
+msgstr "Моё местоположение"
+
+#: apps/education/models.py:205
+msgid "Hujjat"
+msgstr "Документ"
+
+#: templates/gallery/partials/music-list.html:11
+msgid "Ijro etilmoqda"
+msgstr "Играет"
+
+#: templates/partials/player_dock.html:86
+#: templates/gallery/partials/mini_player.html:13
+msgid "Ijro etish"
+msgstr "Воспроизвести"
+
+#: templates/gallery/music.html:23 templates/partials/player_dock.html:66
+msgid "Ijro joyi"
+msgstr "Позиция воспроизведения"
+
+#: templates/core/contact.html:34 templates/dashboard/settings.html:15
+#: templates/dashboard/settings.html:99
+msgid "Ijtimoiy tarmoqlar"
+msgstr "Соцсети"
+
+#: templates/core/share.html:26
+msgid "Ijtimoiy tarmoqlarda ulashish"
+msgstr "Поделиться в соцсетях"
+
+#: templates/accounts/admin_2fa.html:16
+msgid "Ikki bosqichli tasdiqlash"
+msgstr "Двухэтапная проверка"
+
+#: templates/gallery/index.html:51
+msgid "Ilhom beradigan va diqqatni jamlaydigan treklar."
+msgstr "Треки, которые вдохновляют и помогают сосредоточиться."
+
+#: templates/dashboard/inbox.html:31
+msgid "Ilova"
+msgstr "Вложение"
+
+#: templates/miniapp/shell.html:59
+msgid "Ilovani Telegram ichida oching"
+msgstr "Откройте приложение в Telegram"
+
+#: templates/portfolio/project_detail.html:57
+msgid "Imkoniyatlar"
+msgstr "Возможности"
+
+#: apps/core/models.py:162
+msgid "IndexNow kaliti"
+msgstr "Ключ IndexNow"
+
+#: templates/dashboard/settings.html:166
+msgid ""
+"IndexNow kaliti: istalgan 32 belgili tasodifiy matn. Yangi maqola va kurslar"
+" Yandex va Bing'ga darhol yuboriladi."
+msgstr ""
+"Ключ IndexNow: любая случайная строка из 32 символов. Новые статьи и курсы "
+"сразу отправляются в Яндекс и Bing."
+
+#: templates/core/home.html:39
+msgid "Intro videoni ko'rish"
+msgstr "Смотреть интро"
+
+#: templates/dashboard/experience_form.html:30
+msgid "Iqtibos"
+msgstr "Цитата"
+
+#: apps/portfolio/models.py:227
+msgid "Ish"
+msgstr "Работа"
+
+#: templates/dashboard/experience.html:5
+msgid "Ish joylari, frilans, loyihalar va o'qish joylaringiz yilma-yil."
+msgstr "Места работы, фриланс, проекты и учёба по годам."
+
+#: templates/dashboard/experience.html:9
+#: templates/dashboard/experience.html:13
+msgid "Ish tajribasi"
+msgstr "Опыт работы"
+
+#: templates/portfolio/experience_detail.html:81
+msgid "Ish vaqt chizig'i"
+msgstr "Хронология работы"
+
+#: templates/core/contact.html:29 templates/dashboard/settings.html:140
+msgid "Ish vaqti"
+msgstr "Часы работы"
+
+#: templates/dashboard/settings.html:38
+msgid "Ishga ochiqman"
+msgstr "Открыт к работе"
+
+#: templates/dashboard/project_form.html:6
+msgid "Ishingizni namoyish qiling. Quyidagi ma'lumotlarni to'ldiring."
+msgstr "Покажите свою работу. Заполните данные ниже."
+
+#: templates/404.html:16 templates/core/home.html:34
+msgid "Ishlarimni ko'ring"
+msgstr "Смотреть работы"
+
+#: apps/accounts/models.py:66
+msgid "Ishlatildi"
+msgstr "Использован"
+
+#: templates/core/home.html:92
+msgid "Ishlayotganda nima tinglayman"
+msgstr "Что я слушаю за работой"
+
+#: templates/gallery/music.html:4
+msgid ""
+"Ishlayotganda, o'qiyotganda va yo'lda tinglaydigan sevimli musiqalarim."
+msgstr "Любимая музыка для работы, учёбы и дороги."
+
+#: templates/accounts/profile.html:170 apps/accounts/admin.py:39
+msgid "Ism"
+msgstr "Имя"
+
+#: templates/miniapp/register.html:14
+msgid ""
+"Ism va familiyangiz Telegram profilingizdan olinadi, keyin profilda "
+"o'zgartirishingiz mumkin."
+msgstr "Имя и фамилия берутся из профиля Telegram, их можно изменить позже."
+
+#: templates/dashboard/access.html:23
+msgid "Ism yoki telefon"
+msgstr "Имя или телефон"
+
+#: templates/accounts/login.html:75
+msgid "Ism, familiya va telefonni yuboring"
+msgstr "Отправьте имя, фамилию и телефон"
+
+#: templates/dashboard/users.html:16
+msgid "Ism, telefon yoki @username"
+msgstr "Имя, телефон или @username"
+
+#: templates/core/partials/contact_form.html:6
+msgid "Ismingiz"
+msgstr "Ваше имя"
+
+#: templates/education/lesson_detail.html:93 apps/education/models.py:129
+msgid "Ixtiyoriy"
+msgstr "Необязательно"
+
+#: templates/miniapp/lesson.html:41 templates/education/lesson_detail.html:107
+#: templates/dashboard/partials/project_panel.html:20
+msgid "Izoh"
+msgstr "Комментарий"
+
+#: templates/dashboard/partials/homework_row.html:13
+msgid "Izoh (ixtiyoriy)"
+msgstr "Комментарий (необязательно)"
+
+#: templates/education/buy.html:75
+msgid "Izoh (ixtiyoriy): qulay to'lov usuli, savollar..."
+msgstr "Комментарий (необязательно): удобный способ оплаты, вопросы..."
+
+#: apps/interactions/forms.py:52
+msgid "Izoh juda qisqa"
+msgstr "Комментарий слишком короткий"
+
+#: templates/dashboard/base.html:34 templates/dashboard/comments.html:3
+#: templates/dashboard/comments.html:5
+msgid "Izoh va sharhlar"
+msgstr "Комментарии и отзывы"
+
+#: templates/interactions/comments.html:15 apps/interactions/forms.py:47
+msgid "Izoh yozing..."
+msgstr "Напишите комментарий..."
+
+#: templates/interactions/comments.html:21
+msgid "Izoh yozish uchun Telegram orqali kiring"
+msgstr "Войдите через Telegram, чтобы комментировать"
+
+#: templates/accounts/profile.html:183
+msgid "Izohimga javob yozilsa"
+msgstr "Ответ на мой комментарий"
+
+#: templates/miniapp/article.html:12 templates/dashboard/comments.html:8
+#: templates/dashboard/users.html:27
+msgid "Izohlar"
+msgstr "Комментарии"
+
+#: templates/blog/article_detail.html:79
+#: templates/portfolio/project_detail.html:137
+msgid "Izohlar yuklanmoqda..."
+msgstr "Загрузка комментариев..."
+
+#: templates/dashboard/article_form.html:32
+msgid "Izohlarga ruxsat"
+msgstr "Разрешить комментарии"
+
+#: templates/accounts/profile.html:159
+msgid "Izohlarim"
+msgstr "Мои комментарии"
+
+#: templates/interactions/partials/comment_item.html:1
+msgid "Izohni o'chirasizmi?"
+msgstr "Удалить комментарий?"
+
+#: templates/core/share.html:44 templates/dashboard/skills.html:8
+#: templates/dashboard/projects.html:8
+msgid "Jami"
+msgstr "Всего"
+
+#: templates/miniapp/project.html:18 templates/dashboard/project_form.html:53
+#: templates/portfolio/project_detail.html:87
+msgid "Jamoa"
+msgstr "Команда"
+
+#: templates/education/my_courses.html:12
+msgid "Jarayonda"
+msgstr "В процессе"
+
+#: templates/education/lesson_detail.html:117
+#: templates/interactions/partials/comment_item.html:17
+msgid "Javob"
+msgstr "Ответ"
+
+#: apps/interactions/models.py:115
+msgid "Javob berilgan"
+msgstr "Отвечено"
+
+#: templates/dashboard/settings.html:142
+msgid "Javob berish vaqti"
+msgstr "Время ответа"
+
+#: templates/accounts/login.html:16
+msgid "Javob kelsa, Telegram'ga xabar"
+msgstr "Уведомление в Telegram об ответах"
+
+#: templates/dashboard/inbox.html:65 templates/interactions/comments.html:37
+msgid "Javob yozing..."
+msgstr "Напишите ответ..."
+
+#: apps/education/forms.py:31
+msgid "Javob, havola yoki fayldan kamida bittasini yuboring"
+msgstr "Отправьте ответ, ссылку или файл"
+
+#: templates/miniapp/lesson.html:46 templates/education/lesson_detail.html:117
+#: apps/education/forms.py:14
+msgid "Javobingiz, izohlar yoki kod..."
+msgstr "Ваш ответ, заметки или код..."
+
+#: templates/portfolio/partials/project_grid.html:12
+msgid "Jonli demo"
+msgstr "Демо"
+
+#: templates/dashboard/project_form.html:64
+msgid "Jonli ko'rinish"
+msgstr "Предпросмотр"
+
+#: apps/telegram_bot/models.py:150
+msgid "Joylandi"
+msgstr "Опубликовано"
+
+#: templates/dashboard/channel.html:17
+msgid "Joylangan"
+msgstr "Опубликовано"
+
+#: templates/dashboard/experience_form.html:25
+msgid "Joylashuv"
+msgstr "Местоположение"
+
+#: apps/accounts/admin_security.py:80
+#, python-format
+msgid ""
+"Juda ko'p noto'g'ri urinish. %(m)s daqiqadan keyin qayta urinib ko'ring."
+msgstr "Слишком много неверных попыток. Повторите через %(m)s мин."
+
+#: apps/core/views.py:57
+msgid "Juda ko'p xabar yuborildi. Bir soatdan keyin urinib ko'ring."
+msgstr "Слишком много сообщений. Попробуйте через час."
+
+#: apps/core/seo_audit.py:43
+msgid "Kalit so'z H2 sarlavhalardan birida bor"
+msgstr "Ключевое слово есть в подзаголовке H2"
+
+#: apps/core/seo_audit.py:42
+msgid "Kalit so'z URL'da bor"
+msgstr "Ключевое слово есть в URL"
+
+#: apps/core/seo_audit.py:41
+msgid "Kalit so'z birinchi paragrafda bor"
+msgstr "Ключевое слово есть в первом абзаце"
+
+#: apps/core/seo_audit.py:40
+msgid "Kalit so'z meta tavsifda bor"
+msgstr "Ключевое слово есть в meta-описании"
+
+#: apps/core/seo_audit.py:39
+msgid "Kalit so'z sarlavhada bor"
+msgstr "Ключевое слово есть в заголовке"
+
+#: apps/core/seo_audit.py:41
+msgid "Kalit so'zni birinchi paragrafda ishlating"
+msgstr "Используйте ключевое слово в первом абзаце"
+
+#: apps/core/seo_audit.py:43
+msgid "Kalit so'zni kamida bitta H2 sarlavhaga qo'shing"
+msgstr "Добавьте ключевое слово хотя бы в один H2"
+
+#: apps/core/seo_audit.py:40
+msgid "Kalit so'zni meta tavsifga qo'shing"
+msgstr "Добавьте ключевое слово в meta-описание"
+
+#: apps/core/seo_audit.py:39
+msgid "Kalit so'zni sarlavhaga qo'shing"
+msgstr "Добавьте ключевое слово в заголовок"
+
+#: templates/gallery/photo_detail.html:34
+msgid "Kamera"
+msgstr "Камера"
+
+#: templates/core/partials/search_results.html:14
+msgid "Kamida 2 ta belgi kiriting"
+msgstr "Введите минимум 2 символа"
+
+#: templates/dashboard/bot_settings.html:30 templates/dashboard/bot.html:42
+#: apps/telegram_bot/admin.py:20
+msgid "Kanal"
+msgstr "Канал"
+
+#: templates/dashboard/channel_form.html:3
+#: templates/dashboard/partials/project_panel.html:25
+msgid "Kanal posti"
+msgstr "Пост канала"
+
+#: templates/dashboard/base.html:38 templates/dashboard/channel_form.html:5
+#: templates/dashboard/channel.html:3
+msgid "Kanal postlari"
+msgstr "Посты канала"
+
+#: templates/dashboard/channel.html:11
+msgid "Kanal ulanmagan"
+msgstr "Канал не подключён"
+
+#: templates/dashboard/channel_form.html:28
+msgid "Kanalda qadash"
+msgstr "Закрепить в канале"
+
+#: apps/dashboard/views_content.py:68
+msgid "Kanaldagi post yangilandi"
+msgstr "Пост в канале обновлён"
+
+#: templates/dashboard/channel_form.html:46
+msgid "Kanaldagi postni yangilash"
+msgstr "Обновить пост в канале"
+
+#: templates/dashboard/channel_form.html:58
+msgid "Kanaldan ham o'chirish"
+msgstr "Удалить и из канала"
+
+#: templates/dashboard/channel.html:47
+msgid "Kanalga chiqmagan kontent"
+msgstr "Ещё не в канале"
+
+#: templates/dashboard/courses.html:28
+msgid "Kanalga e'lon qilish"
+msgstr "Анонсировать в канале"
+
+#: apps/dashboard/views_content.py:123 apps/dashboard/views_content.py:105
+#: apps/dashboard/views_content.py:71
+msgid "Kanalga joylandi"
+msgstr "Опубликовано в канале"
+
+#: templates/dashboard/article_form.html:51
+msgid "Kanalga joylangan"
+msgstr "Опубликовано в канале"
+
+#: templates/dashboard/channel.html:11
+msgid ""
+"Kanalingiz @username'ini kiriting va botni kanalga admin qilib qo'shing "
+"(xabar yuborish va tahrirlash huquqi bilan)."
+msgstr ""
+"Укажите @username канала и добавьте бота админом (с правом публикации и "
+"редактирования)."
+
+#: templates/dashboard/channel.html:12
+msgid "Kanalni ulash"
+msgstr "Подключить канал"
+
+#: templates/portfolio/experience.html:38
+msgid "Karyera"
+msgstr "Карьера"
+
+#: templates/core/home.html:149
+msgid "Karyera yo'li"
+msgstr "Карьерный путь"
+
+#: templates/portfolio/experience.html:103
+msgid "Keling, ajoyib narsa quramiz"
+msgstr "Давайте создадим что-то крутое"
+
+#: templates/portfolio/projects.html:28
+msgid "Keling, ajoyib narsa quramiz."
+msgstr "Давайте создадим что-то крутое."
+
+#: templates/portfolio/project_detail.html:142
+msgid "Keling, birga ajoyib narsa quramiz."
+msgstr "Давайте вместе создадим что-то крутое."
+
+#: templates/core/home.html:139
+msgid "Keling, birga ma'noli narsa quramiz."
+msgstr "Давайте вместе создадим что-то значимое."
+
+#: templates/404.html:15
+msgid "Kerakli narsani toping"
+msgstr "Найдите нужное"
+
+#: templates/miniapp/course.html:5 templates/education/course_detail.html:11
+msgid "Ketma-ket ochiladi"
+msgstr "Открывается по порядку"
+
+#: templates/gallery/photo_detail.html:23 templates/gallery/music.html:33
+#: templates/partials/player_dock.html:91
+msgid "Keyingi"
+msgstr "Следующая"
+
+#: templates/education/lesson_detail.html:133
+msgid "Keyingi dars"
+msgstr "Следующий урок"
+
+#: templates/education/course_detail.html:72
+msgid ""
+"Keyingi dars oldingi dars videosi ko'rilib, uyga vazifa topshirilgandan "
+"keyin ochiladi."
+msgstr ""
+"Следующий урок открывается после просмотра видео и сдачи домашнего задания."
+
+#: templates/miniapp/lesson.html:58 templates/education/lesson_detail.html:135
+msgid "Keyingi dars yopiq"
+msgstr "Следующий урок закрыт"
+
+#: templates/dashboard/broadcast_form.html:30
+msgid "Kimga yuboriladi"
+msgstr "Кому отправить"
+
+#: templates/partials/header.html:55 templates/accounts/login.html:4
+#: templates/accounts/login.html:64
+msgid "Kirish"
+msgstr "Войти"
+
+#: apps/accounts/views.py:91
+msgid "Kirish botda rad etildi"
+msgstr "Вход отклонён в боте"
+
+#: templates/dashboard/courses.html:11 templates/dashboard/courses.html:12
+msgid "Kirish so'rovlari"
+msgstr "Заявки на доступ"
+
+#: templates/education/course_detail.html:39
+msgid "Kirish va sotib olish"
+msgstr "Войти и купить"
+
+#: templates/education/course_detail.html:46
+msgid "Kirish va yozilish"
+msgstr "Войти и записаться"
+
+#: templates/dashboard/bot.html:26
+msgid "Kirishlar (30 kun)"
+msgstr "Входы (30 дней)"
+
+#: templates/accounts/login.html:76
+msgid "Kirishni tasdiqlang yoki kodni kiriting"
+msgstr "Подтвердите вход или введите код"
+
+#: apps/telegram_bot/models.py:101
+msgid "Kiruvchi"
+msgstr "Входящее"
+
+#: templates/partials/player_dock.html:47
+msgid ""
+"Klaviatura: Probel — ijro/pauza, ← → — 10 soniya, Shift+← → — trek, M — "
+"ovozsiz"
+msgstr ""
+"Клавиатура: Пробел — пуск/пауза, ← → — 10 секунд, Shift+← → — трек, M — без "
+"звука"
+
+#: apps/core/models.py:269 apps/core/models.py:293
+msgid "Ko'k"
+msgstr "Синий"
+
+#: templates/dashboard/skills.html:15 templates/dashboard/skill_form.html:3
+msgid "Ko'nikma"
+msgstr "Навык"
+
+#: templates/dashboard/skills.html:5
+msgid "Ko'nikma qo'shish"
+msgstr "Добавить навык"
+
+#: apps/dashboard/views_content.py:242
+msgid "Ko'nikma saqlandi"
+msgstr "Навык сохранён"
+
+#: config/settings/unfold.py:81
+msgid "Ko'nikma turkumlari"
+msgstr "Категории навыков"
+
+#: templates/core/home.html:178 templates/dashboard/skills.html:3
+#: templates/dashboard/skills.html:5
+msgid "Ko'nikmalar"
+msgstr "Навыки"
+
+#: templates/portfolio/experience.html:90
+msgid "Ko'nikmalar va texnologiyalar"
+msgstr "Навыки и технологии"
+
+#: templates/dashboard/skill_form.html:5
+msgid "Ko'nikmani tahrirlash"
+msgstr "Редактировать навык"
+
+#: templates/core/contact.html:61
+msgid "Ko'p beriladigan savollar"
+msgstr "Частые вопросы"
+
+#: templates/dashboard/projects.html:19
+msgid "Ko'p ko'rilgan"
+msgstr "Популярные"
+
+#: apps/accounts/views.py:232
+msgid "Ko'p qirrali"
+msgstr "Разносторонний"
+
+#: templates/interactions/comments.html:48
+msgid "Ko'proq izohlar"
+msgstr "Больше комментариев"
+
+#: templates/miniapp/lesson.html:7 templates/education/lesson_detail.html:34
+msgid "Ko'rilgan"
+msgstr "Просмотрено"
+
+#: templates/dashboard/partials/moderation_row.html:9
+msgid "Ko'rinadi"
+msgstr "Видно"
+
+#: templates/dashboard/settings.html:14
+msgid "Ko'rinish va fon"
+msgstr "Внешний вид и фон"
+
+#: templates/core/share.html:37
+msgid "Ko'rinishi"
+msgstr "Превью"
+
+#: templates/dashboard/articles.html:17
+#: templates/dashboard/partials/project_panel.html:7
+#: templates/dashboard/partials/project_panel.html:18
+msgid "Ko'rish"
+msgstr "Смотреть"
+
+#: templates/dashboard/analytics.html:21 templates/dashboard/home.html:99
+msgid "Ko'rishlar"
+msgstr "Просмотры"
+
+#: templates/accounts/admin_2fa.html:25
+#, python-format
+msgid ""
+"Kod %(m)s soniya amal qiladi. 5 marta noto'g'ri kiritilsa, kirish "
+"bloklanadi."
+msgstr "Код действует %(m)s сек. После 5 неверных попыток вход блокируется."
+
+#: templates/accounts/login.html:65
+#, python-format
+msgid "Kod %(ttl)s soniya amal qiladi. Kodni hech kimga bermang."
+msgstr "Код действует %(ttl)s сек. Никому его не сообщайте."
+
+#: templates/accounts/admin_2fa.html:16
+msgid "Kod Telegram botga yuborildi"
+msgstr "Код отправлен в Telegram-бот"
+
+#: templates/education/courses.html:81
+msgid "Kod bilan ishlang"
+msgstr "Работайте с кодом"
+
+#: apps/accounts/admin_security.py:152
+msgid "Kod muddati tugadi. Qaytadan kiring."
+msgstr "Срок кода истёк. Войдите заново."
+
+#: apps/accounts/admin_security.py:161
+msgid "Kod noto'g'ri"
+msgstr "Неверный код"
+
+#: apps/accounts/views.py:118
+msgid "Kod noto'g'ri yoki muddati o'tgan. Botdan yangi kod oling."
+msgstr "Код неверный или истёк. Получите новый в боте."
+
+#: templates/core/share.html:57
+msgid "Kodni nusxalash"
+msgstr "Скопировать код"
+
+#: apps/accounts/views.py:234
+msgid "Kolleksioner"
+msgstr "Коллекционер"
+
+#: templates/portfolio/experience_detail.html:68 apps/portfolio/admin.py:135
+msgid "Kompaniya"
+msgstr "Компания"
+
+#: templates/dashboard/experience_form.html:14
+msgid "Kompaniya / joy"
+msgstr "Компания / место"
+
+#: templates/dashboard/experience_form.html:45
+msgid "Kompaniya haqida"
+msgstr "О компании"
+
+#: templates/core/home.html:87
+msgid "Kompaniyalar"
+msgstr "Компании"
+
+#: apps/education/admin.py:84
+msgid "Konspekt"
+msgstr "Конспект"
+
+#: templates/education/courses.html:81
+msgid ""
+"Konspektdagi kodlarni nusxalab, o'zingiz ishga tushiring. Havolalar va "
+"materiallar dars ostida."
+msgstr ""
+"Копируйте код из конспекта и запускайте сами. Ссылки и материалы — под "
+"уроком."
+
+#: templates/dashboard/base.html:24
+msgid "Kontent"
+msgstr "Контент"
+
+#: apps/core/models.py:272
+msgid "Kulrang"
+msgstr "Серый"
+
+#: templates/dashboard/access.html:111 templates/dashboard/courses.html:24
+#: apps/dashboard/views.py:644
+msgid "Kurs"
+msgstr "Курс"
+
+#: templates/education/buy.html:41
+msgid "Kurs dasturi"
+msgstr "Программа курса"
+
+#: templates/education/course_detail.html:57
+msgid "Kurs haqida"
+msgstr "О курсе"
+
+#: templates/education/buy.html:52
+msgid "Kurs narxi"
+msgstr "Стоимость курса"
+
+#: templates/education/buy.html:31
+msgid "Kurs ochiladi"
+msgstr "Курс откроется"
+
+#: templates/miniapp/course.html:26
+msgid "Kurs ochiladi va bot xabar beradi"
+msgstr "Курс откроется, бот сообщит"
+
+#: templates/education/lesson_detail.html:148
+msgid "Kurs progressi"
+msgstr "Прогресс курса"
+
+#: templates/education/courses.html:14
+msgid "Kurs qidirish: Docker, Django..."
+msgstr "Поиск курса: Docker, Django..."
+
+#: templates/dashboard/courses.html:5
+msgid "Kurs qo'shish"
+msgstr "Добавить курс"
+
+#: apps/core/models.py:148
+msgid ""
+"Kurs sotib olmoqchi bo'lganlar yozadigan Telegram username (@siz). Bo'sh "
+"bo'lsa bot ishlatiladi."
+msgstr ""
+"Telegram username, куда пишут покупатели курсов (@вы). Если пусто — "
+"используется бот."
+
+#: templates/dashboard/settings.html:17
+msgid "Kurs to'lovlari"
+msgstr "Оплата курсов"
+
+#: templates/miniapp/locked.html:6 templates/education/buy.html:6
+msgid "Kursga qaytish"
+msgstr "Вернуться к курсу"
+
+#: templates/dashboard/base.html:28 templates/dashboard/access.html:3
+#: templates/dashboard/access.html:5
+msgid "Kursga ruxsatlar"
+msgstr "Доступ к курсам"
+
+#: apps/education/views.py:110
+msgid "Kursga yozildingiz! Birinchi darsdan boshlang."
+msgstr "Вы записаны! Начните с первого урока."
+
+#: apps/telegram_bot/models.py:61
+msgid "Kursga yozilganlar"
+msgstr "Записавшиеся на курсы"
+
+#: templates/miniapp/course.html:15 templates/education/course_detail.html:46
+msgid "Kursga yozilish"
+msgstr "Записаться на курс"
+
+#: apps/education/models.py:153
+msgid "Kursga yozilmaganlar ham ko'ra oladi"
+msgstr "Доступно и без записи на курс"
+
+#: templates/miniapp/shell.html:48 templates/miniapp/home.html:7
+#: templates/miniapp/home.html:44
+msgid "Kurslar"
+msgstr "Курсы"
+
+#: templates/miniapp/courses.html:14
+msgid "Kurslar tez orada"
+msgstr "Курсы скоро"
+
+#: templates/education/course_detail.html:8
+msgid "Kurslarga qaytish"
+msgstr "Назад к курсам"
+
+#: templates/miniapp/profile.html:7 templates/partials/header.html:47
+#: templates/accounts/profile.html:54
+msgid "Kurslarim"
+msgstr "Мои курсы"
+
+#: templates/miniapp/profile.html:10 templates/accounts/profile.html:69
+#: templates/accounts/profile.html:123
+msgid "Kurslarni ko'rish"
+msgstr "Смотреть курсы"
+
+#: templates/miniapp/register.html:5
+msgid ""
+"Kurslarni ko'rish va progressni saqlash uchun bir marta telefon raqamingizni"
+" ulashing."
+msgstr ""
+"Поделитесь номером один раз, чтобы смотреть курсы и сохранять прогресс."
+
+#: templates/education/courses.html:37
+msgid "Kursni ko'rish"
+msgstr "Смотреть курс"
+
+#: templates/dashboard/access.html:87
+msgid "Kursni ochish"
+msgstr "Открыть курс"
+
+#: templates/dashboard/settings.html:90
+msgid ""
+"Kursni pullik qiling: Kurslar → kurs → Qoidalar → «bepul»ni o'chiring va "
+"narx kiriting. «Yopiq kurs» belgilansa, kursni faqat siz ruxsat berganlar "
+"ko'radi."
+msgstr ""
+"Сделайте курс платным: Курсы → курс → Правила → снимите «бесплатный» и "
+"укажите цену. С отметкой «Закрытый курс» его видят только те, кому вы дали "
+"доступ."
+
+#: templates/dashboard/access.html:100
+msgid ""
+"Kursni pullik qilish uchun kurs sozlamalarida «bepul» belgisini olib "
+"tashlang."
+msgstr ""
+"Чтобы сделать курс платным, снимите отметку «бесплатный» в настройках курса."
+
+#: apps/dashboard/forms.py:139
+msgid "Kursni tanlang"
+msgstr "Выберите курс"
+
+#: templates/accounts/profile.html:155
+msgid "Kursni to'liq tugatsangiz, sertifikat shu yerda paydo bo'ladi."
+msgstr "Завершите курс полностью — сертификат появится здесь."
+
+#: templates/education/certificate.html:9
+msgid "Kursni tugatganlik sertifikati"
+msgstr "Сертификат об окончании курса"
+
+#: templates/dashboard/access.html:9
+#: templates/dashboard/partials/moderation_row.html:9
+#: apps/accounts/models.py:63
+msgid "Kutilmoqda"
+msgstr "Ожидает"
+
+#: templates/blog/article_detail.html:70
+msgid "Kuzatish"
+msgstr "Подписаться"
+
+#: templates/dashboard/settings.html:25
+msgid "Lavozim"
+msgstr "Должность"
+
+#: templates/dashboard/experience_form.html:21
+msgid "Lavozim / maqom"
+msgstr "Должность / статус"
+
+#: apps/interactions/models.py:72
+msgid "Like"
+msgstr "Лайк"
+
+#: templates/dashboard/experience_form.html:39
+msgid "Logo / gerb"
+msgstr "Логотип / герб"
+
+#: templates/portfolio/skills.html:15 apps/dashboard/views.py:638
+#: apps/accounts/views.py:177
+msgid "Loyiha"
+msgstr "Проект"
+
+#: apps/interactions/forms.py:19
+msgid "Loyiha bo'yicha hamkorlik"
+msgstr "Сотрудничество по проекту"
+
+#: templates/portfolio/project_detail.html:67
+msgid "Loyiha haqida"
+msgstr "О проекте"
+
+#: templates/dashboard/analytics.html:10
+msgid "Loyiha ko'rishlari (jami)"
+msgstr "Просмотры проектов (всего)"
+
+#: templates/dashboard/project_form.html:17
+msgid "Loyiha ma'lumotlari"
+msgstr "Информация о проекте"
+
+#: templates/dashboard/project_form.html:6
+msgid "Loyiha ma'lumotlari, media va sozlamalarini yangilang."
+msgstr "Обновите данные, медиа и настройки проекта."
+
+#: templates/dashboard/project_form.html:19
+#: templates/dashboard/project_form.html:67
+msgid "Loyiha nomi"
+msgstr "Название проекта"
+
+#: apps/dashboard/views.py:304
+msgid "Loyiha o'chirildi"
+msgstr "Проект удалён"
+
+#: templates/dashboard/projects.html:5
+msgid "Loyiha qo'shish"
+msgstr "Добавить проект"
+
+#: apps/dashboard/views.py:293
+msgid "Loyiha saqlandi"
+msgstr "Проект сохранён"
+
+#: templates/dashboard/project_form.html:48
+msgid "Loyiha tafsilotlari"
+msgstr "Детали проекта"
+
+#: templates/dashboard/projects.html:38
+msgid "Loyiha topilmadi"
+msgstr "Проект не найден"
+
+#: config/settings/unfold.py:79
+msgid "Loyiha turkumlari"
+msgstr "Категории проектов"
+
+#: templates/accounts/profile.html:149
+msgid ""
+"Loyiha va maqolalardagi «Saqlash» tugmasi bilan sevimlilaringizni shu yerga "
+"yig'ing."
+msgstr "Собирайте избранное кнопкой «Сохранить» на проектах и статьях."
+
+#: templates/accounts/login.html:17
+msgid "Loyiha va maqolalarni yig'ing"
+msgstr "Собирайте проекты и статьи"
+
+#: templates/portfolio/project_detail.html:103
+msgid "Loyiha videosi"
+msgstr "Видео проекта"
+
+#: apps/dashboard/views.py:293
+msgid "Loyiha yaratildi"
+msgstr "Проект создан"
+
+#: templates/dashboard/home.html:71
+msgid "Loyiha yaratish"
+msgstr "Создать проект"
+
+#: templates/dashboard/base.html:62
+msgid "Loyiha, maqola, foydalanuvchi..."
+msgstr "Проект, статья, пользователь..."
+
+#: templates/core/search.html:6
+msgid "Loyiha, maqola, kurs yoki texnologiya..."
+msgstr "Проект, статья, курс или технология..."
+
+#: templates/404.html:16 templates/miniapp/shell.html:50
+#: templates/miniapp/home.html:69
+msgid "Loyihalar"
+msgstr "Проекты"
+
+#: templates/portfolio/project_detail.html:12
+msgid "Loyihalarga qaytish"
+msgstr "Назад к проектам"
+
+#: templates/dashboard/projects.html:5
+msgid "Loyihalaringizni boshqaring va ishingizni namoyish qiling."
+msgstr "Управляйте проектами и показывайте свою работу."
+
+#: templates/portfolio/projects.html:14
+msgid "Loyihalarni qidirish..."
+msgstr "Поиск проектов..."
+
+#: apps/interactions/forms.py:20
+msgid "Loyihangiz yoki g'oyangiz haqida yozing..."
+msgstr "Расскажите о проекте или идее..."
+
+#: templates/portfolio/partials/project_grid.html:11
+msgid "Loyihani ko'rish"
+msgstr "Смотреть проект"
+
+#: templates/dashboard/project_form.html:3
+#: templates/dashboard/project_form.html:6
+msgid "Loyihani tahrirlash"
+msgstr "Редактировать проект"
+
+#: templates/dashboard/partials/project_panel.html:32
+msgid "Loyihani tanlang"
+msgstr "Выберите проект"
+
+#: apps/blog/models.py:20
+msgid "Lucide belgi nomi"
+msgstr "Название иконки Lucide"
+
+#: apps/portfolio/models.py:181
+msgid "Lucide belgi nomi, masalan: store"
+msgstr "Название иконки Lucide, напр.: store"
+
+#: apps/core/models.py:301
+msgid "Lucide belgi nomi: code-xml, rocket, trending-up, clapperboard"
+msgstr "Имя иконки Lucide: code-xml, rocket, trending-up, clapperboard"
+
+#: templates/dashboard/track_form.html:13
+msgid "MP3, M4A, OGG · 30 MB gacha"
+msgstr "MP3, M4A, OGG · до 30 МБ"
+
+#: apps/dashboard/forms.py:289
+msgid "MP3, M4A, OGG, WAV, AAC yoki FLAC fayl yuklang"
+msgstr "Загрузите MP3, M4A, OGG, WAV, AAC или FLAC"
+
+#: apps/gallery/models.py:140
+msgid "MP3/M4A/OGG. Fayl bo'lmasa, tashqi havola ishlatiladi"
+msgstr "MP3/M4A/OGG. Без файла используется внешняя ссылка"
+
+#: apps/telegram_bot/models.py:62
+msgid "Ma'lum kurs o'quvchilari"
+msgstr "Студенты определённого курса"
+
+#: templates/portfolio/project_detail.html:81 apps/portfolio/admin.py:85
+msgid "Ma'lumot"
+msgstr "Информация"
+
+#: templates/core/home.html:170
+msgid "Mahalliy vaqt"
+msgstr "Местное время"
+
+#: apps/core/models.py:130
+msgid "Mahalliy vaqtni ko'rsatish uchun: Asia/Tashkent"
+msgstr "Для показа местного времени: Asia/Tashkent"
+
+#: templates/portfolio/experience_detail.html:46
+msgid "Mahsulotlar"
+msgstr "Продукты"
+
+#: templates/core/contact.html:28 templates/dashboard/settings.html:124
+msgid "Manzil"
+msgstr "Адрес"
+
+#: templates/dashboard/articles.html:17 templates/blog/articles.html:72
+#: apps/dashboard/views.py:640
+msgid "Maqola"
+msgstr "Статья"
+
+#: apps/dashboard/views.py:371
+msgid "Maqola o'chirildi"
+msgstr "Статья удалена"
+
+#: templates/dashboard/analytics.html:11
+msgid "Maqola o'qishlar (jami)"
+msgstr "Прочтения статей (всего)"
+
+#: templates/dashboard/articles.html:5 templates/dashboard/home.html:70
+msgid "Maqola qo'shish"
+msgstr "Добавить статью"
+
+#: apps/dashboard/views.py:357
+msgid "Maqola saqlandi"
+msgstr "Статья сохранена"
+
+#: templates/miniapp/journal.html:13 templates/dashboard/articles.html:29
+#: templates/blog/articles.html:46
+msgid "Maqola topilmadi"
+msgstr "Статьи не найдены"
+
+#: templates/dashboard/articles.html:52
+msgid "Maqola yozish"
+msgstr "Написать статью"
+
+#: templates/dashboard/article_form.html:5 templates/dashboard/articles.html:3
+#: templates/dashboard/articles.html:5
+msgid "Maqolalar"
+msgstr "Статьи"
+
+#: templates/dashboard/bot_settings.html:32
+msgid "Maqolalarni avtomatik joylash"
+msgstr "Автопубликация статей"
+
+#: templates/dashboard/article_form.html:58
+msgid "Maqolani o'chirish"
+msgstr "Удалить статью"
+
+#: templates/blog/articles.html:23
+msgid "Maqolani o'qish"
+msgstr "Читать статью"
+
+#: templates/dashboard/article_form.html:3
+#: templates/dashboard/article_form.html:6
+msgid "Maqolani tahrirlash"
+msgstr "Редактировать статью"
+
+#: apps/accounts/views.py:230
+msgid "Marafonchi"
+msgstr "Марафонец"
+
+#: apps/portfolio/models.py:247
+msgid "Masalan: Bakalavr, O'rta ma'lumot"
+msgstr "Например: бакалавр, среднее образование"
+
+#: apps/portfolio/models.py:248
+msgid "Masalan: Dasturiy injiniring"
+msgstr "Например: программная инженерия"
+
+#: apps/core/models.py:299
+msgid "Masalan: NutriZone asoschisi"
+msgstr "Например: основатель NutriZone"
+
+#: apps/portfolio/models.py:115
+msgid "Masalan: Smart nutrition ecosystem"
+msgstr "Например: Smart nutrition ecosystem"
+
+#: apps/portfolio/models.py:45
+msgid "Masalan: Web Framework"
+msgstr "Например: Web Framework"
+
+#: apps/blog/models.py:53
+msgid "Masalan: docker darslari. SEO tekshiruvi shu so'z bo'yicha ishlaydi"
+msgstr "Например: уроки docker. SEO-проверка работает по этому слову"
+
+#: templates/portfolio/projects.html:17
+msgid "Mashhur"
+msgstr "Популярные"
+
+#: templates/dashboard/analytics.html:15
+msgid "Mashhur loyihalar"
+msgstr "Популярные проекты"
+
+#: templates/dashboard/analytics.html:16
+msgid "Mashhur maqolalar"
+msgstr "Популярные статьи"
+
+#: templates/blog/articles.html:60
+msgid "Mashhur mavzular"
+msgstr "Популярные темы"
+
+#: templates/portfolio/experience.html:43
+msgid "Masofaviy va ofisda"
+msgstr "Удалённо и в офисе"
+
+#: templates/dashboard/article_form.html:17 apps/blog/admin.py:34
+#: apps/telegram_bot/admin.py:46
+msgid "Matn"
+msgstr "Текст"
+
+#: apps/core/seo_audit.py:50
+msgid "Matn H2 sarlavhalar bilan bo'lingan"
+msgstr "Текст разбит подзаголовками H2"
+
+#: apps/core/seo_audit.py:48
+#, python-format
+msgid "Matn hajmi yetarli (%(n)s so'z)"
+msgstr "Достаточный объём текста (%(n)s слов)"
+
+#: apps/core/seo_audit.py:49
+#, python-format
+msgid ""
+"Matn kamida 600 so'z bo'lsin (hozir %(n)s). Uzun va foydali maqolalar "
+"yuqoriroq chiqadi"
+msgstr ""
+"Нужно минимум 600 слов (сейчас %(n)s). Длинные полезные статьи ранжируются "
+"выше"
+
+#: apps/core/models.py:141
+msgid "Matn o'qilishi uchun: 0–80"
+msgstr "Для читаемости текста: 0–80"
+
+#: templates/dashboard/bot_settings.html:9 apps/telegram_bot/admin.py:15
+msgid "Matnlar"
+msgstr "Тексты"
+
+#: apps/core/seo_audit.py:50
+msgid "Matnni kamida 2 ta H2 sarlavha bilan bo'ling"
+msgstr "Разделите текст минимум 2 подзаголовками H2"
+
+#: templates/dashboard/channel_form.html:7
+msgid ""
+"Matnni rich text bilan yozing: Telegram formatiga avtomatik o'giriladi."
+msgstr ""
+"Пишите в rich text — текст автоматически конвертируется в формат Telegram."
+
+#: templates/core/partials/contact_form.html:9
+msgid "Mavzu"
+msgstr "Тема"
+
+#: templates/miniapp/shell.html:39 templates/partials/header.html:32
+msgid "Mavzuni almashtirish"
+msgstr "Сменить тему"
+
+#: templates/dashboard/project_form.html:28 templates/partials/header.html:18
+#: templates/partials/header.html:75
+msgid "Media"
+msgstr "Медиа"
+
+#: templates/dashboard/settings.html:30
+msgid "Media va statistika"
+msgstr "Медиа и статистика"
+
+#: templates/gallery/photo_detail.html:6
+msgid "Mediaga qaytish"
+msgstr "Назад в медиа"
+
+#: templates/core/share.html:62
+msgid "Mehmon"
+msgstr "Гость"
+
+#: templates/partials/header.html:14 templates/partials/header.html:71
+#: templates/portfolio/about.html:3
+msgid "Men haqimda"
+msgstr "Обо мне"
+
+#: templates/portfolio/skills.html:45
+msgid "Men ishlaydigan texnologiyalarning to'liq ro'yxati"
+msgstr "Полный список технологий, с которыми я работаю"
+
+#: templates/core/home.html:20
+msgid "Men —"
+msgstr "Я —"
+
+#: templates/core/contact.html:34
+msgid "Meni boshqa platformalarda toping"
+msgstr "Найдите меня на других платформах"
+
+#: templates/core/contact.html:43
+msgid "Meni bu yerda toping"
+msgstr "Где меня найти"
+
+#: templates/portfolio/about.html:40
+msgid "Mening hikoyam"
+msgstr "Моя история"
+
+#: templates/portfolio/about.html:85
+msgid "Mening yo'lim"
+msgstr "Мой путь"
+
+#: templates/partials/header.html:57
+msgid "Menyu"
+msgstr "Меню"
+
+#: apps/core/seo_audit.py:47
+#, python-format
+msgid "Meta tavsif 110–160 belgi bo'lsin (hozir %(n)s)"
+msgstr "Meta-описание: 110–160 символов (сейчас %(n)s)"
+
+#: apps/core/seo_audit.py:46
+#, python-format
+msgid "Meta tavsif uzunligi yaxshi (%(n)s belgi)"
+msgstr "Длина meta-описания в норме (%(n)s)"
+
+#: apps/telegram_bot/models.py:23
+msgid "Mini App tugmasi"
+msgstr "Кнопка Mini App"
+
+#: templates/dashboard/comments.html:5
+msgid "Moderatsiya: tasdiqlash, yashirish, qadash va o'chirish."
+msgstr "Модерация: одобрение, скрытие, закрепление и удаление."
+
+#: templates/dashboard/articles.html:17
+#: templates/interactions/partials/comment_item.html:7
+msgid "Muallif"
+msgstr "Автор"
+
+#: templates/blog/article_detail.html:67
+msgid "Muallif haqida"
+msgstr "Об авторе"
+
+#: templates/dashboard/home.html:82
+msgid "Muammo bor"
+msgstr "Есть проблема"
+
+#: templates/dashboard/experience_form.html:45
+msgid "Muassasa haqida"
+msgstr "Об учебном заведении"
+
+#: templates/dashboard/access.html:54 templates/dashboard/access.html:111
+msgid "Muddat"
+msgstr "Срок"
+
+#: apps/dashboard/views_content.py:355
+msgid "Muddat yangilandi"
+msgstr "Срок обновлён"
+
+#: templates/dashboard/access.html:119
+msgid "Muddati tugagan"
+msgstr "Истёк"
+
+#: templates/dashboard/access.html:124
+msgid "Muddatni yangilash"
+msgstr "Обновить срок"
+
+#: templates/dashboard/access.html:54 templates/dashboard/access.html:85
+msgid "Muddatsiz"
+msgstr "Бессрочно"
+
+#: templates/blog/article_detail.html:60
+msgid "Mundarija"
+msgstr "Содержание"
+
+#: templates/dashboard/track_form.html:21
+#: templates/dashboard/playlist_form.html:13
+msgid "Muqova"
+msgstr "Обложка"
+
+#: templates/dashboard/article_form.html:20
+msgid "Muqova rasmi"
+msgstr "Обложка"
+
+#: templates/dashboard/project_form.html:28
+msgid "Muqova, skrinshotlar va video"
+msgstr "Обложка, скриншоты и видео"
+
+#: templates/dashboard/project_form.html:32
+msgid "Muqovani yuklang"
+msgstr "Загрузите обложку"
+
+#: templates/gallery/index.html:19 templates/gallery/index.html:51
+#: templates/gallery/music.html:3
+msgid "Musiqa"
+msgstr "Музыка"
+
+#: templates/partials/player_dock.html:5
+msgid "Musiqa pleyeri"
+msgstr "Музыкальный плеер"
+
+#: templates/dashboard/projects.html:31 templates/dashboard/articles.html:24
+#: templates/dashboard/articles.html:40
+msgid "Nashr"
+msgstr "Опубликовано"
+
+#: templates/dashboard/projects.html:9 templates/dashboard/projects.html:17
+#: templates/dashboard/articles.html:9
+msgid "Nashr qilingan"
+msgstr "Опубликовано"
+
+#: templates/dashboard/project_form.html:99
+#: templates/dashboard/partials/project_panel.html:27
+msgid "Nashr qilish"
+msgstr "Опубликовать"
+
+#: templates/dashboard/article_form.html:29
+msgid "Nashr sozlamalari"
+msgstr "Настройки публикации"
+
+#: templates/portfolio/project_detail.html:60
+#: templates/portfolio/project_detail.html:116
+msgid "Natijalar"
+msgstr "Результаты"
+
+#: templates/partials/player_dock.html:52
+#: templates/partials/player_dock.html:112
+msgid "Navbat"
+msgstr "Очередь"
+
+#: templates/dashboard/track_form.html:16
+msgid "Nega yoqadi (ixtiyoriy)"
+msgstr "Почему нравится (необязательно)"
+
+#: templates/miniapp/course.html:51 templates/education/buy.html:37
+#: templates/education/course_detail.html:56
+msgid "Nimalarni o'rganasiz"
+msgstr "Чему вы научитесь"
+
+#: templates/dashboard/settings.html:103
+#: templates/dashboard/playlist_form.html:9
+msgid "Nomi"
+msgstr "Название"
+
+#: templates/dashboard/music.html:16
+msgid "Nomi yoki ijrochi..."
+msgstr "Название или исполнитель..."
+
+#: apps/dashboard/forms.py:214
+msgid "Noto'g'ri vaqt zonasi. Masalan: Asia/Tashkent"
+msgstr "Неверный часовой пояс. Например: Asia/Tashkent"
+
+#: templates/dashboard/analytics.html:9
+msgid "Noyob tashrifchilar"
+msgstr "Уникальные посетители"
+
+#: templates/core/share.html:23
+msgid "Nusxalandi"
+msgstr "Скопировано"
+
+#: templates/dashboard/channel.html:57 templates/dashboard/channel.html:58
+#: templates/partials/player_dock.html:41
+msgid "O'chiq"
+msgstr "Выключено"
+
+#: apps/dashboard/views_content.py:217
+msgid "O'chirildi"
+msgstr "Удалено"
+
+#: apps/education/models.py:226
+msgid "O'chirilsa, foydalanuvchi kursni ko'ra olmaydi"
+msgstr "Если выключить, пользователь не увидит курс"
+
+#: templates/dashboard/bot_settings.html:18
+msgid "O'chirilsa, foydalanuvchilarga texnik ishlar matni ko'rsatiladi"
+msgstr "Если выключить, пользователи увидят текст о техработах"
+
+#: templates/dashboard/track_form.html:31
+#: templates/dashboard/partials/moderation_row.html:1
+msgid "O'chirilsinmi?"
+msgstr "Удалить?"
+
+#: templates/dashboard/experience_form.html:56
+#: templates/dashboard/skill_form.html:26
+#: templates/dashboard/track_form.html:31
+msgid "O'chirish"
+msgstr "Удалить"
+
+#: templates/dashboard/project_form.html:37
+msgid "O'chirish uchun rasmni bosing"
+msgstr "Нажмите на фото, чтобы удалить"
+
+#: templates/gallery/photo_detail.html:37
+msgid "O'lcham"
+msgstr "Разрешение"
+
+#: apps/interactions/models.py:114
+msgid "O'qilgan"
+msgstr "Прочитано"
+
+#: templates/dashboard/bot.html:28
+msgid "O'qilmagan xabarlar"
+msgstr "Непрочитанные"
+
+#: templates/dashboard/experience.html:8
+msgid "O'qish joyi qo'shish"
+msgstr "Добавить учёбу"
+
+#: templates/portfolio/experience.html:63
+msgid "O'qish joylarim"
+msgstr "Где я учился"
+
+#: templates/blog/articles.html:73
+msgid "O'qishlar"
+msgstr "Прочтения"
+
+#: templates/accounts/profile.html:66
+msgid "O'qishni davom ettiring"
+msgstr "Продолжить обучение"
+
+#: templates/education/courses.html:89
+msgid "O'qituvchi"
+msgstr "Преподаватель"
+
+#: templates/dashboard/experience_form.html:14
+msgid "O'quv muassasasi"
+msgstr "Учебное заведение"
+
+#: templates/dashboard/settings.html:91
+msgid ""
+"O'quvchi so'rov qoldiradi va Telegram'da sizga yozadi. Sizga bot orqali "
+"xabar keladi."
+msgstr ""
+"Ученик оставляет заявку и пишет вам в Telegram. Бот присылает уведомление."
+
+#: templates/dashboard/settings.html:83
+msgid ""
+"O'quvchi «Sotib olish» tugmasini bossa, tayyor xabar bilan shu Telegram "
+"akkauntga o'tadi."
+msgstr ""
+"По кнопке «Купить» ученик перейдёт в этот Telegram-аккаунт с готовым "
+"сообщением."
+
+#: templates/dashboard/home.html:29 templates/dashboard/courses.html:8
+#: templates/education/courses.html:22
+msgid "O'quvchilar"
+msgstr "Студенты"
+
+#: templates/dashboard/article_form.html:32
+msgid "O'quvchilar izoh yozishi mumkin"
+msgstr "Читатели могут комментировать"
+
+#: templates/dashboard/skills.html:11 templates/dashboard/skills.html:24
+msgid "O'rganilmoqda"
+msgstr "Изучается"
+
+#: templates/dashboard/skill_form.html:15
+msgid "O'rganish progressi"
+msgstr "Прогресс изучения"
+
+#: templates/portfolio/skills.html:57
+msgid "O'rganish yo'li"
+msgstr "Путь обучения"
+
+#: templates/partials/player_dock.html:1 templates/portfolio/skills.html:71
+#: apps/portfolio/models.py:38
+msgid "O'rta"
+msgstr "Средний"
+
+#: templates/portfolio/project_detail.html:128
+msgid "O'xshash loyihalar"
+msgstr "Похожие проекты"
+
+#: templates/blog/article_detail.html:74
+msgid "O'xshash maqolalar"
+msgstr "Похожие статьи"
+
+#: templates/gallery/photo_detail.html:49
+msgid "O'xshash media"
+msgstr "Похожие медиа"
+
+#: templates/dashboard/skill_form.html:22
+msgid "O'z belgisi (SVG/PNG)"
+msgstr "Своя иконка (SVG/PNG)"
+
+#: templates/dashboard/settings.html:99
+msgid ""
+"O'z profillaringizni qo'shing. Footer, Contact va hero bloklarida qayerda "
+"ko'rinishini tanlang."
+msgstr ""
+"Добавьте свои профили и выберите, где их показывать: футер, контакты или "
+"hero."
+
+#: templates/education/courses.html:11
+msgid ""
+"O'zbek tilidagi amaliy kurslar. Har bir dars: video, konspekt va kodlar, "
+"havolalar va uyga vazifa. Darslar ketma-ket ochiladi, kurs oxirida "
+"sertifikat beriladi."
+msgstr ""
+"Практические курсы на узбекском: видео, конспект и код, ссылки и домашнее "
+"задание в каждом уроке. Уроки открываются по порядку, в конце — сертификат."
+
+#: apps/accounts/forms.py:14
+msgid "O'zingiz haqingizda bir jumla"
+msgstr "Пара слов о себе"
+
+#: apps/core/models.py:154
+msgid "OG rasm"
+msgstr "OG-изображение"
+
+#: templates/partials/channel_cta.html:7 templates/blog/articles.html:69
+msgid "Obuna"
+msgstr "Подписаться"
+
+#: apps/blog/views.py:94
+msgid "Obuna bo'ldingiz! Yangi maqolalar emailingizga keladi."
+msgstr "Вы подписаны! Новые статьи придут на почту."
+
+#: config/settings/unfold.py:93
+msgid "Obunachilar"
+msgstr "Подписчики"
+
+#: templates/dashboard/channel_form.html:27
+msgid "Obunachilarga bildirishnoma ovozsiz keladi"
+msgstr "Подписчики получат уведомление без звука"
+
+#: templates/gallery/photo_detail.html:35
+msgid "Obyektiv"
+msgstr "Объектив"
+
+#: templates/accounts/profile.html:134
+#: templates/portfolio/partials/project_grid.html:40
+msgid "Ochish"
+msgstr "Открыть"
+
+#: templates/core/contact.html:52
+msgid "Odatda javob beraman"
+msgstr "Обычно отвечаю в течение"
+
+#: templates/partials/player_dock.html:15
+msgid "Oddiy"
+msgstr "Обычный"
+
+#: templates/dashboard/settings.html:67
+msgid "Oldindan ko'rish"
+msgstr "Предпросмотр"
+
+#: templates/gallery/photo_detail.html:22 templates/gallery/music.html:29
+#: templates/partials/player_dock.html:85
+msgid "Oldingi"
+msgstr "Предыдущая"
+
+#: templates/education/lesson_detail.html:130
+msgid "Oldingi dars"
+msgstr "Предыдущий урок"
+
+#: templates/education/partials/lesson_row.html:3
+msgid "Oldingi darsni tugating"
+msgstr "Завершите предыдущий урок"
+
+#: templates/miniapp/locked.html:5
+msgid ""
+"Oldingi darsni tugating: videoni oxirigacha ko'ring va uyga vazifani "
+"topshiring."
+msgstr ""
+"Завершите предыдущий урок: досмотрите видео и сдайте домашнее задание."
+
+#: templates/education/buy.html:71
+msgid "Oldingi so'rov rad etilgan"
+msgstr "Предыдущая заявка отклонена"
+
+#: templates/dashboard/bot.html:12 templates/dashboard/broadcast_form.html:3
+#: templates/dashboard/broadcast_form.html:5
+msgid "Ommaviy xabar"
+msgstr "Рассылка"
+
+#: templates/dashboard/bot.html:50 config/settings/unfold.py:133
+msgid "Ommaviy xabarlar"
+msgstr "Рассылки"
+
+#: templates/miniapp/shell.html:34 templates/core/share.html:6
+msgid "Orqaga"
+msgstr "Назад"
+
+#: templates/gallery/music.html:37 templates/partials/player_dock.html:106
+msgid "Ovoz balandligi"
+msgstr "Громкость"
+
+#: templates/gallery/music.html:38 templates/gallery/music.html:38
+#: templates/partials/player_dock.html:9
+msgid "Ovoz sozlamalari"
+msgstr "Настройки звука"
+
+#: templates/partials/player_dock.html:101
+msgid "Ovozni yoqish"
+msgstr "Включить звук"
+
+#: templates/gallery/music.html:36 templates/partials/player_dock.html:101
+msgid "Ovozsiz"
+msgstr "Без звука"
+
+#: templates/dashboard/channel_form.html:27
+msgid "Ovozsiz yuborish"
+msgstr "Отправить без звука"
+
+#: templates/dashboard/bot.html:33
+msgid "Oxirgi 14 kun: /start va saytga kirishlar"
+msgstr "Последние 14 дней: /start и входы на сайт"
+
+#: templates/dashboard/analytics.html:5
+msgid "Oxirgi 30 kun: tashriflar, mashhur kontent va kurslar."
+msgstr "Последние 30 дней: визиты, популярный контент и курсы."
+
+#: apps/accounts/admin.py:35
+msgid "Parol (faqat adminlar uchun)"
+msgstr "Пароль (только для админов)"
+
+#: templates/miniapp/register.html:8
+msgid "Parol kerak emas"
+msgstr "Пароль не нужен"
+
+#: templates/accounts/login.html:12
+msgid ""
+"Parol kerak emas. Bot sizni bir marta ro'yxatdan o'tkazadi, keyin har safar "
+"bitta tugma bilan kirasiz."
+msgstr ""
+"Пароль не нужен. Бот один раз зарегистрирует вас, а дальше вход — одной "
+"кнопкой."
+
+#: templates/accounts/profile.html:187
+msgid "Parol yo'q: kirish faqat Telegram orqali."
+msgstr "Пароля нет: вход только через Telegram."
+
+#: templates/accounts/login.html:74
+msgid "Pastdagi tugmani bosing yoki QR kodni telefoningizda skanerlang"
+msgstr "Нажмите кнопку ниже или отсканируйте QR-код телефоном"
+
+#: templates/partials/player_dock.html:86
+#: templates/gallery/partials/mini_player.html:13
+msgid "Pauza"
+msgstr "Пауза"
+
+#: templates/dashboard/settings.html:103
+msgid "Platforma"
+msgstr "Платформа"
+
+#: templates/dashboard/home.html:36
+msgid "Platforma ko'rinishi"
+msgstr "Обзор платформы"
+
+#: templates/dashboard/home.html:8
+msgid "Platformangizda bugun nimalar bo'layotgani."
+msgstr "Что происходит на вашей платформе сегодня."
+
+#: templates/core/share.html:26
+msgid "Platformani tanlang."
+msgstr "Выберите платформу."
+
+#: templates/partials/player_dock.html:113
+msgid "Pleyerni yopish"
+msgstr "Закрыть плеер"
+
+#: templates/dashboard/playlist_form.html:3
+msgid "Pleylist"
+msgstr "Плейлист"
+
+#: apps/dashboard/views_content.py:185
+msgid "Pleylist saqlandi"
+msgstr "Плейлист сохранён"
+
+#: templates/gallery/music.html:56 templates/dashboard/music.html:26
+msgid "Pleylist yo'q"
+msgstr "Плейлистов нет"
+
+#: templates/gallery/music.html:47 templates/dashboard/music.html:10
+#: templates/dashboard/music.html:24
+msgid "Pleylistlar"
+msgstr "Плейлисты"
+
+#: templates/gallery/partials/music-list.html:39
+msgid "Pleylistlarim"
+msgstr "Мои плейлисты"
+
+#: templates/dashboard/playlist_form.html:5
+msgid "Pleylistni tahrirlash"
+msgstr "Редактировать плейлист"
+
+#: config/settings/unfold.py:75 apps/portfolio/apps.py:9
+msgid "Portfolio"
+msgstr "Портфолио"
+
+#: templates/dashboard/channel_form.html:7
+msgid "Post kanalda turibdi: saqlasangiz, kanaldagi post ham yangilanadi."
+msgstr "Пост уже в канале: при сохранении он обновится и там."
+
+#: templates/dashboard/channel_form.html:16
+msgid "Post matni"
+msgstr "Текст поста"
+
+#: apps/dashboard/views_content.py:102
+msgid "Post o'chirildi"
+msgstr "Пост удалён"
+
+#: templates/dashboard/channel_form.html:57
+msgid "Postni o'chirish"
+msgstr "Удалить пост"
+
+#: templates/dashboard/channel_form.html:6
+msgid "Postni tahrirlash"
+msgstr "Редактировать пост"
+
+#: templates/education/course_detail.html:11
+msgid "Premium"
+msgstr "Премиум"
+
+#: templates/accounts/profile.html:110
+msgid "Premium kurslarim"
+msgstr "Мои премиум-курсы"
+
+#: templates/miniapp/shell.html:51 templates/dashboard/settings.html:13
+#: templates/dashboard/inbox.html:52
+msgid "Profil"
+msgstr "Профиль"
+
+#: apps/accounts/views.py:164
+msgid "Profil saqlandi"
+msgstr "Профиль сохранён"
+
+#: templates/partials/header.html:46 templates/accounts/profile.html:4
+msgid "Profilim"
+msgstr "Мой профиль"
+
+#: templates/education/course_detail.html:22
+#: templates/education/courses.html:63 apps/education/admin.py:139
+msgid "Progress"
+msgstr "Прогресс"
+
+#: templates/accounts/login.html:15
+msgid "Progress saqlanadi, sertifikat olasiz"
+msgstr "Прогресс сохраняется, есть сертификат"
+
+#: templates/education/lesson_detail.html:40
+msgid "Progress saqlanishi uchun tizimga kiring"
+msgstr "Войдите, чтобы сохранять прогресс"
+
+#: templates/education/courses.html:36
+msgid "Progressingiz"
+msgstr "Ваш прогресс"
+
+#: templates/dashboard/access.html:82
+msgid "Pullik kurs yo'q"
+msgstr "Платных курсов нет"
+
+#: templates/dashboard/settings.html:83
+msgid "Pullik kurslar"
+msgstr "Платные курсы"
+
+#: templates/dashboard/access.html:91
+msgid "Pullik va yopiq kurslar"
+msgstr "Платные и закрытые курсы"
+
+#: templates/dashboard/access.html:5
+msgid ""
+"Pullik va yopiq kurslar: so'rovlar, to'lovlar va kimga ruxsat berilgani. "
+"Ruxsat berilganda o'quvchiga bot orqali xabar boradi."
+msgstr ""
+"Платные и закрытые курсы: заявки, оплаты и выданные доступы. При выдаче "
+"доступа ученик получает сообщение от бота."
+
+#: templates/dashboard/access.html:12
+msgid "Pullik/yopiq kurslar"
+msgstr "Платные/закрытые"
+
+#: templates/core/share.html:52
+msgid "QR yuklab olish"
+msgstr "Скачать QR"
+
+#: apps/education/models.py:300
+msgid "Qabul qilindi"
+msgstr "Принято"
+
+#: templates/dashboard/partials/homework_row.html:14
+#: apps/education/admin.py:117
+msgid "Qabul qilish"
+msgstr "Принять"
+
+#: templates/dashboard/homework.html:5
+msgid "Qabul qilsangiz yoki qaytarsangiz, o'quvchiga bot orqali xabar boradi."
+msgstr "При принятии или возврате студент получит сообщение в боте."
+
+#: templates/dashboard/partials/moderation_row.html:9
+msgid "Qadalgan"
+msgstr "Закреплён"
+
+#: templates/dashboard/channel_form.html:18
+msgid ""
+"Qalin, kursiv, havola, kod, kod bloki, iqtibos va ro'yxatlar Telegram'da "
+"xuddi shunday ko'rinadi. Ichki havolalar to'liq manzilga aylantiriladi."
+msgstr ""
+"Жирный, курсив, ссылки, код, блоки кода, цитаты и списки выглядят в Telegram"
+" так же. Внутренние ссылки становятся полными."
+
+#: templates/dashboard/settings.html:88
+msgid "Qanday ishlaydi"
+msgstr "Как это работает"
+
+#: templates/education/courses.html:78
+msgid "Qanday o'qiysiz"
+msgstr "Как проходит обучение"
+
+#: templates/education/buy.html:27
+msgid "Qanday sotib olinadi"
+msgstr "Как купить"
+
+#: apps/education/models.py:301
+msgid "Qayta ishlash kerak"
+msgstr "Нужна доработка"
+
+#: templates/dashboard/partials/homework_row.html:14
+#: apps/education/admin.py:124
+msgid "Qaytarish"
+msgstr "Вернуть"
+
+#: templates/404.html:23 templates/core/search.html:12
+#: templates/education/courses.html:15
+msgid "Qidirish"
+msgstr "Искать"
+
+#: templates/dashboard/projects.html:16 templates/dashboard/articles.html:38
+#: templates/dashboard/comments.html:10
+msgid "Qidirish..."
+msgstr "Поиск..."
+
+#: templates/404.html:15 templates/core/search.html:4
+#: templates/core/search.html:8
+msgid "Qidiruv"
+msgstr "Поиск"
+
+#: templates/dashboard/settings.html:159
+msgid "Qidiruv tizimlari va statistika"
+msgstr "Поисковые системы и статистика"
+
+#: templates/dashboard/skill_form.html:10
+msgid "Qisqa izoh (Web Framework...)"
+msgstr "Подпись (Web Framework...)"
+
+#: templates/dashboard/article_form.html:16
+msgid "Qisqa mazmun"
+msgstr "Краткое описание"
+
+#: templates/dashboard/project_form.html:22
+msgid "Qisqa shior"
+msgstr "Слоган"
+
+#: templates/dashboard/experience_form.html:27
+#: templates/dashboard/project_form.html:23
+msgid "Qisqa tavsif"
+msgstr "Краткое описание"
+
+#: templates/portfolio/project_detail.html:59
+#: templates/portfolio/project_detail.html:110
+msgid "Qiyinchiliklar"
+msgstr "Сложности"
+
+#: apps/accounts/views.py:229
+msgid "Qizg'in o'quvchi"
+msgstr "Усердный ученик"
+
+#: templates/portfolio/projects.html:29
+msgid ""
+"Qiziqarli loyihalar, hamkorlik yoki texnologiya haqida suhbatga doimo "
+"ochiqman."
+msgstr ""
+"Всегда открыт к интересным проектам, сотрудничеству и разговорам о "
+"технологиях."
+
+#: templates/portfolio/about.html:74 config/settings/unfold.py:84
+msgid "Qiziqishlar"
+msgstr "Интересы"
+
+#: templates/portfolio/about.html:32
+msgid "Qiziquvchanlik"
+msgstr "Любопытство"
+
+#: templates/dashboard/access.html:74
+msgid "Qo'lda ruxsat berish"
+msgstr "Выдать доступ вручную"
+
+#: apps/telegram_bot/models.py:154
+msgid "Qo'lda yozilgan"
+msgstr "Написан вручную"
+
+#: templates/dashboard/articles.html:42
+msgid "Qo'llash"
+msgstr "Применить"
+
+#: templates/dashboard/users.html:27
+#: templates/dashboard/partials/user_panel.html:14
+msgid "Qo'shilgan"
+msgstr "Добавлен"
+
+#: apps/education/admin.py:41
+msgid "Qoidalar"
+msgstr "Правила"
+
+#: templates/dashboard/article_form.html:62
+#: templates/dashboard/projects.html:10 templates/dashboard/projects.html:17
+msgid "Qoralama"
+msgstr "Черновик"
+
+#: templates/dashboard/settings.html:61
+msgid "Qoraytirish"
+msgstr "Затемнение"
+
+#: apps/accounts/models.py:65 apps/education/models.py:250
+msgid "Rad etildi"
+msgstr "Отклонено"
+
+#: templates/dashboard/access.html:56 templates/dashboard/access.html:61
+msgid "Rad etish"
+msgstr "Отклонить"
+
+#: apps/interactions/views.py:167
+msgid "Rahmat! Sharhingiz tekshiruvdan keyin chiqadi"
+msgstr "Спасибо! Отзыв появится после проверки"
+
+#: templates/core/partials/contact_success.html:5
+#, python-format
+msgid "Rahmat, %(name)s. Odatda 24 soat ichida javob beraman."
+msgstr "Спасибо, %(name)s. Обычно отвечаю в течение 24 часов."
+
+#: templates/accounts/admin_2fa.html:20 templates/accounts/login.html:60
+msgid "Raqam"
+msgstr "Цифра"
+
+#: templates/miniapp/register.html:7
+msgid "Raqam Telegram tomonidan tasdiqlanadi"
+msgstr "Номер подтверждается Telegram"
+
+#: templates/accounts/login.html:23
+msgid "Raqamingiz ochiq ko'rsatilmaydi"
+msgstr "Номер не показывается публично"
+
+#: templates/miniapp/register.html:12
+msgid "Raqamni ulashish"
+msgstr "Поделиться номером"
+
+#: templates/dashboard/channel_form.html:21
+#: templates/dashboard/broadcast_form.html:26
+msgid "Rasm (ixtiyoriy)"
+msgstr "Изображение (необязательно)"
+
+#: apps/accounts/forms.py:24
+msgid "Rasm hajmi 3 MB dan oshmasin"
+msgstr "Изображение не более 3 МБ"
+
+#: templates/dashboard/settings.html:64
+msgid ""
+"Rasm sekin yaqinlashadi (qurilmada «kam harakat» yoqilgan bo'lsa o'chadi)"
+msgstr "Фото медленно приближается (отключается при «уменьшении движения»)"
+
+#: templates/dashboard/partials/project_panel.html:23
+msgid "Rasm yo'q"
+msgstr "Нет изображений"
+
+#: templates/core/partials/contact_form.html:16
+msgid ""
+"Rasm, hujjat yoki boshqa fayllarni biriktirishingiz mumkin (10 MB gacha)."
+msgstr "Можно прикрепить изображения, документы и другие файлы (до 10 МБ)."
+
+#: templates/core/home.html:60
+msgid "Rasmingizni yuklang"
+msgstr "Загрузите своё фото"
+
+#: apps/dashboard/forms.py:143
+msgid "Rasmli xabar matni 1024 belgidan oshmasligi kerak (Telegram cheklovi)"
+msgstr "Подпись к фото — не более 1024 символов (ограничение Telegram)"
+
+#: templates/accounts/profile.html:18
+msgid "Rasmni almashtirish"
+msgstr "Сменить фото"
+
+#: apps/dashboard/views_content.py:75
+#, python-format
+msgid "Rejalashtirildi: %(t)s"
+msgstr "Запланировано: %(t)s"
+
+#: templates/dashboard/channel.html:18 apps/telegram_bot/models.py:67
+#: apps/telegram_bot/models.py:149
+msgid "Rejalashtirilgan"
+msgstr "Запланировано"
+
+#: templates/dashboard/channel_form.html:30
+msgid "Rejalashtirish (bo'sh qolsa — qoralama)"
+msgstr "Запланировать (пусто — черновик)"
+
+#: templates/dashboard/channel.html:5
+msgid ""
+"Rich text bilan post yozing, rejalashtiring yoki sayt kontentidan bir "
+"bosishda post qiling."
+msgstr ""
+"Пишите посты в rich text, планируйте или публикуйте контент сайта в один "
+"клик."
+
+#: templates/dashboard/bot.html:24 templates/dashboard/users.html:9
+#: templates/dashboard/partials/user_panel.html:8
+msgid "Ro'yxatdan o'tgan"
+msgstr "Зарегистрирован"
+
+#: apps/telegram_bot/models.py:60
+msgid "Ro'yxatdan o'tganlar"
+msgstr "Зарегистрированные"
+
+#: templates/dashboard/bot.html:9
+msgid "Ro'yxatdan o'tish, saytga kirish, ommaviy xabarlar va suhbatlar."
+msgstr "Регистрация, вход на сайт, рассылки и чаты."
+
+#: templates/dashboard/users.html:20
+msgid "Ro'yxatdan to'liq o'tmagan"
+msgstr "Регистрация не завершена"
+
+#: templates/miniapp/project.html:16 templates/dashboard/project_form.html:51
+#: templates/portfolio/project_detail.html:85
+msgid "Rolim"
+msgstr "Моя роль"
+
+#: apps/core/seo_audit.py:54
+msgid "Rus va ingliz tarjimalari kiritilgan"
+msgstr "Есть русский и английский переводы"
+
+#: apps/core/seo_audit.py:54
+msgid "Rus/ingliz tarjimasini qo'shing — Yandex va xalqaro qidiruv uchun"
+msgstr ""
+"Добавьте перевод на русский/английский — для Яндекса и международного поиска"
+
+#: apps/dashboard/views_content.py:348
+msgid "Ruxsat bekor qilindi"
+msgstr "Доступ отозван"
+
+#: apps/education/models.py:249
+msgid "Ruxsat berildi"
+msgstr "Доступ выдан"
+
+#: apps/dashboard/views_content.py:334
+#, python-format
+msgid "Ruxsat berildi: %(user)s → %(course)s"
+msgstr "Доступ выдан: %(user)s → %(course)s"
+
+#: templates/dashboard/access.html:108
+msgid "Ruxsat berilganlar"
+msgstr "С доступом"
+
+#: apps/dashboard/views_content.py:351
+msgid "Ruxsat qayta tiklandi"
+msgstr "Доступ восстановлен"
+
+#: templates/dashboard/access.html:125
+msgid "Ruxsatni bekor qilish"
+msgstr "Отозвать доступ"
+
+#: apps/blog/admin.py:39 apps/portfolio/admin.py:91 apps/education/admin.py:46
+msgid "SEO"
+msgstr "SEO"
+
+#: templates/dashboard/article_form.html:45
+msgid "SEO tekshiruvi maqola saqlangandan keyin ko'rinadi."
+msgstr "SEO-проверка появится после сохранения статьи."
+
+#: apps/core/admin.py:26
+msgid "SEO va footer"
+msgstr "SEO и футер"
+
+#: apps/portfolio/models.py:50
+msgid "SVG/PNG. Devicon'dan ustun turadi."
+msgstr "SVG/PNG. Приоритетнее Devicon."
+
+#: templates/dashboard/access.html:60
+msgid "Sabab (o'quvchiga yuboriladi)"
+msgstr "Причина (будет отправлена ученику)"
+
+#: templates/dashboard/analytics.html:8
+msgid "Sahifa ko'rishlar"
+msgstr "Просмотры страниц"
+
+#: config/settings/unfold.py:68
+msgid "Sahifa sarlavhalari"
+msgstr "Заголовки страниц"
+
+#: templates/dashboard/settings.html:156
+msgid "Sahifa sarlavhalari va iqtiboslar"
+msgstr "Заголовки страниц и цитаты"
+
+#: templates/miniapp/home.html:4
+msgid "Salom,"
+msgstr "Привет,"
+
+#: templates/core/home.html:15
+#, python-format
+msgid "Salom, men %(name)s."
+msgstr "Привет, я %(name)s."
+
+#: templates/dashboard/articles.html:17
+#: templates/education/certificate.html:14
+msgid "Sana"
+msgstr "Дата"
+
+#: apps/accounts/admin.py:36
+msgid "Sanalar"
+msgstr "Даты"
+
+#: apps/dashboard/views.py:564 apps/dashboard/views_content.py:208
+#: apps/dashboard/views_content.py:77
+msgid "Saqlandi"
+msgstr "Сохранено"
+
+#: templates/accounts/profile.html:46 templates/accounts/profile.html:147
+#: templates/interactions/partials/reaction_button.html:2
+msgid "Saqlangan"
+msgstr "Сохранено"
+
+#: templates/accounts/profile.html:56 templates/accounts/login.html:17
+msgid "Saqlanganlar"
+msgstr "Сохранённое"
+
+#: templates/dashboard/experience_form.html:60
+#: templates/dashboard/article_form.html:63
+#: templates/dashboard/skill_form.html:25
+msgid "Saqlash"
+msgstr "Сохранить"
+
+#: templates/dashboard/channel_form.html:48
+msgid "Saqlash / rejalashtirish"
+msgstr "Сохранить / запланировать"
+
+#: templates/dashboard/track_form.html:30
+msgid "Saqlash va yopish"
+msgstr "Сохранить и закрыть"
+
+#: templates/dashboard/article_form.html:14
+msgid "Sarlavha"
+msgstr "Заголовок"
+
+#: apps/core/seo_audit.py:45
+#, python-format
+msgid "Sarlavha 30–60 belgi bo'lsin (hozir %(n)s)"
+msgstr "Заголовок: 30–60 символов (сейчас %(n)s)"
+
+#: apps/core/seo_audit.py:44
+#, python-format
+msgid "Sarlavha uzunligi yaxshi (%(n)s belgi)"
+msgstr "Длина заголовка в норме (%(n)s)"
+
+#: templates/dashboard/article_form.html:13
+msgid "Sarlavha, qisqa mazmun va matn"
+msgstr "Заголовок, краткое описание и текст"
+
+#: templates/education/courses.html:90
+msgid "Savol berish"
+msgstr "Задать вопрос"
+
+#: templates/gallery/index.html:38
+msgid "Sayohat vloglaridan loyiha sharhlarigacha."
+msgstr "От тревел-влогов до разборов проектов."
+
+#: templates/miniapp/home.html:8 config/settings/unfold.py:63
+#: apps/core/apps.py:9
+msgid "Sayt"
+msgstr "Сайт"
+
+#: templates/dashboard/settings.html:46
+msgid "Sayt foni"
+msgstr "Фон сайта"
+
+#: templates/dashboard/inbox.html:9
+msgid "Sayt formasi"
+msgstr "Форма сайта"
+
+#: templates/dashboard/settings.html:7 templates/dashboard/home.html:74
+#: config/settings/unfold.py:66
+msgid "Sayt sozlamalari"
+msgstr "Настройки сайта"
+
+#: templates/education/buy.html:62
+msgid "Sayt va Telegram Mini App'da o'qish"
+msgstr "Обучение на сайте и в Telegram Mini App"
+
+#: templates/miniapp/register.html:9
+msgid "Sayt va ilovada bitta hisob"
+msgstr "Один аккаунт для сайта и приложения"
+
+#: templates/dashboard/experience_form.html:53
+#: templates/dashboard/track_form.html:27
+#: templates/dashboard/playlist_form.html:13
+msgid "Saytda ko'rinadi"
+msgstr "Виден на сайте"
+
+#: templates/dashboard/experience_form.html:6
+#: templates/dashboard/article_form.html:7
+#: templates/dashboard/project_form.html:9
+msgid "Saytda ko'rish"
+msgstr "Открыть на сайте"
+
+#: templates/dashboard/settings.html:38
+msgid "Saytda yashil “Available” belgisi"
+msgstr "Зелёный значок «Available» на сайте"
+
+#: templates/dashboard/project_form.html:64
+msgid "Saytdagi kartochka ko'rinishi"
+msgstr "Как карточка выглядит на сайте"
+
+#: templates/dashboard/settings.html:163
+msgid "Saytga chiqqandan keyin:"
+msgstr "После запуска сайта:"
+
+#: templates/dashboard/partials/user_panel.html:15
+msgid "Saytga kirgan"
+msgstr "Вход на сайт"
+
+#: templates/accounts/login.html:33
+msgid "Saytga kirish"
+msgstr "Вход на сайт"
+
+#: templates/dashboard/bot.html:72
+msgid "Saytga kirishlar"
+msgstr "Входы на сайт"
+
+#: templates/miniapp/project.html:24
+#: templates/portfolio/project_detail.html:14
+msgid "Saytga o'tish"
+msgstr "Перейти на сайт"
+
+#: templates/core/share.html:55
+msgid "Saytingiz yoki blogingizga joylang."
+msgstr "Разместите на своём сайте или блоге."
+
+#: templates/miniapp/profile.html:32 config/settings/unfold.py:59
+msgid "Saytni ochish"
+msgstr "Открыть сайт"
+
+#: apps/core/seo_audit.py:52
+msgid "Saytning boshqa sahifalariga havola bor"
+msgstr "Есть ссылки на другие страницы сайта"
+
+#: templates/miniapp/course.html:13 templates/education/buy.html:14
+#: templates/education/course_detail.html:26
+msgid "Sertifikat"
+msgstr "Сертификат"
+
+#: templates/education/courses.html:83
+msgid "Sertifikat oling"
+msgstr "Получите сертификат"
+
+#: templates/education/certificate.html:15
+msgid "Sertifikat raqami"
+msgstr "Номер сертификата"
+
+#: templates/miniapp/profile.html:26 templates/accounts/profile.html:45
+#: templates/accounts/profile.html:57
+msgid "Sertifikatlar"
+msgstr "Сертификаты"
+
+#: templates/dashboard/track_form.html:26
+msgid "Sevimli"
+msgstr "Избранное"
+
+#: templates/gallery/index.html:64
+msgid "Sevimli mediangizni ulashing"
+msgstr "Поделитесь любимым медиа"
+
+#: templates/core/home.html:92
+msgid "Sevimli musiqalarim"
+msgstr "Моя любимая музыка"
+
+#: templates/gallery/index.html:54 templates/gallery/music.html:66
+#: templates/dashboard/music.html:9
+msgid "Sevimlilar"
+msgstr "Избранное"
+
+#: apps/interactions/admin.py:38
+msgid "Sharh"
+msgstr "Отзыв"
+
+#: templates/interactions/reviews.html:9
+#: templates/interactions/reviews.html:10
+msgid "Sharh yozish"
+msgstr "Написать отзыв"
+
+#: templates/interactions/reviews.html:20
+msgid "Sharhingiz tekshiruvda"
+msgstr "Ваш отзыв на проверке"
+
+#: templates/dashboard/comments.html:9
+#: templates/dashboard/project_form.html:85
+#: templates/portfolio/project_detail.html:61
+msgid "Sharhlar"
+msgstr "Отзывы"
+
+#: templates/interactions/reviews.html:9
+msgid "Sharhni tahrirlash"
+msgstr "Изменить отзыв"
+
+#: apps/core/admin.py:13
+msgid "Shaxsiy"
+msgstr "Личное"
+
+#: apps/portfolio/models.py:230
+msgid "Shaxsiy loyihalar"
+msgstr "Личные проекты"
+
+#: templates/dashboard/settings.html:23 templates/accounts/profile.html:168
+msgid "Shaxsiy ma'lumotlar"
+msgstr "Личные данные"
+
+#: templates/dashboard/settings.html:33
+msgid "Shaxsiy rasm (bosh sahifa)"
+msgstr "Личное фото (главная)"
+
+#: templates/dashboard/settings.html:149
+msgid "Shior"
+msgstr "Слоган"
+
+#: templates/core/contact.html:52
+msgid "Shoshilinch masalalar uchun Telegram yoki telefon orqali yozing."
+msgstr "По срочным вопросам пишите в Telegram или звоните."
+
+#: templates/core/share.html:44
+msgid "Shu oy"
+msgstr "Этот месяц"
+
+#: templates/portfolio/project_detail.html:142
+msgid "Shunga o'xshash loyihangiz bormi?"
+msgstr "Есть похожий проект?"
+
+#: templates/accounts/profile.html:95
+msgid "Siz uchun kurslar"
+msgstr "Курсы для вас"
+
+#: templates/core/share.html:50
+msgid "Skanerlang va ulashing"
+msgstr "Сканируйте и делитесь"
+
+#: templates/dashboard/home.html:60
+msgid "So'nggi faollik"
+msgstr "Последняя активность"
+
+#: templates/dashboard/bot.html:63
+msgid "So'nggi hodisalar"
+msgstr "Последние события"
+
+#: templates/blog/articles.html:31
+msgid "So'nggi maqolalar"
+msgstr "Последние статьи"
+
+#: templates/accounts/profile.html:74
+msgid "So'nggi tugatilgan darslar"
+msgstr "Последние пройденные уроки"
+
+#: templates/core/share.html:61
+msgid "So'nggi ulashishlar"
+msgstr "Последние репосты"
+
+#: templates/education/course_detail.html:37
+msgid "So'rov ko'rib chiqilmoqda"
+msgstr "Заявка на рассмотрении"
+
+#: templates/accounts/login.html:49
+msgid "So'rov muddati tugadi."
+msgstr "Срок запроса истёк."
+
+#: templates/miniapp/course.html:24 templates/education/buy.html:29
+msgid "So'rov qoldiring va Telegram'da yozing"
+msgstr "Оставьте заявку и напишите в Telegram"
+
+#: apps/dashboard/views_content.py:337
+msgid "So'rov rad etildi"
+msgstr "Заявка отклонена"
+
+#: templates/education/buy.html:68
+msgid "So'rov raqami"
+msgstr "Номер заявки"
+
+#: templates/dashboard/access.html:67 templates/accounts/profile.html:136
+msgid "So'rov yo'q"
+msgstr "Заявок нет"
+
+#: templates/miniapp/course.html:20 templates/education/buy.html:68
+msgid "So'rovingiz ko'rib chiqilmoqda"
+msgstr "Ваша заявка на рассмотрении"
+
+#: apps/education/views.py:135
+msgid "So'rovingiz qabul qilindi. To'lovdan keyin kurs ochiladi."
+msgstr "Заявка принята. Курс откроется после оплаты."
+
+#: templates/dashboard/access.html:19
+msgid "So'rovlar"
+msgstr "Заявки"
+
+#: templates/accounts/profile.html:128
+msgid "So'rovlarim"
+msgstr "Мои заявки"
+
+#: templates/education/courses.html:21
+msgid "Soat kontent"
+msgstr "Часов контента"
+
+#: templates/dashboard/experience_form.html:47
+msgid "Soha"
+msgstr "Отрасль"
+
+#: templates/miniapp/course.html:28 templates/education/course_detail.html:39
+msgid "Sotib olish"
+msgstr "Купить"
+
+#: apps/core/models.py:151
+msgid "Sotib olish sahifasida ko'rinadi: to'lov usullari, muddatlar va h.k."
+msgstr "Показывается на странице покупки: способы оплаты, сроки и т.д."
+
+#: templates/education/buy.html:77
+msgid "Sotib olish · Telegram"
+msgstr "Купить · Telegram"
+
+#: templates/dashboard/access.html:10
+msgid "Sotilgan"
+msgstr "Продано"
+
+#: templates/gallery/photo_detail.html:36
+msgid "Sozlama"
+msgstr "Настройки"
+
+#: templates/dashboard/base.html:41 templates/dashboard/settings.html:5
+#: templates/dashboard/project_form.html:82
+msgid "Sozlamalar"
+msgstr "Настройки"
+
+#: apps/dashboard/views.py:627
+msgid "Sozlamalar saqlandi"
+msgstr "Настройки сохранены"
+
+#: templates/dashboard/channel.html:59
+msgid "Sozlash"
+msgstr "Настроить"
+
+#: apps/gallery/models.py:141
+msgid "Spotify, YouTube Music, Apple Music yoki SoundCloud"
+msgstr "Spotify, YouTube Music, Apple Music или SoundCloud"
+
+#: templates/core/home.html:155 apps/portfolio/models.py:228
+msgid "Startap"
+msgstr "Стартап"
+
+#: apps/core/admin.py:18
+msgid "Statistika"
+msgstr "Статистика"
+
+#: templates/core/contact.html:76
+msgid "Suhbatni boshlash"
+msgstr "Начать чат"
+
+#: templates/dashboard/inbox.html:69
+msgid "Suhbatni tanlang"
+msgstr "Выберите чат"
+
+#: templates/dashboard/access.html:53
+msgid "Summa"
+msgstr "Сумма"
+
+#: templates/dashboard/access.html:84
+msgid "Summa (so'm)"
+msgstr "Сумма (сум)"
+
+#: templates/dashboard/experience.html:17
+#: templates/portfolio/experience.html:63 config/settings/unfold.py:109
+msgid "Ta'lim"
+msgstr "Обучение"
+
+#: templates/dashboard/article_form.html:53
+msgid "Tahrirlab"
+msgstr "С правкой"
+
+#: templates/dashboard/partials/channel_suggest.html:6
+msgid "Tahrirlab joylash"
+msgstr "Отредактировать и опубликовать"
+
+#: templates/dashboard/experience_form.html:5
+#: templates/dashboard/partials/project_panel.html:8
+#: templates/dashboard/partials/user_panel.html:29
+msgid "Tahrirlash"
+msgstr "Редактировать"
+
+#: templates/dashboard/experience_form.html:3
+#: templates/partials/header.html:19 templates/partials/header.html:76
+msgid "Tajriba"
+msgstr "Опыт"
+
+#: templates/dashboard/experience_form.html:5 templates/dashboard/base.html:29
+#: templates/dashboard/experience.html:3
+msgid "Tajriba va ta'lim"
+msgstr "Опыт и образование"
+
+#: templates/portfolio/experience_detail.html:7
+msgid "Tajribaga qaytish"
+msgstr "Назад к опыту"
+
+#: templates/education/course_detail.html:58
+msgid "Talablar"
+msgstr "Требования"
+
+#: templates/dashboard/projects.html:11 templates/dashboard/projects.html:17
+#: templates/blog/articles.html:16
+msgid "Tanlangan"
+msgstr "Избранное"
+
+#: apps/education/admin.py:122
+msgid "Tanlangan javoblar qabul qilindi"
+msgstr "Выбранные ответы приняты"
+
+#: apps/education/admin.py:128
+msgid "Tanlangan javoblar qaytarildi"
+msgstr "Выбранные ответы возвращены"
+
+#: templates/dashboard/project_form.html:83
+#: templates/portfolio/project_detail.html:23
+#: templates/portfolio/partials/project_grid.html:5
+msgid "Tanlangan loyiha"
+msgstr "Избранный проект"
+
+#: templates/core/home.html:121
+msgid "Tanlangan loyihalar"
+msgstr "Избранные проекты"
+
+#: templates/dashboard/article_form.html:33
+msgid "Tanlangan maqola"
+msgstr "Избранная статья"
+
+#: templates/dashboard/settings.html:103
+msgid "Tartib"
+msgstr "Порядок"
+
+#: apps/accounts/models.py:64
+msgid "Tasdiqlandi"
+msgstr "Подтверждён"
+
+#: templates/accounts/profile.html:26
+msgid "Tasdiqlangan"
+msgstr "Подтверждён"
+
+#: templates/dashboard/base.html:77
+msgid "Tasdiqlanmagan sharhlar"
+msgstr "Отзывы на модерации"
+
+#: templates/accounts/admin_2fa.html:24
+#: templates/dashboard/partials/moderation_row.html:13
+#: apps/interactions/admin.py:22
+msgid "Tasdiqlash"
+msgstr "Одобрить"
+
+#: templates/dashboard/music.html:11
+msgid "Tashqi havolalar"
+msgstr "Внешние ссылки"
+
+#: templates/dashboard/analytics.html:21
+msgid "Tashrifchilar"
+msgstr "Посетители"
+
+#: templates/dashboard/analytics.html:13
+msgid "Tashriflar"
+msgstr "Визиты"
+
+#: templates/dashboard/home.html:36
+msgid "Tashriflar, yangi foydalanuvchilar va izohlar"
+msgstr "Визиты, новые пользователи и комментарии"
+
+#: templates/dashboard/experience_form.html:46
+#: templates/dashboard/partials/project_panel.html:12
+#: apps/education/admin.py:40
+msgid "Tavsif"
+msgstr "Описание"
+
+#: templates/education/courses.html:28
+msgid "Tavsiya etiladi"
+msgstr "Рекомендуем"
+
+#: templates/dashboard/settings.html:77
+msgid ""
+"Tavsiya: 2560×1440 yoki kattaroq JPG/WebP. Yuklangan rasm sifati "
+"o'zgartirilmaydi; mobil uchun yengil nusxa avtomatik ishlatiladi."
+msgstr ""
+"Рекомендуем JPG/WebP от 2560×1440. Качество загруженного фото не меняется; "
+"для мобильных используется облегчённая копия."
+
+#: templates/dashboard/settings.html:46
+msgid ""
+"Tayyor fonlardan birini tanlang yoki o'zingiznikini yuklang. Sahifalar uchun"
+" alohida fonni «Sahifa sarlavhalari» bo'limida berish mumkin."
+msgstr ""
+"Выберите готовый фон или загрузите свой. Отдельный фон страниц задаётся в "
+"разделе «Заголовки страниц»."
+
+#: templates/gallery/photo_detail.html:42
+#: templates/dashboard/article_form.html:36
+#: templates/dashboard/partials/project_panel.html:14
+msgid "Teglar"
+msgstr "Теги"
+
+#: templates/dashboard/homework.html:9
+msgid "Tekshiriladigan vazifa yo'q"
+msgstr "Нет заданий на проверку"
+
+#: templates/dashboard/base.html:78 templates/dashboard/courses.html:10
+msgid "Tekshiriladigan vazifalar"
+msgstr "Задания на проверку"
+
+#: apps/education/models.py:299
+msgid "Tekshirilmoqda"
+msgstr "На проверке"
+
+#: templates/dashboard/article_form.html:44
+msgid "Tekshiruv o'zbekcha matn bo'yicha, saqlagandan keyin yangilanadi."
+msgstr "Проверка по узбекскому тексту, обновляется после сохранения."
+
+#: templates/core/contact.html:27 templates/dashboard/users.html:27
+#: templates/dashboard/partials/user_panel.html:11
+msgid "Telefon"
+msgstr "Телефон"
+
+#: templates/accounts/login.html:21
+msgid "Telefon Telegram tomonidan tasdiqlanadi"
+msgstr "Телефон подтверждается Telegram"
+
+#: templates/accounts/login.html:41
+msgid "Telefon kamerasi bilan skanerlang"
+msgstr "Отсканируйте камерой телефона"
+
+#: templates/accounts/profile.html:186
+msgid ""
+"Telefon raqamingiz Telegram orqali tasdiqlangan va saytda ko'rsatilmaydi."
+msgstr "Ваш номер подтверждён через Telegram и не показывается на сайте."
+
+#: templates/core/share.html:51
+msgid "Telefonda oching yoki QR orqali yuboring."
+msgstr "Откройте на телефоне или отправьте QR-код."
+
+#: apps/accounts/admin.py:33
+msgid "Telegram"
+msgstr "Telegram"
+
+#: templates/dashboard/broadcast_form.html:24
+msgid "Telegram HTML: <b>, <i>, <u>, <code>, <a href>"
+msgstr "Telegram HTML: <b>, <i>, <u>, <code>, <a href>"
+
+#: apps/accounts/models.py:15
+msgid "Telegram ID"
+msgstr "Telegram ID"
+
+#: apps/miniapp/apps.py:9
+msgid "Telegram Mini App"
+msgstr "Telegram Mini App"
+
+#: config/settings/unfold.py:129 apps/telegram_bot/apps.py:9
+msgid "Telegram bot"
+msgstr "Telegram-бот"
+
+#: templates/accounts/login.html:44
+msgid "Telegram botni ochish"
+msgstr "Открыть Telegram-бота"
+
+#: templates/dashboard/article_form.html:51
+msgid "Telegram kanal"
+msgstr "Telegram-канал"
+
+#: templates/partials/channel_cta.html:6
+msgid "Telegram kanalimiz"
+msgstr "Наш Telegram-канал"
+
+#: templates/accounts/login.html:11
+msgid "Telegram orqali bir zumda kiring"
+msgstr "Мгновенный вход через Telegram"
+
+#: templates/partials/header.html:83
+msgid "Telegram orqali kirish"
+msgstr "Войти через Telegram"
+
+#: templates/dashboard/users.html:5
+msgid "Telegram orqali ro'yxatdan o'tgan foydalanuvchilar"
+msgstr "Пользователи, зарегистрированные через Telegram"
+
+#: templates/accounts/profile.html:26
+msgid "Telegram orqali tasdiqlangan"
+msgstr "Подтверждён через Telegram"
+
+#: apps/accounts/models.py:16
+msgid "Telegram username"
+msgstr "Имя пользователя Telegram"
+
+#: templates/dashboard/channel_form.html:35
+#: templates/dashboard/broadcast_form.html:42
+msgid "Telegram'da ko'rinishi"
+msgstr "Как выглядит в Telegram"
+
+#: templates/miniapp/course.html:21 templates/education/buy.html:77
+msgid "Telegram'da yozish"
+msgstr "Написать в Telegram"
+
+#: apps/accounts/admin_security.py:127
+msgid "Telegram'ga kod yuborib bo'lmadi. Keyinroq urinib ko'ring."
+msgstr "Не удалось отправить код в Telegram. Попробуйте позже."
+
+#: templates/dashboard/inbox.html:34
+msgid "Telegramda yozish"
+msgstr "Написать в Telegram"
+
+#: templates/dashboard/bot.html:39
+msgid "Texnik ishlar"
+msgstr "Техработы"
+
+#: templates/portfolio/skills.html:13
+msgid "Texnologiya"
+msgstr "Технология"
+
+#: templates/dashboard/project_form.html:56
+#: templates/portfolio/project_detail.html:58
+#: templates/portfolio/project_detail.html:92
+msgid "Texnologiyalar"
+msgstr "Технологии"
+
+#: templates/dashboard/experience_form.html:33
+msgid "Texnologiyalar / fanlar"
+msgstr "Технологии / предметы"
+
+#: templates/portfolio/experience_detail.html:97
+msgid "Texnologiyalar va vositalar"
+msgstr "Технологии и инструменты"
+
+#: templates/dashboard/skills.html:5
+msgid "Texnologiyalar, daraja va o'rganish jarayoni."
+msgstr "Технологии, уровень и прогресс изучения."
+
+#: templates/core/contact.html:50
+msgid "Tez javob"
+msgstr "Быстрый ответ"
+
+#: templates/core/contact.html:61
+msgid "Tez-tez so'raladigan savollarga javoblar"
+msgstr "Ответы на частые вопросы"
+
+#: templates/dashboard/home.html:68
+msgid "Tezkor amallar"
+msgstr "Быстрые действия"
+
+#: templates/partials/player_dock.html:30
+msgid "Tezlik"
+msgstr "Скорость"
+
+#: templates/dashboard/access.html:127
+msgid "Tiklash"
+msgstr "Восстановить"
+
+#: templates/miniapp/profile.html:28 templates/dashboard/users.html:27
+#: templates/accounts/profile.html:175
+msgid "Til"
+msgstr "Язык"
+
+#: templates/dashboard/base.html:39
+msgid "Tizim"
+msgstr "Система"
+
+#: templates/dashboard/home.html:82
+msgid "Tizim holati"
+msgstr "Состояние системы"
+
+#: templates/core/contact.html:74
+msgid "To'g'ridan-to'g'ri yozmoqchimisiz?"
+msgstr "Хотите написать напрямую?"
+
+#: templates/dashboard/access.html:56
+msgid "To'landi, ruxsat berish"
+msgstr "Оплачено, выдать доступ"
+
+#: templates/dashboard/base.html:42
+msgid "To'liq admin"
+msgstr "Полная админка"
+
+#: templates/dashboard/users.html:36
+msgid "To'liq emas"
+msgstr "Не завершена"
+
+#: templates/dashboard/project_form.html:24
+msgid "To'liq tavsif"
+msgstr "Полное описание"
+
+#: templates/portfolio/about.html:85
+msgid "To'liq vaqt chizig'i"
+msgstr "Полная хронология"
+
+#: templates/dashboard/settings.html:85
+msgid "To'lov bo'yicha izoh"
+msgstr "Комментарий об оплате"
+
+#: templates/dashboard/access.html:74
+msgid "To'lov boshqa yo'l bilan kelgan bo'lsa"
+msgstr "Если оплата пришла другим способом"
+
+#: templates/education/buy.html:80
+msgid ""
+"To'lov faqat rasmiy Telegram akkaunt orqali qabul qilinadi. Begona "
+"havolalarga ishonmang."
+msgstr ""
+"Оплата принимается только через официальный Telegram-аккаунт. Не доверяйте "
+"сторонним ссылкам."
+
+#: templates/dashboard/settings.html:92
+msgid ""
+"To'lov kelgach Dashboard → Kursga ruxsatlar → «To'landi, ruxsat berish». "
+"O'quvchiga bot xabar yuboradi."
+msgstr ""
+"После оплаты: Dashboard → Доступ к курсам → «Оплачено, выдать доступ». Бот "
+"уведомит ученика."
+
+#: templates/education/buy.html:31
+msgid ""
+"To'lov tasdiqlangach kurs profilingizda ochiladi va bot sizga xabar "
+"yuboradi."
+msgstr ""
+"После подтверждения оплаты курс откроется в профиле, а бот пришлёт "
+"сообщение."
+
+#: templates/dashboard/settings.html:84
+msgid "To'lov uchun Telegram username"
+msgstr "Telegram username для оплаты"
+
+#: templates/education/buy.html:30
+msgid "To'lov usuli Telegram'da kelishiladi: Click, Payme, karta yoki naqd."
+msgstr ""
+"Способ оплаты обсуждается в Telegram: Click, Payme, карта или наличные."
+
+#: apps/core/admin.py:25
+msgid "To'lovlar"
+msgstr "Оплаты"
+
+#: templates/miniapp/course.html:25 templates/education/buy.html:30
+msgid "To'lovni amalga oshiring"
+msgstr "Оплатите"
+
+#: apps/core/models.py:271 apps/core/models.py:296
+msgid "To'q sariq"
+msgstr "Оранжевый"
+
+#: apps/core/models.py:84
+msgid "Tog'lar va shahar chiroqlari"
+msgstr "Горы и огни города"
+
+#: templates/dashboard/base.html:47
+msgid "Token kiritilmagan"
+msgstr "Токен не указан"
+
+#: templates/dashboard/base.html:47
+msgid "Token ulangan"
+msgstr "Токен подключён"
+
+#: templates/dashboard/partials/access_user_results.html:8
+msgid "Topilmadi"
+msgstr "Не найдено"
+
+#: templates/portfolio/experience.html:41
+msgid "Topshirilgan loyihalar"
+msgstr "Сданные проекты"
+
+#: templates/miniapp/lesson.html:48 templates/education/lesson_detail.html:119
+msgid "Topshirish"
+msgstr "Сдать"
+
+#: templates/miniapp/lesson.html:38 templates/education/lesson_detail.html:92
+msgid "Topshirish majburiy"
+msgstr "Сдача обязательна"
+
+#: apps/education/models.py:130
+msgid "Topshirish shart"
+msgstr "Обязательная сдача"
+
+#: templates/education/lesson_detail.html:123
+msgid "Topshirish uchun kiring"
+msgstr "Войдите, чтобы сдать"
+
+#: templates/dashboard/articles.html:37
+msgid "Tozalash"
+msgstr "Сбросить"
+
+#: templates/dashboard/track_form.html:3
+msgid "Trek"
+msgstr "Трек"
+
+#: templates/dashboard/music.html:5
+msgid "Trek qo'shish"
+msgstr "Добавить трек"
+
+#: apps/dashboard/views_content.py:154
+msgid "Trek saqlandi"
+msgstr "Трек сохранён"
+
+#: templates/gallery/music.html:90
+msgid "Trek tanlang"
+msgstr "Выберите трек"
+
+#: templates/gallery/music.html:64 templates/dashboard/music.html:8
+#: templates/dashboard/playlist_form.html:10
+msgid "Treklar"
+msgstr "Треки"
+
+#: templates/dashboard/track_form.html:5
+msgid "Trekni tahrirlash"
+msgstr "Редактировать трек"
+
+#: templates/dashboard/experience_form.html:24
+msgid "Tugagan"
+msgstr "Окончание"
+
+#: templates/education/buy.html:61
+msgid "Tugatganlik sertifikati"
+msgstr "Сертификат об окончании"
+
+#: templates/education/lesson_detail.html:65
+#: templates/education/my_courses.html:12
+#: templates/accounts/partials/course_row.html:6
+msgid "Tugatilgan"
+msgstr "Завершён"
+
+#: templates/dashboard/courses.html:9
+msgid "Tugatilgan darslar"
+msgstr "Пройденные уроки"
+
+#: templates/dashboard/broadcast_form.html:27
+msgid "Tugma matni"
+msgstr "Текст кнопки"
+
+#: apps/dashboard/forms.py:137 apps/dashboard/forms.py:268
+msgid "Tugma uchun matn va havola birga kiritilishi kerak"
+msgstr "Текст и ссылка кнопки указываются вместе"
+
+#: templates/education/buy.html:29
+msgid ""
+"Tugmani bosganingizda so'rov raqamingiz bilan tayyor xabar ochiladi. Uni "
+"yuboring."
+msgstr ""
+"По кнопке откроется готовое сообщение с номером заявки. Отправьте его."
+
+#: templates/partials/player_dock.html:15
+msgid "Tun"
+msgstr "Ночь"
+
+#: templates/dashboard/experience_form.html:13
+#: templates/dashboard/project_form.html:50
+#: templates/portfolio/project_detail.html:84
+msgid "Turi"
+msgstr "Тип"
+
+#: templates/dashboard/skills.html:15 templates/dashboard/articles.html:17
+#: templates/portfolio/project_detail.html:83
+msgid "Turkum"
+msgstr "Категория"
+
+#: templates/dashboard/project_form.html:71
+msgid "Turkum va teglar"
+msgstr "Категория и теги"
+
+#: templates/dashboard/skills.html:13 templates/dashboard/articles.html:45
+#: templates/portfolio/skills.html:77
+msgid "Turkumlar"
+msgstr "Категории"
+
+#: templates/portfolio/experience.html:48
+msgid "Turlar bo'yicha"
+msgstr "По типам"
+
+#: templates/dashboard/access.html:11
+msgid "Tushum"
+msgstr "Выручка"
+
+#: apps/core/seo_audit.py:42
+msgid "URL (slug) kalit so'zni o'z ichiga olsin"
+msgstr "Добавьте ключевое слово в URL (slug)"
+
+#: templates/dashboard/bot.html:40
+msgid "Ulangan"
+msgstr "Подключён"
+
+#: templates/core/share.html:37
+msgid "Ulashilganda shunday ko'rinadi."
+msgstr "Так это будет выглядеть при публикации."
+
+#: templates/gallery/video_detail.html:22
+#: templates/gallery/photo_detail.html:15 templates/miniapp/article.html:13
+msgid "Ulashish"
+msgstr "Поделиться"
+
+#: templates/core/share.html:22
+msgid "Ulashish havolasi"
+msgstr "Ссылка для шаринга"
+
+#: templates/core/share.html:43
+msgid "Ulashish statistikasi"
+msgstr "Статистика репостов"
+
+#: apps/core/models.py:164
+msgid "Umami skript manzili"
+msgstr "URL скрипта Umami"
+
+#: apps/core/models.py:165
+msgid "Umami website ID"
+msgstr "Umami website ID"
+
+#: templates/accounts/profile.html:117 templates/education/buy.html:20
+msgid "Umrbod kirish"
+msgstr "Пожизненный доступ"
+
+#: templates/accounts/profile.html:53
+#: templates/portfolio/project_detail.html:55
+#: templates/portfolio/experience_detail.html:40
+msgid "Umumiy"
+msgstr "Обзор"
+
+#: templates/portfolio/skills.html:65
+msgid "Umumiy ko'rinish"
+msgstr "Обзор"
+
+#: apps/accounts/views.py:102
+msgid "Urinishlar soni ko'p. 10 daqiqadan keyin qayta urinib ko'ring."
+msgstr "Слишком много попыток. Повторите через 10 минут."
+
+#: apps/accounts/admin_security.py:156
+msgid "Urinishlar soni tugadi. Qaytadan kiring."
+msgstr "Попытки исчерпаны. Войдите заново."
+
+#: templates/miniapp/lesson.html:38 templates/education/lesson_detail.html:90
+#: apps/dashboard/views.py:126
+msgid "Uyga vazifa"
+msgstr "Домашнее задание"
+
+#: templates/dashboard/bot_settings.html:27
+msgid "Uyga vazifa topshirildi"
+msgstr "Домашнее задание сдано"
+
+#: apps/miniapp/views.py:227 apps/education/views.py:342
+msgid "Uyga vazifa topshirildi!"
+msgstr "Домашнее задание сдано!"
+
+#: apps/education/models.py:128
+msgid "Uyga vazifa yo'q"
+msgstr "Без домашнего задания"
+
+#: templates/dashboard/homework.html:3 templates/dashboard/homework.html:5
+#: config/settings/unfold.py:114
+msgid "Uyga vazifalar"
+msgstr "Домашние задания"
+
+#: templates/education/buy.html:60
+msgid "Uyga vazifalar va shaxsiy tekshiruv"
+msgstr "Домашние задания с личной проверкой"
+
+#: templates/education/lesson_detail.html:135
+#: templates/education/courses.html:82
+msgid "Uyga vazifani topshiring"
+msgstr "Сдайте домашнее задание"
+
+#: templates/partials/player_dock.html:39
+msgid "Uyqu taymeri"
+msgstr "Таймер сна"
+
+#: templates/miniapp/course.html:44
+#: templates/education/partials/lesson_row.html:14
+msgid "Vazifa"
+msgstr "Задание"
+
+#: templates/education/lesson_detail.html:135
+msgid "Vazifa tekshirilishini kuting"
+msgstr "Дождитесь проверки задания"
+
+#: apps/core/models.py:239
+msgid "Veb-sayt"
+msgstr "Веб-сайт"
+
+#: apps/core/models.py:112 apps/dashboard/forms.py:49
+msgid "Vergul bilan ajrating"
+msgstr "Через запятую"
+
+#: apps/gallery/models.py:12 apps/education/admin.py:83
+msgid "Video"
+msgstr "Видео"
+
+#: templates/dashboard/home.html:72
+msgid "Video dars qo'shish"
+msgstr "Добавить видеоурок"
+
+#: templates/education/courses.html:20
+msgid "Video darslar"
+msgstr "Видеоуроки"
+
+#: templates/miniapp/lesson.html:8 templates/miniapp/lesson.html:14
+#: templates/education/lesson_detail.html:38
+msgid "Video ko'rildi"
+msgstr "Видео просмотрено"
+
+#: templates/education/lesson_detail.html:160
+msgid "Video ko'rildi!"
+msgstr "Видео просмотрено!"
+
+#: templates/accounts/login.html:15
+msgid "Video kurslar"
+msgstr "Видеокурсы"
+
+#: templates/dashboard/courses.html:5
+msgid "Video kurslar, darslar va o'quvchilar progressi."
+msgstr "Видеокурсы, уроки и прогресс студентов."
+
+#: templates/miniapp/lesson.html:21 templates/education/lesson_detail.html:52
+msgid "Video tez orada"
+msgstr "Видео скоро"
+
+#: templates/gallery/index.html:18 templates/gallery/index.html:38
+#: templates/gallery/video_list.html:3
+msgid "Videolar"
+msgstr "Видео"
+
+#: templates/gallery/video_detail.html:6
+msgid "Videolarga qaytish"
+msgstr "Назад к видео"
+
+#: templates/miniapp/lesson.html:15 templates/education/lesson_detail.html:36
+msgid "Videoni ko'rdim"
+msgstr "Я посмотрел видео"
+
+#: templates/education/courses.html:80
+msgid "Videoni ko'ring"
+msgstr "Смотрите видео"
+
+#: templates/education/lesson_detail.html:29
+msgid "Videoni ochish"
+msgstr "Открыть видео"
+
+#: templates/education/lesson_detail.html:135
+msgid "Videoni oxirigacha ko'ring"
+msgstr "Досмотрите видео до конца"
+
+#: templates/partials/player_dock.html:15
+msgid "Vokal"
+msgstr "Вокал"
+
+#: apps/portfolio/models.py:130
+msgid "Web & Mobile"
+msgstr "Web и Mobile"
+
+#: templates/core/partials/contact_form.html:10
+msgid "Xabar"
+msgstr "Сообщение"
+
+#: templates/dashboard/broadcast_form.html:14
+#: templates/dashboard/partials/user_panel.html:24
+msgid "Xabar matni"
+msgstr "Текст сообщения"
+
+#: apps/dashboard/views.py:231
+msgid "Xabar navbatga qo'yildi"
+msgstr "Сообщение поставлено в очередь"
+
+#: templates/dashboard/inbox.html:19
+msgid "Xabar yo'q"
+msgstr "Сообщений нет"
+
+#: apps/dashboard/forms.py:164
+msgid "Xabar yozing..."
+msgstr "Напишите сообщение..."
+
+#: templates/core/contact.html:19
+msgid "Xabar yuborish"
+msgstr "Отправить сообщение"
+
+#: templates/core/partials/contact_success.html:4
+msgid "Xabaringiz yuborildi!"
+msgstr "Сообщение отправлено!"
+
+#: apps/core/views.py:68
+msgid "Xabaringiz yuborildi. Tez orada javob beraman!"
+msgstr "Сообщение отправлено. Скоро отвечу!"
+
+#: templates/dashboard/base.html:35 templates/dashboard/inbox.html:3
+#: templates/dashboard/inbox.html:5
+msgid "Xabarlar"
+msgstr "Сообщения"
+
+#: templates/dashboard/inbox.html:36
+msgid "Xabarni tanlang"
+msgstr "Выберите сообщение"
+
+#: templates/miniapp/profile.html:14 templates/accounts/profile.html:55
+msgid "Xaridlar"
+msgstr "Покупки"
+
+#: templates/core/home.html:166
+#, python-format
+msgid "Xarita: %(place)s"
+msgstr "Карта: %(place)s"
+
+#: templates/core/home.html:171
+msgid "Xaritada"
+msgstr "На карте"
+
+#: templates/gallery/photo_detail.html:40 templates/core/contact.html:43
+#: templates/portfolio/experience_detail.html:76
+msgid "Xaritada ochish"
+msgstr "Открыть на карте"
+
+#: templates/dashboard/settings.html:128
+msgid "Xaritadagi joylashuv"
+msgstr "Местоположение на карте"
+
+#: templates/dashboard/settings.html:128
+msgid ""
+"Xaritani bosing yoki markerni suring: koordinatalar avtomatik yoziladi. Bosh"
+" sahifa va Aloqa sahifasida ko'rinadi."
+msgstr ""
+"Кликните по карте или перетащите маркер — координаты заполнятся сами. "
+"Показывается на главной и в контактах."
+
+#: templates/dashboard/channel.html:19 apps/telegram_bot/models.py:70
+#: apps/telegram_bot/models.py:151
+msgid "Xato"
+msgstr "Ошибка"
+
+#: templates/accounts/login.html:10
+msgid "Xavfsiz kirish"
+msgstr "Безопасный вход"
+
+#: templates/dashboard/settings.html:62
+msgid "Xiralashtirish"
+msgstr "Размытие"
+
+#: templates/miniapp/register.html:4
+msgid "Xush kelibsiz!"
+msgstr "Добро пожаловать!"
+
+#: templates/dashboard/home.html:6
+msgid "Xush kelibsiz,"
+msgstr "С возвращением,"
+
+#: templates/portfolio/about.html:30
+msgid "Yakunlangan loyihalar"
+msgstr "Завершённые проекты"
+
+#: apps/core/models.py:160
+msgid "Yandex Webmaster kodi"
+msgstr "Код Яндекс.Вебмастера"
+
+#: templates/dashboard/bot.html:50 templates/dashboard/music.html:24
+#: templates/dashboard/home.html:55
+msgid "Yangi"
+msgstr "Новое"
+
+#: templates/dashboard/bot.html:72
+msgid "Yangi /start"
+msgstr "Новые /start"
+
+#: templates/accounts/login.html:18
+msgid "Yangi dars va maqolalar birinchi bo'lib"
+msgstr "Новые уроки и статьи первыми"
+
+#: templates/dashboard/channel.html:58
+msgid "Yangi darslar"
+msgstr "Новые уроки"
+
+#: templates/dashboard/bot_settings.html:23 apps/dashboard/views.py:120
+msgid "Yangi foydalanuvchi"
+msgstr "Новый пользователь"
+
+#: templates/dashboard/home.html:52 templates/dashboard/home.html:99
+msgid "Yangi foydalanuvchilar"
+msgstr "Новые пользователи"
+
+#: templates/blog/articles.html:52
+msgid "Yangi g'oyalar, hamkorlik va muhokamalarga doimo ochiqman."
+msgstr "Всегда открыт к новым идеям, сотрудничеству и обсуждениям."
+
+#: templates/portfolio/projects.html:33
+msgid "Yangi imkoniyatlar"
+msgstr "Новые возможности"
+
+#: templates/portfolio/experience.html:103
+msgid "Yangi imkoniyatlar, hamkorlik va qiziqarli loyihalarga ochiqman."
+msgstr "Открыт к новым возможностям, сотрудничеству и интересным проектам."
+
+#: templates/core/contact.html:14
+msgid "Yangi imkoniyatlarga ochiqman"
+msgstr "Открыт к новым возможностям"
+
+#: templates/dashboard/bot_settings.html:24 apps/dashboard/views.py:122
+msgid "Yangi izoh"
+msgstr "Новый комментарий"
+
+#: templates/portfolio/about.html:47
+msgid "Yangi joylarni kashf etish"
+msgstr "Открываю новые места"
+
+#: templates/dashboard/channel_form.html:6
+msgid "Yangi kanal posti"
+msgstr "Новый пост в канал"
+
+#: templates/dashboard/skill_form.html:5
+msgid "Yangi ko'nikma"
+msgstr "Новый навык"
+
+#: templates/accounts/profile.html:182
+msgid "Yangi kurs va maqolalar"
+msgstr "Новые курсы и статьи"
+
+#: templates/dashboard/project_form.html:3
+msgid "Yangi loyiha"
+msgstr "Новый проект"
+
+#: templates/dashboard/project_form.html:6
+msgid "Yangi loyiha qo'shish"
+msgstr "Добавить новый проект"
+
+#: templates/core/home.html:11
+msgid "Yangi loyihalarga ochiqman"
+msgstr "Открыт к новым проектам"
+
+#: templates/dashboard/article_form.html:3
+msgid "Yangi maqola"
+msgstr "Новая статья"
+
+#: templates/dashboard/article_form.html:6
+msgid "Yangi maqola qo'shish"
+msgstr "Добавить новую статью"
+
+#: templates/partials/channel_cta.html:6
+msgid "Yangi maqola va darslar birinchi bo'lib kanalda"
+msgstr "Новые статьи и уроки — сначала в канале"
+
+#: apps/telegram_bot/models.py:31
+msgid "Yangi maqola va darslar shu kanalga e'lon qilinadi"
+msgstr "Новые статьи и уроки публикуются в этом канале"
+
+#: templates/dashboard/articles.html:51
+msgid "Yangi maqola yozing va ilhomlantiring."
+msgstr "Напишите статью и вдохновите других."
+
+#: templates/dashboard/channel.html:57
+msgid "Yangi maqolalar"
+msgstr "Новые статьи"
+
+#: templates/blog/articles.html:66
+msgid "Yangi maqolalar emailingizga keladi."
+msgstr "Новые статьи придут на вашу почту."
+
+#: templates/dashboard/playlist_form.html:5
+msgid "Yangi pleylist"
+msgstr "Новый плейлист"
+
+#: templates/dashboard/channel.html:5
+msgid "Yangi post"
+msgstr "Новый пост"
+
+#: templates/blog/articles.html:65
+msgid "Yangi postlarni o'tkazib yubormang"
+msgstr "Не пропустите новые посты"
+
+#: apps/core/models.py:163
+msgid "Yangi sahifalar Yandex va Bing'ga darhol yuboriladi"
+msgstr "Новые страницы сразу отправляются в Яндекс и Bing"
+
+#: templates/dashboard/bot_settings.html:25 apps/dashboard/views.py:124
+msgid "Yangi sharh"
+msgstr "Новый отзыв"
+
+#: templates/dashboard/settings.html:118
+msgid ""
+"Yangi tarmoq qo'shish uchun oxirgi bo'sh qatorni to'ldiring va saqlang. "
+"Saqlangandan keyin yana bo'sh qator paydo bo'ladi."
+msgstr ""
+"Чтобы добавить сеть, заполните последнюю пустую строку и сохраните. После "
+"сохранения появится новая строка."
+
+#: templates/dashboard/track_form.html:5
+msgid "Yangi trek"
+msgstr "Новый трек"
+
+#: templates/dashboard/base.html:76
+msgid "Yangi xabarlar"
+msgstr "Новые сообщения"
+
+#: templates/dashboard/experience_form.html:5
+msgid "Yangi yozuv"
+msgstr "Новая запись"
+
+#: templates/dashboard/partials/project_panel.html:15
+msgid "Yangilangan"
+msgstr "Обновлено"
+
+#: templates/dashboard/projects.html:19 templates/interactions/comments.html:5
+msgid "Yangilari"
+msgstr "Сначала новые"
+
+#: templates/dashboard/project_form.html:99 templates/accounts/login.html:49
+msgid "Yangilash"
+msgstr "Обновить"
+
+#: templates/accounts/login.html:18
+msgid "Yangiliklar"
+msgstr "Новости"
+
+#: templates/dashboard/partials/project_panel.html:15
+msgid "Yaratilgan"
+msgstr "Создано"
+
+#: templates/dashboard/project_form.html:20
+msgid "Yaratish"
+msgstr "Создать"
+
+#: apps/core/models.py:268 apps/core/models.py:295
+msgid "Yashil"
+msgstr "Зелёный"
+
+#: templates/dashboard/partials/project_panel.html:27
+#: templates/dashboard/partials/moderation_row.html:13
+#: apps/interactions/admin.py:26
+msgid "Yashirish"
+msgstr "Скрыть"
+
+#: templates/miniapp/project.html:19 templates/dashboard/skills.html:15
+#: templates/portfolio/skills.html:14
+msgid "Yil"
+msgstr "Лет"
+
+#: templates/portfolio/skills.html:57
+msgid "Yillar davomida texnologiyalar soni"
+msgstr "Количество технологий по годам"
+
+#: templates/core/home.html:85 templates/portfolio/about.html:29
+#: templates/portfolio/experience.html:40
+msgid "Yillik tajriba"
+msgstr "Лет опыта"
+
+#: templates/portfolio/about.html:13
+msgid "Yo'lim haqida ko'proq"
+msgstr "Подробнее о моём пути"
+
+#: templates/dashboard/experience_form.html:17
+msgid "Yo'nalish / fakultet"
+msgstr "Направление / факультет"
+
+#: templates/dashboard/bot.html:40
+msgid "Yo'q"
+msgstr "Нет"
+
+#: templates/miniapp/course.html:5 templates/dashboard/courses.html:17
+msgid "Yopiq"
+msgstr "Закрытый"
+
+#: templates/education/buy.html:14 templates/education/course_detail.html:11
+msgid "Yopiq kurs"
+msgstr "Закрытый курс"
+
+#: templates/partials/player_dock.html:9
+#: templates/partials/player_dock.html:52 templates/partials/header.html:68
+msgid "Yopish"
+msgstr "Закрыть"
+
+#: templates/dashboard/bot.html:39 templates/dashboard/channel.html:57
+#: templates/dashboard/channel.html:58
+msgid "Yoqilgan"
+msgstr "Включён"
+
+#: apps/education/models.py:63
+msgid "Yoqilgan bo'lsa, keyingi dars oldingisi tugatilgandan keyin ochiladi"
+msgstr ""
+"Если включено, следующий урок открывается после завершения предыдущего"
+
+#: templates/dashboard/music.html:5
+msgid ""
+"Yoqtirgan musiqalaringiz: saytdagi Media → Musiqa bo'limida pleyer bilan "
+"ko'rinadi."
+msgstr "Любимая музыка: показывается с плеером в разделе Медиа → Музыка."
+
+#: apps/gallery/models.py:102
+msgid "YouTube havolasi"
+msgstr "Ссылка YouTube"
+
+#: apps/portfolio/models.py:125
+msgid "YouTube havolasi (fayl bo'lmasa)"
+msgstr "Ссылка YouTube (если нет файла)"
+
+#: templates/education/my_courses.html:5
+msgid "Yozilgan kurslaringiz va progressingiz."
+msgstr "Ваши курсы и прогресс."
+
+#: templates/blog/articles.html:78
+msgid "Yozish yo'lim"
+msgstr "Мой путь в писательстве"
+
+#: apps/telegram_bot/models.py:69
+msgid "Yuborildi"
+msgstr "Отправлено"
+
+#: apps/telegram_bot/models.py:68
+msgid "Yuborilmoqda"
+msgstr "Отправляется"
+
+#: templates/interactions/comments.html:16
+#: templates/interactions/comments.html:38
+#: templates/interactions/reviews.html:21
+msgid "Yuborish"
+msgstr "Отправить"
+
+#: apps/dashboard/views.py:562
+msgid "Yuborish boshlandi"
+msgstr "Рассылка запущена"
+
+#: templates/dashboard/channel_form.html:26
+msgid "Yuborish sozlamalari"
+msgstr "Параметры отправки"
+
+#: templates/gallery/photo_detail.html:14
+#: templates/education/lesson_detail.html:78
+msgid "Yuklab olish"
+msgstr "Скачать"
+
+#: templates/portfolio/project_detail.html:124
+msgid "Yuklanmoqda..."
+msgstr "Загрузка..."
+
+#: apps/core/models.py:139
+msgid ""
+"Yuklansa, tanlangan tayyor fondan ustun turadi. Kamida 2560px kenglik "
+"tavsiya etiladi; sifati o'zgartirilmaydi."
+msgstr ""
+"Если загружен, заменяет готовый фон. Рекомендуемая ширина от 2560px; "
+"качество не меняется."
+
+#: templates/dashboard/article_form.html:22
+msgid "Yuklash uchun bosing"
+msgstr "Нажмите, чтобы загрузить"
+
+#: apps/core/models.py:85
+msgid "Yulduzli tun"
+msgstr "Звёздная ночь"
+
+#: templates/portfolio/skills.html:70 apps/portfolio/models.py:39
+#: apps/education/models.py:38
+msgid "Yuqori"
+msgstr "Продвинутый"
+
+#: apps/portfolio/models.py:232
+msgid "Yutuq"
+msgstr "Достижение"
+
+#: templates/accounts/profile.html:83
+msgid "Yutuqlar"
+msgstr "Достижения"
+
+#: templates/dashboard/experience_form.html:29
+msgid "Yutuqlar, olimpiadalar, faoliyat"
+msgstr "Достижения, олимпиады, активность"
+
+#: apps/education/models.py:256
+msgid "admin izohi"
+msgstr "комментарий админа"
+
+#: apps/gallery/models.py:46 apps/gallery/models.py:143
+#: apps/gallery/models.py:63
+msgid "albom"
+msgstr "альбом"
+
+#: apps/gallery/models.py:47
+msgid "albomlar"
+msgstr "альбомы"
+
+#: apps/blog/models.py:52 apps/education/models.py:69
+msgid "asosiy kalit so'z"
+msgstr "ключевое слово"
+
+#: apps/portfolio/models.py:54
+msgid "asosiy ko'nikma"
+msgstr "основной навык"
+
+#: apps/portfolio/models.py:257
+msgid "asosiy mahsulotlar"
+msgstr "основные продукты"
+
+#: apps/gallery/models.py:139
+msgid "audio fayl"
+msgstr "аудиофайл"
+
+#: apps/telegram_bot/models.py:77
+msgid "auditoriya"
+msgstr "аудитория"
+
+#: apps/core/models.py:103 apps/accounts/models.py:18
+msgid "avatar"
+msgstr "аватар"
+
+#: apps/interactions/models.py:51
+msgid "baho"
+msgstr "оценка"
+
+#: apps/portfolio/models.py:249
+msgid "baho / GPA"
+msgstr "оценка / GPA"
+
+#: templates/dashboard/home.html:87
+msgid "band"
+msgstr "занято"
+
+#: apps/portfolio/models.py:244
+msgid "batafsil"
+msgstr "подробно"
+
+#: apps/core/models.py:301 apps/blog/models.py:20 apps/portfolio/models.py:181
+msgid "belgi"
+msgstr "иконка"
+
+#: templates/dashboard/access.html:82 apps/education/models.py:54
+msgid "bepul"
+msgstr "бесплатно"
+
+#: apps/education/models.py:153
+msgid "bepul ko'rish"
+msgstr "бесплатный просмотр"
+
+#: apps/education/models.py:330
+msgid "berilgan"
+msgstr "выдан"
+
+#: apps/portfolio/models.py:52
+msgid "bilim darajasi %"
+msgstr "уровень владения %"
+
+#: apps/accounts/models.py:20
+msgid "bio"
+msgstr "о себе"
+
+#: apps/accounts/models.py:25
+msgid "bloklangan"
+msgstr "заблокирован"
+
+#: apps/portfolio/models.py:240
+msgid "boshlangan"
+msgstr "начало"
+
+#: apps/portfolio/models.py:57
+msgid "boshlangan yil"
+msgstr "год начала"
+
+#: apps/portfolio/models.py:326
+msgid "bosqich"
+msgstr "этап"
+
+#: apps/portfolio/models.py:327
+msgid "bosqichlar"
+msgstr "этапы"
+
+#: apps/telegram_bot/models.py:141
+msgid "bot hodisalari"
+msgstr "события бота"
+
+#: apps/telegram_bot/models.py:140
+msgid "bot hodisasi"
+msgstr "событие бота"
+
+#: apps/telegram_bot/models.py:38 apps/telegram_bot/models.py:39
+msgid "bot sozlamalari"
+msgstr "настройки бота"
+
+#: apps/telegram_bot/models.py:114
+msgid "bot xabari"
+msgstr "сообщение бота"
+
+#: apps/telegram_bot/models.py:115
+msgid "bot xabarlari"
+msgstr "сообщения бота"
+
+#: apps/telegram_bot/models.py:12
+msgid "bot yoqilgan"
+msgstr "бот включён"
+
+#: apps/accounts/models.py:32
+msgid "botdagi oxirgi faollik"
+msgstr "последняя активность в боте"
+
+#: apps/accounts/models.py:27
+msgid "botni bloklagan"
+msgstr "заблокировал бота"
+
+#: apps/telegram_bot/models.py:131
+msgid "botni bloklash"
+msgstr "блокировка бота"
+
+#: apps/core/models.py:95
+msgid "brend nomi"
+msgstr "название бренда"
+
+#: apps/core/models.py:96
+msgid "brend shiori"
+msgstr "слоган бренда"
+
+#: apps/telegram_bot/models.py:129
+msgid "buyruq"
+msgstr "команда"
+
+#: apps/core/models.py:249
+msgid "contact sahifasida"
+msgstr "на странице контактов"
+
+#: apps/telegram_bot/models.py:28
+msgid "contact xabari haqida xabar"
+msgstr "уведомлять о сообщениях с сайта"
+
+#: templates/miniapp/journal.html:11 templates/miniapp/home.html:61
+#: templates/core/home.html:220
+msgid "daq"
+msgstr "мин"
+
+#: templates/miniapp/article.html:5 templates/blog/article_detail.html:38
+msgid "daqiqa o'qish"
+msgstr "мин чтения"
+
+#: apps/portfolio/models.py:51 apps/portfolio/models.py:247
+#: apps/education/models.py:51
+msgid "daraja"
+msgstr "уровень"
+
+#: templates/miniapp/course.html:8 templates/miniapp/lesson.html:23
+#: templates/miniapp/home.html:49
+msgid "dars"
+msgstr "урок"
+
+#: apps/education/models.py:286
+msgid "dars progressi"
+msgstr "прогресс урока"
+
+#: apps/education/models.py:287
+msgid "dars progresslari"
+msgstr "прогресс уроков"
+
+#: apps/education/models.py:47
+msgid "dars tili"
+msgstr "язык курса"
+
+#: apps/education/models.py:160
+msgid "darslar"
+msgstr "уроки"
+
+#: apps/telegram_bot/models.py:33
+msgid "darslarni kanalga avtomatik joylash"
+msgstr "автопубликация уроков в канал"
+
+#: apps/gallery/models.py:104 apps/gallery/models.py:146
+#: apps/portfolio/models.py:132
+msgid "davomiyligi"
+msgstr "длительность"
+
+#: apps/education/models.py:145
+msgid "davomiyligi (soniya)"
+msgstr "длительность (сек)"
+
+#: apps/portfolio/models.py:47
+msgid "devicon nomi"
+msgstr "имя devicon"
+
+#: apps/portfolio/models.py:48
+msgid ""
+"devicon.dev dagi nom: python, docker. Kerak bo'lsa variant bilan: django-"
+"plain. Saytdagi belgilar: wcd:sql, wcd:rest-api, wcd:celery, wcd:aiogram, "
+"wcd:vps, wcd:ai, wcd:prompt, wcd:nextjs, wcd:github"
+msgstr ""
+"Имя на devicon.dev: python, docker. С вариантом: django-plain. Встроенные "
+"иконки: wcd:sql, wcd:rest-api, wcd:celery, wcd:aiogram, wcd:vps, wcd:ai, "
+"wcd:prompt, wcd:nextjs, wcd:github"
+
+#: apps/core/models.py:121 apps/blog/models.py:97
+#: apps/interactions/models.py:120
+msgid "email"
+msgstr "email"
+
+#: apps/education/models.py:56
+msgid "eski narx (chegirma uchun)"
+msgstr "старая цена (для скидки)"
+
+#: apps/core/models.py:246 apps/core/models.py:278 apps/core/models.py:305
+msgid "faol"
+msgstr "активен"
+
+#: apps/core/models.py:98
+msgid "favicon"
+msgstr "favicon"
+
+#: templates/gallery/index.html:17 templates/gallery/index.html:18
+#: apps/education/models.py:211
+msgid "fayl"
+msgstr "файл"
+
+#: apps/core/models.py:136
+msgid "fon"
+msgstr "фон"
+
+#: apps/core/models.py:141
+msgid "fon qoraytirish %"
+msgstr "затемнение фона %"
+
+#: apps/core/models.py:338
+msgid "fon rasmi"
+msgstr "фоновое изображение"
+
+#: apps/core/models.py:142
+msgid "fon xiralashtirish (px)"
+msgstr "размытие фона (px)"
+
+#: apps/core/models.py:143
+msgid "fonda yengil harakat"
+msgstr "лёгкое движение фона"
+
+#: apps/core/models.py:155
+msgid "footer matni"
+msgstr "текст футера"
+
+#: apps/core/models.py:248
+msgid "footerda"
+msgstr "в футере"
+
+#: apps/gallery/models.py:82
+msgid "foto"
+msgstr "фото"
+
+#: apps/gallery/models.py:83
+msgid "fotolar"
+msgstr "фото"
+
+#: apps/accounts/models.py:35 apps/interactions/models.py:24
+#: apps/interactions/models.py:50
+msgid "foydalanuvchi"
+msgstr "пользователь"
+
+#: apps/education/models.py:255
+msgid "foydalanuvchi izohi"
+msgstr "комментарий пользователя"
+
+#: apps/accounts/models.py:36
+msgid "foydalanuvchilar"
+msgstr "пользователи"
+
+#: apps/core/models.py:159
+msgid "google-site-verification meta tegidagi content qiymati"
+msgstr "Значение content из мета-тега google-site-verification"
+
+#: apps/core/models.py:244 apps/core/models.py:303
+#: apps/education/models.py:210
+msgid "havola"
+msgstr "ссылка"
+
+#: apps/telegram_bot/models.py:166
+msgid "havola previewsiz"
+msgstr "без превью ссылок"
+
+#: apps/portfolio/models.py:345
+msgid "hayot yo'li"
+msgstr "жизненный путь"
+
+#: apps/portfolio/models.py:344
+msgid "hayot yo'li bosqichi"
+msgstr "этап пути"
+
+#: apps/core/models.py:111
+msgid "hero teglar"
+msgstr "теги hero"
+
+#: apps/core/models.py:247
+msgid "hero/headerda"
+msgstr "в hero/шапке"
+
+#: apps/blog/models.py:48 apps/portfolio/models.py:136
+#: apps/interactions/models.py:124
+msgid "holati"
+msgstr "статус"
+
+#: templates/core/home.html:158 templates/portfolio/experience.html:72
+#: templates/dashboard/partials/experience_row.html:5
+msgid "hozir"
+msgstr "сейчас"
+
+#: apps/portfolio/models.py:55
+msgid "hozir o'rganilmoqda"
+msgstr "изучается сейчас"
+
+#: apps/portfolio/models.py:242
+msgid "hozir shu yerda"
+msgstr "работаю сейчас"
+
+#: apps/core/models.py:282
+msgid "hozirgi holat"
+msgstr "текущий статус"
+
+#: apps/core/models.py:283
+msgid "hozirgi holatlar"
+msgstr "текущие статусы"
+
+#: apps/core/models.py:244
+msgid "https://... yoki mailto:..."
+msgstr "https://... или mailto:..."
+
+#: apps/telegram_bot/models.py:72 apps/telegram_bot/models.py:161
+msgid "ichki nomi"
+msgstr "внутреннее название"
+
+#: apps/gallery/models.py:138
+msgid "ijrochi"
+msgstr "исполнитель"
+
+#: apps/core/models.py:253
+msgid "ijtimoiy tarmoq"
+msgstr "соцсеть"
+
+#: apps/core/models.py:254
+msgid "ijtimoiy tarmoqlar"
+msgstr "соцсети"
+
+#: apps/interactions/models.py:123
+msgid "ilova"
+msgstr "вложение"
+
+#: apps/portfolio/models.py:186
+msgid "imkoniyat"
+msgstr "возможность"
+
+#: apps/portfolio/models.py:187
+msgid "imkoniyatlar"
+msgstr "возможности"
+
+#: apps/core/models.py:115
+msgid "intro video davomiyligi"
+msgstr "длительность интро"
+
+#: apps/core/models.py:114
+msgid "intro video havolasi"
+msgstr "ссылка на интро"
+
+#: apps/core/models.py:337 apps/portfolio/models.py:245
+msgid "iqtibos"
+msgstr "цитата"
+
+#: apps/core/models.py:131
+msgid "ish vaqti"
+msgstr "часы работы"
+
+#: apps/core/models.py:116
+msgid "ishga ochiq"
+msgstr "открыт к работе"
+
+#: apps/interactions/models.py:119
+msgid "ism"
+msgstr "имя"
+
+#: apps/core/models.py:100
+msgid "ism familiya"
+msgstr "имя и фамилия"
+
+#: apps/blog/models.py:87 apps/portfolio/models.py:165
+#: apps/portfolio/models.py:292
+msgid "izoh"
+msgstr "комментарий"
+
+#: apps/education/models.py:309
+msgid "izoh (admin)"
+msgstr "комментарий (админ)"
+
+#: apps/accounts/models.py:31
+msgid "izohimga javob haqida xabar"
+msgstr "уведомлять об ответах на мои комментарии"
+
+#: apps/interactions/models.py:35
+msgid "izohlar"
+msgstr "комментарии"
+
+#: apps/gallery/models.py:74 apps/gallery/models.py:108 apps/blog/models.py:50
+msgid "izohlarga ruxsat"
+msgstr "разрешить комментарии"
+
+#: apps/telegram_bot/models.py:81
+msgid "jami"
+msgstr "всего"
+
+#: apps/portfolio/models.py:133
+msgid "jamoa"
+msgstr "команда"
+
+#: apps/portfolio/models.py:256
+msgid "jamoa a'zolari"
+msgstr "участники команды"
+
+#: templates/portfolio/skills.html:84
+msgid "jarayonda"
+msgstr "в процессе"
+
+#: apps/core/models.py:351 apps/interactions/models.py:25
+#: apps/education/models.py:305
+msgid "javob"
+msgstr "ответ"
+
+#: apps/core/models.py:133
+msgid "javob berish vaqti"
+msgstr "время ответа"
+
+#: apps/gallery/models.py:40 apps/gallery/models.py:67
+msgid "joy"
+msgstr "место"
+
+#: apps/telegram_bot/models.py:172
+msgid "joylangan"
+msgstr "опубликовано"
+
+#: apps/portfolio/models.py:239
+msgid "joylashuv"
+msgstr "местоположение"
+
+#: apps/gallery/models.py:70
+msgid "kamera"
+msgstr "камера"
+
+#: apps/telegram_bot/models.py:31
+msgid "kanal ID / @username"
+msgstr "ID канала / @username"
+
+#: apps/telegram_bot/models.py:179
+msgid "kanal posti"
+msgstr "пост канала"
+
+#: apps/telegram_bot/models.py:180
+msgid "kanal postlari"
+msgstr "посты канала"
+
+#: apps/telegram_bot/models.py:168
+msgid "kanalda qadash"
+msgstr "закрепить в канале"
+
+#: apps/blog/models.py:54 apps/education/models.py:152
+msgid "kanalga joylangan"
+msgstr "опубликовано в канале"
+
+#: apps/core/models.py:125
+msgid "kenglik (lat)"
+msgstr "широта (lat)"
+
+#: apps/education/models.py:62
+msgid "ketma-ket ochilish"
+msgstr "последовательное открытие"
+
+#: apps/core/models.py:333
+msgid "kichik yozuv"
+msgstr "надзаголовок"
+
+#: apps/accounts/models.py:96 apps/telegram_bot/models.py:127
+msgid "kirish kodi"
+msgstr "код входа"
+
+#: apps/accounts/models.py:97
+msgid "kirish kodlari"
+msgstr "коды входа"
+
+#: apps/accounts/models.py:77
+msgid "kirish so'rovi"
+msgstr "запрос на вход"
+
+#: apps/accounts/models.py:78
+msgid "kirish so'rovlari"
+msgstr "запросы на вход"
+
+#: apps/telegram_bot/models.py:128
+msgid "kirishni tasdiqlash"
+msgstr "подтверждение входа"
+
+#: apps/portfolio/models.py:62
+msgid "ko'nikma"
+msgstr "навык"
+
+#: apps/portfolio/models.py:23
+msgid "ko'nikma turkumi"
+msgstr "категория навыков"
+
+#: apps/portfolio/models.py:24
+msgid "ko'nikma turkumlari"
+msgstr "категории навыков"
+
+#: apps/portfolio/models.py:63
+msgid "ko'nikmalar"
+msgstr "навыки"
+
+#: templates/gallery/partials/photos-grid.html:9
+msgid "ko'proq foto"
+msgstr "ещё фото"
+
+#: templates/gallery/partials/videos-grid.html:13
+msgid "ko'proq video"
+msgstr "ещё видео"
+
+#: apps/education/models.py:258
+msgid "ko'rib chiqilgan"
+msgstr "рассмотрено"
+
+#: apps/education/models.py:278
+msgid "ko'rilgan soniyalar"
+msgstr "просмотрено секунд"
+
+#: apps/gallery/models.py:42 apps/gallery/models.py:76
+#: apps/gallery/models.py:109
+msgid "ko'rinadi"
+msgstr "опубликовано"
+
+#: templates/gallery/video_detail.html:20
+#: templates/gallery/video_detail.html:30 templates/dashboard/home.html:91
+msgid "ko'rish"
+msgstr "просмотров"
+
+#: apps/blog/models.py:56 apps/portfolio/models.py:141
+msgid "ko'rishlar"
+msgstr "просмотры"
+
+#: apps/portfolio/models.py:234
+msgid "kompaniya / joy"
+msgstr "компания / место"
+
+#: apps/portfolio/models.py:252
+msgid "kompaniya haqida"
+msgstr "о компании"
+
+#: apps/education/models.py:148
+msgid "konspekt va kodlar"
+msgstr "конспект и код"
+
+#: templates/dashboard/access.html:54 templates/dashboard/access.html:54
+#: templates/dashboard/access.html:54
+msgid "kun"
+msgstr "дн."
+
+#: apps/interactions/models.py:145
+msgid "kunlik tashrif"
+msgstr "визиты за день"
+
+#: apps/interactions/models.py:146
+msgid "kunlik tashriflar"
+msgstr "визиты по дням"
+
+#: apps/education/models.py:76 apps/education/models.py:133
+#: apps/education/models.py:253
+msgid "kurs"
+msgstr "курс"
+
+#: apps/education/models.py:46
+msgid "kurs kimlar uchun"
+msgstr "для кого курс"
+
+#: apps/education/models.py:65
+msgid "kurs sahifasi uchun login"
+msgstr "вход для страницы курса"
+
+#: apps/education/models.py:263
+msgid "kursga kirish so'rovi"
+msgstr "заявка на доступ к курсу"
+
+#: apps/education/models.py:264
+msgid "kursga kirish so'rovlari"
+msgstr "заявки на доступ к курсам"
+
+#: apps/education/models.py:237
+msgid "kursga yozilish"
+msgstr "запись на курс"
+
+#: apps/education/models.py:238
+msgid "kursga yozilishlar"
+msgstr "записи на курсы"
+
+#: apps/education/models.py:77
+msgid "kurslar"
+msgstr "курсы"
+
+#: apps/core/models.py:101 apps/portfolio/models.py:236
+msgid "lavozim"
+msgstr "должность"
+
+#: apps/core/models.py:97 apps/portfolio/models.py:238
+msgid "logo"
+msgstr "логотип"
+
+#: apps/portfolio/models.py:147
+msgid "loyiha"
+msgstr "проект"
+
+#: apps/portfolio/models.py:170
+msgid "loyiha rasmi"
+msgstr "фото проекта"
+
+#: apps/portfolio/models.py:171
+msgid "loyiha rasmlari"
+msgstr "фото проекта"
+
+#: apps/portfolio/models.py:100
+msgid "loyiha turkumi"
+msgstr "категория проекта"
+
+#: apps/portfolio/models.py:101
+msgid "loyiha turkumlari"
+msgstr "категории проектов"
+
+#: apps/portfolio/models.py:148 apps/portfolio/models.py:260
+msgid "loyihalar"
+msgstr "проекты"
+
+#: apps/portfolio/models.py:129
+msgid "manba kod havolasi"
+msgstr "ссылка на исходный код"
+
+#: apps/core/models.py:123
+msgid "manzil"
+msgstr "адрес"
+
+#: apps/blog/models.py:62
+msgid "maqola"
+msgstr "статья"
+
+#: apps/blog/models.py:25
+msgid "maqola turkumi"
+msgstr "категория статей"
+
+#: apps/blog/models.py:26
+msgid "maqola turkumlari"
+msgstr "категории статей"
+
+#: apps/blog/models.py:63
+msgid "maqolalar"
+msgstr "статьи"
+
+#: apps/telegram_bot/models.py:32
+msgid "maqolalarni kanalga avtomatik joylash"
+msgstr "автопубликация статей в канал"
+
+#: apps/blog/models.py:41 apps/portfolio/models.py:195
+#: apps/portfolio/models.py:303
+msgid "matn"
+msgstr "текст"
+
+#: apps/interactions/models.py:121
+msgid "mavzu"
+msgstr "тема"
+
+#: apps/gallery/models.py:23
+msgid "media turkumi"
+msgstr "категория медиа"
+
+#: apps/gallery/models.py:24
+msgid "media turkumlari"
+msgstr "категории медиа"
+
+#: apps/core/models.py:17 apps/core/models.py:153
+msgid "meta description"
+msgstr "meta description"
+
+#: apps/core/models.py:16
+msgid "meta title"
+msgstr "meta title"
+
+#: apps/education/models.py:119 apps/education/models.py:134
+msgid "modul"
+msgstr "модуль"
+
+#: apps/education/models.py:120
+msgid "modullar"
+msgstr "модули"
+
+#: apps/blog/models.py:46
+msgid "muallif"
+msgstr "автор"
+
+#: apps/gallery/models.py:41 apps/gallery/models.py:103
+#: apps/gallery/models.py:145
+msgid "muqova"
+msgstr "обложка"
+
+#: apps/education/models.py:55
+msgid "narxi (so'm)"
+msgstr "цена (сум)"
+
+#: apps/blog/models.py:51
+msgid "nashr sanasi"
+msgstr "дата публикации"
+
+#: apps/portfolio/models.py:216
+msgid "natija"
+msgstr "результат"
+
+#: apps/portfolio/models.py:217
+msgid "natijalar"
+msgstr "результаты"
+
+#: apps/gallery/models.py:142
+msgid "nega yoqadi"
+msgstr "почему нравится"
+
+#: apps/education/models.py:44
+msgid "nimalarni o'rganasiz"
+msgstr "чему вы научитесь"
+
+#: apps/gallery/models.py:16 apps/gallery/models.py:38
+#: apps/gallery/models.py:59
+msgid "nomi"
+msgstr "название"
+
+#: apps/telegram_bot/models.py:108
+msgid "o'qilgan"
+msgstr "прочитано"
+
+#: apps/blog/models.py:55
+msgid "o'qish vaqti (daqiqa)"
+msgstr "время чтения (мин)"
+
+#: templates/dashboard/courses.html:20
+#: templates/education/course_detail.html:17
+msgid "o'quvchi"
+msgstr "студентов"
+
+#: templates/portfolio/skills.html:16
+msgid "o'rganaman"
+msgstr "учусь"
+
+#: apps/portfolio/models.py:56
+msgid "o'rganish progressi %"
+msgstr "прогресс изучения %"
+
+#: apps/portfolio/models.py:50
+msgid "o'z belgisi"
+msgstr "своя иконка"
+
+#: apps/core/models.py:138
+msgid "o'z fon rasmingiz"
+msgstr "свой фон"
+
+#: apps/blog/models.py:104
+msgid "obunachi"
+msgstr "подписчик"
+
+#: apps/blog/models.py:105
+msgid "obunachilar"
+msgstr "подписчики"
+
+#: apps/gallery/models.py:71
+msgid "obyektiv"
+msgstr "объектив"
+
+#: templates/interactions/reviews.html:27
+#: templates/interactions/partials/comment_item.html:9
+msgid "oldin"
+msgstr "назад"
+
+#: apps/gallery/models.py:69
+msgid "olingan vaqt"
+msgstr "время съёмки"
+
+#: apps/telegram_bot/models.py:90
+msgid "ommaviy xabar"
+msgstr "рассылка"
+
+#: apps/telegram_bot/models.py:91
+msgid "ommaviy xabarlar"
+msgstr "рассылки"
+
+#: apps/telegram_bot/models.py:167
+msgid "ovozsiz yuborish"
+msgstr "без звука"
+
+#: apps/education/models.py:279
+msgid "oxirgi joy"
+msgstr "последняя позиция"
+
+#: apps/core/models.py:241
+msgid "platforma"
+msgstr "платформа"
+
+#: apps/gallery/models.py:179
+msgid "pleylist"
+msgstr "плейлист"
+
+#: apps/gallery/models.py:180
+msgid "pleylistlar"
+msgstr "плейлисты"
+
+#: apps/telegram_bot/models.py:162
+msgid "post matni"
+msgstr "текст поста"
+
+#: apps/interactions/models.py:28
+msgid "qadalgan"
+msgstr "закреплён"
+
+#: apps/core/models.py:102
+msgid "qisqa bio"
+msgstr "краткая биография"
+
+#: apps/core/models.py:299 apps/portfolio/models.py:45
+msgid "qisqa izoh"
+msgstr "подпись"
+
+#: apps/blog/models.py:40
+msgid "qisqa mazmun"
+msgstr "краткое описание"
+
+#: apps/portfolio/models.py:115
+msgid "qisqa shior"
+msgstr "слоган"
+
+#: apps/portfolio/models.py:116 apps/portfolio/models.py:243
+#: apps/education/models.py:42
+msgid "qisqa tavsif"
+msgstr "краткое описание"
+
+#: apps/portfolio/models.py:200
+msgid "qiyinchilik"
+msgstr "сложность"
+
+#: apps/portfolio/models.py:201
+msgid "qiyinchiliklar"
+msgstr "сложности"
+
+#: apps/core/models.py:275 apps/portfolio/models.py:209
+msgid "qiymat"
+msgstr "значение"
+
+#: apps/portfolio/models.py:358
+msgid "qiziqish"
+msgstr "интерес"
+
+#: apps/portfolio/models.py:359
+msgid "qiziqishlar"
+msgstr "интересы"
+
+#: apps/core/models.py:335
+msgid "qo'shimcha sarlavha"
+msgstr "подзаголовок"
+
+#: templates/education/certificate.html:11
+msgid "quyidagi kursni muvaffaqiyatli tugatdi"
+msgstr "успешно завершил(а) курс"
+
+#: apps/core/models.py:276 apps/core/models.py:302
+msgid "rang"
+msgstr "цвет"
+
+#: templates/miniapp/project.html:7
+#: templates/portfolio/partials/project_grid.html:17 apps/gallery/models.py:62
+msgid "rasm"
+msgstr "изображение"
+
+#: apps/blog/models.py:93 apps/portfolio/models.py:298
+msgid "rasmlar"
+msgstr "изображения"
+
+#: apps/interactions/models.py:84
+msgid "reaksiya"
+msgstr "реакция"
+
+#: apps/interactions/models.py:85
+msgid "reaksiyalar"
+msgstr "реакции"
+
+#: apps/education/models.py:216
+msgid "resurs"
+msgstr "ресурс"
+
+#: apps/education/models.py:217
+msgid "resurslar"
+msgstr "ресурсы"
+
+#: apps/accounts/models.py:22
+msgid "ro'yxatdan o'tgan"
+msgstr "зарегистрирован"
+
+#: apps/telegram_bot/models.py:18
+msgid "ro'yxatdan o'tgandan keyingi matn"
+msgstr "текст после регистрации"
+
+#: apps/telegram_bot/models.py:126
+msgid "ro'yxatdan o'tish"
+msgstr "регистрация"
+
+#: apps/core/models.py:309
+msgid "rol"
+msgstr "роль"
+
+#: apps/portfolio/models.py:131
+msgid "rolim"
+msgstr "моя роль"
+
+#: apps/core/models.py:310
+msgid "rollar"
+msgstr "роли"
+
+#: templates/dashboard/access.html:97
+msgid "ruxsat"
+msgstr "доступ"
+
+#: apps/education/models.py:231
+msgid "ruxsat bergan"
+msgstr "выдал доступ"
+
+#: apps/education/models.py:232
+msgid "ruxsat muddati"
+msgstr "срок доступа"
+
+#: apps/core/models.py:332
+msgid "sahifa"
+msgstr "страница"
+
+#: apps/core/models.py:343
+msgid "sahifa sarlavhalari"
+msgstr "заголовки страниц"
+
+#: apps/core/models.py:342
+msgid "sahifa sarlavhasi"
+msgstr "заголовок страницы"
+
+#: apps/telegram_bot/models.py:15
+msgid "salomlashish matni"
+msgstr "приветствие"
+
+#: apps/gallery/models.py:107 apps/portfolio/models.py:319
+msgid "sana"
+msgstr "дата"
+
+#: apps/core/models.py:274 apps/core/models.py:334 apps/blog/models.py:38
+msgid "sarlavha"
+msgstr "заголовок"
+
+#: apps/core/models.py:350
+msgid "savol"
+msgstr "вопрос"
+
+#: apps/portfolio/models.py:128
+msgid "sayt havolasi"
+msgstr "ссылка на сайт"
+
+#: apps/core/models.py:170 apps/core/models.py:171
+msgid "sayt sozlamalari"
+msgstr "настройки сайта"
+
+#: apps/education/models.py:333
+msgid "sertifikat"
+msgstr "сертификат"
+
+#: apps/education/models.py:48
+msgid "sertifikat beriladi"
+msgstr "выдаётся сертификат"
+
+#: apps/education/models.py:329
+msgid "sertifikat raqami"
+msgstr "номер сертификата"
+
+#: apps/education/models.py:334
+msgid "sertifikatlar"
+msgstr "сертификаты"
+
+#: apps/gallery/models.py:148
+msgid "sevimli"
+msgstr "избранное"
+
+#: templates/dashboard/home.html:29 templates/portfolio/project_detail.html:29
+#: templates/portfolio/partials/project_grid.html:20
+msgid "sharh"
+msgstr "отзыв"
+
+#: apps/interactions/models.py:62
+msgid "sharhlar"
+msgstr "отзывы"
+
+#: apps/portfolio/models.py:139 apps/education/models.py:68
+msgid "sharhlarga ruxsat"
+msgstr "разрешить отзывы"
+
+#: apps/core/models.py:105
+msgid "shaxsiy rasm (hero)"
+msgstr "личное фото (hero)"
+
+#: templates/dashboard/settings.html:165
+msgid "shu manzilni qo'shing"
+msgstr "добавьте этот адрес"
+
+#: templates/dashboard/projects.html:8 templates/dashboard/articles.html:8
+#: templates/dashboard/home.html:17
+msgid "shu oyda"
+msgstr "за месяц"
+
+#: apps/gallery/models.py:17 apps/gallery/models.py:39
+#: apps/gallery/models.py:60
+msgid "slug"
+msgstr "slug"
+
+#: templates/miniapp/course.html:18 templates/core/home.html:203
+#: templates/dashboard/access.html:11
+msgid "so'm"
+msgstr "сум"
+
+#: apps/portfolio/models.py:253
+msgid "soha"
+msgstr "отрасль"
+
+#: apps/gallery/models.py:72
+msgid "sozlamalar"
+msgstr "настройки"
+
+#: apps/core/models.py:119
+msgid "ta'sir qilingan odamlar"
+msgstr "охват людей"
+
+#: apps/portfolio/models.py:266
+msgid "tajriba"
+msgstr "опыт"
+
+#: apps/core/models.py:118 apps/portfolio/models.py:53
+msgid "tajriba (yil)"
+msgstr "опыт (лет)"
+
+#: apps/portfolio/models.py:267
+msgid "tajribalar"
+msgstr "опыт"
+
+#: apps/education/models.py:45
+msgid "talablar"
+msgstr "требования"
+
+#: apps/gallery/models.py:75 apps/blog/models.py:49
+#: apps/portfolio/models.py:137
+msgid "tanlangan"
+msgstr "избранное"
+
+#: templates/dashboard/home.html:42
+msgid "tanlangan til bo'yicha"
+msgstr "по выбранному языку"
+
+#: apps/gallery/models.py:18 apps/gallery/models.py:150
+#: apps/gallery/models.py:174
+msgid "tartib"
+msgstr "порядок"
+
+#: apps/education/models.py:137
+msgid "tartib raqami"
+msgstr "порядковый номер"
+
+#: apps/interactions/models.py:27 apps/interactions/models.py:53
+msgid "tasdiqlangan"
+msgstr "одобрено"
+
+#: apps/gallery/models.py:141
+msgid "tashqi havola"
+msgstr "внешняя ссылка"
+
+#: apps/education/models.py:142
+msgid "tashqi video havolasi"
+msgstr "внешняя ссылка на видео"
+
+#: apps/gallery/models.py:61 apps/gallery/models.py:100
+#: apps/core/models.py:300
+msgid "tavsif"
+msgstr "описание"
+
+#: apps/core/models.py:70
+msgid "teg"
+msgstr "тег"
+
+#: apps/gallery/models.py:65 apps/gallery/models.py:106 apps/core/models.py:71
+msgid "teglar"
+msgstr "теги"
+
+#: apps/education/models.py:310
+msgid "tekshirilgan"
+msgstr "проверено"
+
+#: apps/core/models.py:122 apps/accounts/models.py:17
+msgid "telefon"
+msgstr "телефон"
+
+#: apps/telegram_bot/models.py:13
+msgid "texnik ishlar matni"
+msgstr "текст о техработах"
+
+#: apps/portfolio/models.py:121 apps/portfolio/models.py:259
+#: apps/education/models.py:52
+msgid "texnologiyalar"
+msgstr "технологии"
+
+#: apps/blog/models.py:98 apps/accounts/models.py:19
+msgid "til"
+msgstr "язык"
+
+#: apps/education/models.py:257
+msgid "to'langan summa"
+msgstr "оплаченная сумма"
+
+#: apps/portfolio/models.py:117 apps/education/models.py:43
+msgid "to'liq tavsif"
+msgstr "полное описание"
+
+#: apps/core/models.py:150
+msgid "to'lov bo'yicha izoh"
+msgstr "комментарий об оплате"
+
+#: apps/core/models.py:147
+msgid "to'lov uchun Telegram"
+msgstr "Telegram для оплаты"
+
+#: templates/gallery/index.html:19 templates/gallery/music.html:53
+#: templates/dashboard/music.html:26
+msgid "trek"
+msgstr "трек"
+
+#: apps/gallery/models.py:155 apps/gallery/models.py:173
+msgid "treklar"
+msgstr "треки"
+
+#: apps/education/models.py:50
+msgid "treyler havolasi"
+msgstr "ссылка на трейлер"
+
+#: apps/portfolio/models.py:241
+msgid "tugagan"
+msgstr "окончание"
+
+#: templates/dashboard/courses.html:21 apps/education/models.py:228
+msgid "tugatgan"
+msgstr "завершили"
+
+#: templates/miniapp/course.html:10 apps/education/models.py:281
+msgid "tugatilgan"
+msgstr "завершён"
+
+#: apps/telegram_bot/models.py:76 apps/telegram_bot/models.py:165
+msgid "tugma havolasi"
+msgstr "ссылка кнопки"
+
+#: apps/telegram_bot/models.py:75 apps/telegram_bot/models.py:164
+msgid "tugma matni"
+msgstr "текст кнопки"
+
+#: apps/gallery/models.py:15 apps/portfolio/models.py:130
+#: apps/portfolio/models.py:237
+msgid "turi"
+msgstr "тип"
+
+#: apps/gallery/models.py:64 apps/gallery/models.py:105
+#: apps/gallery/models.py:147
+msgid "turkum"
+msgstr "категория"
+
+#: apps/interactions/models.py:107
+msgid "ulashish"
+msgstr "репост"
+
+#: apps/interactions/models.py:108
+msgid "ulashishlar"
+msgstr "репосты"
+
+#: apps/core/models.py:243
+msgid "username"
+msgstr "имя пользователя"
+
+#: apps/education/models.py:149
+msgid "uyga vazifa"
+msgstr "домашнее задание"
+
+#: apps/telegram_bot/models.py:29
+msgid "uyga vazifa haqida xabar"
+msgstr "уведомлять о домашних заданиях"
+
+#: apps/education/models.py:314
+msgid "uyga vazifa javobi"
+msgstr "ответ на задание"
+
+#: apps/education/models.py:315
+msgid "uyga vazifa javoblari"
+msgstr "ответы на задания"
+
+#: apps/education/models.py:150
+msgid "uyga vazifa talabi"
+msgstr "требование к заданию"
+
+#: apps/core/models.py:127
+msgid "uzunlik (lng)"
+msgstr "долгота (lng)"
+
+#: apps/core/models.py:132
+msgid "vaqt mintaqasi"
+msgstr "часовой пояс"
+
+#: apps/core/models.py:129
+msgid "vaqt zonasi (IANA)"
+msgstr "часовой пояс (IANA)"
+
+#: apps/portfolio/models.py:308
+msgid "vazifa"
+msgstr "обязанность"
+
+#: apps/portfolio/models.py:309
+msgid "vazifalar"
+msgstr "обязанности"
+
+#: apps/portfolio/models.py:254
+msgid "veb-sayt"
+msgstr "веб-сайт"
+
+#: apps/gallery/models.py:114
+msgid "video"
+msgstr "видео"
+
+#: apps/portfolio/models.py:126
+msgid "video davomiyligi"
+msgstr "длительность видео"
+
+#: apps/gallery/models.py:101 apps/portfolio/models.py:124
+#: apps/education/models.py:140
+msgid "video fayl"
+msgstr "видеофайл"
+
+#: apps/portfolio/models.py:125
+msgid "video havolasi"
+msgstr "ссылка на видео"
+
+#: apps/education/models.py:280
+msgid "video ko'rildi"
+msgstr "видео просмотрено"
+
+#: apps/gallery/models.py:115
+msgid "videolar"
+msgstr "видео"
+
+#: apps/interactions/models.py:122 apps/interactions/models.py:129
+msgid "xabar"
+msgstr "сообщение"
+
+#: apps/interactions/models.py:130
+msgid "xabarlar"
+msgstr "сообщения"
+
+#: apps/gallery/models.py:68 apps/core/models.py:124
+#: apps/portfolio/models.py:255
+msgid "xarita havolasi"
+msgstr "ссылка на карту"
+
+#: apps/core/models.py:128
+msgid "xarita yaqinligi"
+msgstr "масштаб карты"
+
+#: templates/dashboard/bot.html:57 apps/telegram_bot/models.py:83
+#: apps/telegram_bot/models.py:173
+msgid "xato"
+msgstr "ошибок"
+
+#: templates/portfolio/project_detail.html:31
+#: templates/portfolio/partials/project_grid.html:22
+msgid "yakunlangan"
+msgstr "завершён"
+
+#: apps/portfolio/models.py:134
+msgid "yakunlangan yil"
+msgstr "год завершения"
+
+#: apps/telegram_bot/models.py:25
+msgid "yangi foydalanuvchi haqida xabar"
+msgstr "уведомлять о новых пользователях"
+
+#: apps/telegram_bot/models.py:26
+msgid "yangi izoh haqida xabar"
+msgstr "уведомлять о новых комментариях"
+
+#: apps/accounts/models.py:29
+msgid "yangi kurs va maqolalar haqida xabar"
+msgstr "уведомлять о новых курсах и статьях"
+
+#: apps/telegram_bot/models.py:27
+msgid "yangi sharh haqida xabar"
+msgstr "уведомлять о новых отзывах"
+
+#: apps/core/models.py:9
+msgid "yangilangan"
+msgstr "обновлено"
+
+#: apps/core/models.py:8
+msgid "yaratilgan"
+msgstr "создано"
+
+#: templates/accounts/profile.html:161
+msgid "yashirilgan"
+msgstr "скрыт"
+
+#: templates/dashboard/access.html:54 templates/dashboard/access.html:85
+#: templates/portfolio/skills.html:36
+msgid "yil"
+msgstr "лет"
+
+#: templates/core/home.html:67
+msgid "yil tajriba"
+msgstr "лет опыта"
+
+#: templates/education/courses.html:89
+msgid "yillik tajriba"
+msgstr "лет опыта"
+
+#: apps/portfolio/models.py:248
+msgid "yo'nalish / fakultet"
+msgstr "направление / факультет"
+
+#: templates/accounts/login.html:52
+msgid "yoki botdagi kodni kiriting"
+msgstr "или введите код из бота"
+
+#: templates/dashboard/project_form.html:32
+msgid "yoki shu yerga tashlang"
+msgstr "или перетащите сюда"
+
+#: templates/dashboard/access.html:96
+msgid "yopiq"
+msgstr "закрытый"
+
+#: apps/education/models.py:58
+msgid "yopiq kurs"
+msgstr "закрытый курс"
+
+#: apps/telegram_bot/models.py:20
+msgid "yordam matni"
+msgstr "текст помощи"
+
+#: apps/education/models.py:227
+msgid "yozilgan"
+msgstr "записан"
+
+#: apps/telegram_bot/models.py:82
+msgid "yuborildi"
+msgstr "отправлено"
+
+#: apps/telegram_bot/models.py:79 apps/telegram_bot/models.py:169
+msgid "yuborish vaqti"
+msgstr "время отправки"
+
+#: apps/gallery/models.py:73
+msgid "yuklab olishga ruxsat"
+msgstr "разрешить скачивание"
+
+#: apps/portfolio/models.py:250
+msgid "yutuqlar va faoliyat"
+msgstr "достижения и активность"
+
+#: templates/core/partials/search_results.html:11
+#, python-format
+msgid "“%(q)s” bo'yicha hech narsa topilmadi"
+msgstr "По запросу «%(q)s» ничего не найдено"

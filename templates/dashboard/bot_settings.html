@@ -1,0 +1,38 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% block dash_title %}{% trans "Bot sozlamalari" %}{% endblock %}
+{% block dash %}
+{% trans "Bot sozlamalari" as t %}{% url 'dashboard:bot' as parent_url %}
+{% include "dashboard/partials/page_head.html" with title=t parent="Telegram bot" parent_url=parent_url %}
+<form method="post" class="grid xl:grid-cols-2 gap-4">{% csrf_token %}
+  <section class="panel flex flex-col gap-4">
+    <h2 class="text-lg font-semibold">{% trans "Matnlar" %}</h2>
+    {% include "dashboard/partials/field.html" with field=form.welcome_text %}
+    {% include "dashboard/partials/field.html" with field=form.registered_text %}
+    {% include "dashboard/partials/field.html" with field=form.help_text %}
+    {% include "dashboard/partials/field.html" with field=form.mini_app_button_text %}
+  </section>
+  <div class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-1">
+      <h2 class="text-lg font-semibold mb-2">{% trans "Holat" %}</h2>
+      {% trans "Bot yoqilgan" as l %}{% trans "O'chirilsa, foydalanuvchilarga texnik ishlar matni ko'rsatiladi" as h %}{% include "dashboard/partials/toggle.html" with field=form.is_enabled label=l hint=h %}
+      {% include "dashboard/partials/field.html" with field=form.maintenance_text %}
+    </section>
+    <section class="panel flex flex-col gap-1">
+      <h2 class="text-lg font-semibold mb-2">{% trans "Adminga bildirishnomalar" %}</h2>
+      {% trans "Yangi foydalanuvchi" as l %}{% include "dashboard/partials/toggle.html" with field=form.notify_new_user label=l %}
+      {% trans "Yangi izoh" as l %}{% include "dashboard/partials/toggle.html" with field=form.notify_new_comment label=l %}
+      {% trans "Yangi sharh" as l %}{% include "dashboard/partials/toggle.html" with field=form.notify_new_review label=l %}
+      {% trans "Aloqa formasi va botga xabarlar" as l %}{% include "dashboard/partials/toggle.html" with field=form.notify_contact_message label=l %}
+      {% trans "Uyga vazifa topshirildi" as l %}{% include "dashboard/partials/toggle.html" with field=form.notify_homework label=l %}
+    </section>
+    <section class="panel flex flex-col gap-2">
+      <h2 class="text-lg font-semibold mb-1">{% trans "Kanal" %}</h2>
+      {% include "dashboard/partials/field.html" with field=form.channel_id %}
+      {% trans "Maqolalarni avtomatik joylash" as l %}{% include "dashboard/partials/toggle.html" with field=form.auto_post_articles label=l %}
+      {% trans "Darslarni avtomatik joylash" as l %}{% include "dashboard/partials/toggle.html" with field=form.auto_post_lessons label=l %}
+    </section>
+    <button class="btn btn-primary py-3"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+  </div>
+</form>
+{% endblock %}

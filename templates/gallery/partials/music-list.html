@@ -1,0 +1,44 @@
+{% load i18n wcd %}
+<div id="music-list" class="grid lg:grid-cols-[1fr_1.1fr_1fr] gap-3" x-data="{ first: {{ tracks.0.pk|default:'null' }} }">
+  {% tracks_json tracks "media-tracks" %}
+  {% if tracks %}
+  {% with t0=tracks.0 %}
+  <div class="glass glass--sm p-4 flex flex-col gap-4">
+    <div class="flex gap-4">
+      <template x-if="$store.player.track"><img :src="$store.player.track.cover" alt="" class="w-24 h-24 rounded-xl object-cover bg-ink/10"></template>
+      <template x-if="!$store.player.track">{% if t0.cover %}<img src="{% thumb t0.cover 240 %}" alt="" class="w-24 h-24 rounded-xl object-cover">{% else %}<span class="icon-tile w-24 h-24"><i data-lucide="music"></i></span>{% endif %}</template>
+      <div class="flex-1 min-w-0">
+        <span class="chip !text-[10px]" x-show="$store.player.playing" x-cloak><i data-lucide="audio-lines" class="w-3 h-3"></i>{% trans "Ijro etilmoqda" %}</span>
+        <div class="font-semibold text-lg mt-2 truncate" x-text="$store.player.track ? $store.player.track.title : '{{ t0.title|escapejs }}'">{{ t0.title }}</div>
+        <div class="text-sm text-ink-3 truncate" x-text="$store.player.track ? $store.player.track.artist : '{{ t0.artist|escapejs }}'">{{ t0.artist }}</div>
+      </div>
+    </div>
+    <div>
+      <div class="h-1.5 rounded-full bg-ink/15 cursor-pointer" @click="$store.player.seekTo($event)"><div class="h-full rounded-full bg-ink relative" :style="`width:${$store.player.pct}%`"><span class="absolute -right-1.5 -top-1 w-3.5 h-3.5 rounded-full bg-ink shadow"></span></div></div>
+      <div class="flex justify-between text-[11px] text-ink-3 mt-1 tabular"><span x-text="$store.player.current">0:00</span><span x-text="$store.player.total">{{ t0.duration|default:"0:00" }}</span></div>
+    </div>
+    <div class="flex items-center justify-center gap-5">
+      <button type="button" class="text-ink-2 hover:text-ink" @click="$store.player.track ? $store.player.prev() : $store.player.playFrom('media-tracks')" aria-label="{% trans 'Oldingi' %}"><i data-lucide="skip-back" class="w-5 h-5"></i></button>
+      <button type="button" class="btn-icon w-14 h-14" @click="$store.player.track ? $store.player.toggle() : $store.player.playFrom('media-tracks')" :aria-label="$store.player.playing ? 'Pause' : 'Play'"><span x-show="!$store.player.playing"><i data-lucide="play" class="fill-current w-5 h-5"></i></span><span x-show="$store.player.playing" x-cloak><i data-lucide="pause" class="w-5 h-5"></i></span></button>
+      <button type="button" class="text-ink-2 hover:text-ink" @click="$store.player.track ? $store.player.next() : $store.player.playFrom('media-tracks')" aria-label="{% trans 'Keyingi' %}"><i data-lucide="skip-forward" class="w-5 h-5"></i></button>
+    </div>
+  </div>
+  {% endwith %}
+  <ol class="glass glass--sm p-2 flex flex-col">
+    {% for t in tracks %}
+      <li><button type="button" class="w-full flex items-center gap-3 rounded-xl px-2 py-2 text-left hover:bg-ink/10" :class="$store.player.isCurrent({{ t.pk }}) && 'bg-ink/10'" @click="$store.player.playFrom('media-tracks', {{ t.pk }})">
+        <span class="w-5 text-xs text-ink-3 tabular"><span x-show="!($store.player.isCurrent({{ t.pk }}) && $store.player.playing)">{{ forloop.counter|stringformat:"02d" }}</span><span x-show="$store.player.isCurrent({{ t.pk }}) && $store.player.playing" x-cloak class="text-accent">♪</span></span>
+        {% if t.cover %}<img src="{% thumb t.cover 240 %}" alt="" class="w-9 h-9 rounded-lg object-cover">{% endif %}
+        <span class="flex-1 min-w-0"><span class="block text-sm font-medium truncate" :class="$store.player.isCurrent({{ t.pk }}) && 'text-accent'">{{ t.title }}</span><span class="block text-[11px] text-ink-3 truncate">{{ t.artist }}</span></span>
+        <span class="text-xs text-ink-3 tabular">{{ t.duration }}</span>
+      </button></li>
+    {% endfor %}
+  </ol>
+  {% else %}<p class="text-ink-3 text-sm py-10 text-center lg:col-span-2">{% trans "Hali trek yo'q" %}</p>{% endif %}
+  <div class="glass glass--sm p-4">
+    <h3 class="font-semibold mb-3">{% trans "Pleylistlarim" %}</h3>
+    <div class="grid grid-cols-2 gap-2">
+      {% for pl in playlists %}<a href="{% url 'gallery:music' %}?playlist={{ pl.pk }}" class="relative rounded-xl overflow-hidden aspect-[4/3] group">{% if pl.cover %}<img src="{% thumb pl.cover 240 %}" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">{% endif %}<span class="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent"><span class="block text-sm font-semibold text-white">{{ pl.title }}</span><span class="text-[11px] text-white/75">{{ pl.tracks.count }} {% trans "trek" %}</span></span></a>{% endfor %}
+    </div>
+  </div>
+</div>

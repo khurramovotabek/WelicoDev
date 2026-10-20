@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load i18n wcd static %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block title %}{% trans "Kirish" %}{% endblock %}
+{% block content %}
+<section class="grid lg:grid-cols-[1fr_460px] gap-10 items-center pt-8 lg:pt-14 pb-6">
+  {# ------------------------------------------------------------ Chap: nima uchun kirish kerak #}
+  <div class="flex flex-col gap-6 order-2 lg:order-1">
+    <div class="flex flex-col gap-4">
+      <span class="eyebrow w-fit"><span class="dot"></span>{% trans "Xavfsiz kirish" %}</span>
+      <h1 class="text-4xl sm:text-6xl font-semibold leading-[1.04]">{% trans "Telegram orqali bir zumda kiring" %}</h1>
+      <p class="text-lg text-ink-2 max-w-[46ch]">{% trans "Parol kerak emas. Bot sizni bir marta ro'yxatdan o'tkazadi, keyin har safar bitta tugma bilan kirasiz." %}</p>
+    </div>
+    <ul class="grid sm:grid-cols-2 gap-3">
+      <li class="glass glass--sm p-4 flex gap-3"><span class="icon-tile bg-accent-strong/25 text-accent"><i data-lucide="graduation-cap"></i></span><div><div class="font-semibold">{% trans "Video kurslar" %}</div><div class="text-xs text-ink-3">{% trans "Progress saqlanadi, sertifikat olasiz" %}</div></div></li>
+      <li class="glass glass--sm p-4 flex gap-3"><span class="icon-tile bg-violet/20 text-violet"><i data-lucide="message-circle"></i></span><div><div class="font-semibold">{% trans "Izoh va sharhlar" %}</div><div class="text-xs text-ink-3">{% trans "Javob kelsa, Telegram'ga xabar" %}</div></div></li>
+      <li class="glass glass--sm p-4 flex gap-3"><span class="icon-tile bg-warn/15 text-warn"><i data-lucide="bookmark"></i></span><div><div class="font-semibold">{% trans "Saqlanganlar" %}</div><div class="text-xs text-ink-3">{% trans "Loyiha va maqolalarni yig'ing" %}</div></div></li>
+      <li class="glass glass--sm p-4 flex gap-3"><span class="icon-tile bg-ok/15 text-ok"><i data-lucide="bell-ring"></i></span><div><div class="font-semibold">{% trans "Yangiliklar" %}</div><div class="text-xs text-ink-3">{% trans "Yangi dars va maqolalar birinchi bo'lib" %}</div></div></li>
+    </ul>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-ink-3">
+      <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-ok"></i>{% trans "Telefon Telegram tomonidan tasdiqlanadi" %}</span>
+      <span class="flex items-center gap-1.5"><i data-lucide="lock" class="w-4 h-4 text-accent"></i>{% trans "Bir martalik kod, 2 daqiqa" %}</span>
+      <span class="flex items-center gap-1.5"><i data-lucide="eye-off" class="w-4 h-4 text-violet"></i>{% trans "Raqamingiz ochiq ko'rsatilmaydi" %}</span>
+    </div>
+  </div>
+
+  {# ------------------------------------------------------------ O'ng: kirish kartasi #}
+  <div class="order-1 lg:order-2 relative" x-data="loginCard({{ login_request.created_at|date:'U' }})">
+    <div class="absolute -inset-6 rounded-[40px] bg-gradient-to-br from-accent-strong/40 via-violet/25 to-transparent blur-3xl opacity-70" aria-hidden="true"></div>
+    <div class="relative glass glass--strong p-6 sm:p-8" hx-get="{% url 'accounts:login_status' %}" hx-trigger="every 2s" hx-swap="none">
+      <div class="flex items-center gap-3">
+        {% include "partials/logo_mark.html" with size=44 %}
+        <div><h2 class="text-xl font-semibold">{% trans "Saytga kirish" %}</h2><p class="text-xs text-ink-3">{{ site.brand_name }} · @{{ bot_username }}</p></div>
+      </div>
+
+      <div class="hidden sm:flex flex-col items-center gap-3 mt-6">
+        <div class="relative p-[3px] rounded-[26px] overflow-hidden">
+          <span class="absolute inset-[-50%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_0deg,rgb(var(--accent-strong)),rgb(var(--violet)),rgb(var(--ok)),rgb(var(--accent-strong)))]" aria-hidden="true"></span>
+          <div class="relative rounded-[23px] bg-white p-3" x-ref="qr" style="width:196px;height:196px"></div>
+        </div>
+        <p class="text-xs text-ink-3">{% trans "Telefon kamerasi bilan skanerlang" %}</p>
+      </div>
+
+      <a href="{{ deep_link }}" target="_blank" rel="noopener" class="btn btn-primary w-full py-3.5 mt-6 text-[15px]">{% social_icon "telegram" "w-5 h-5" %}{% trans "Telegram botni ochish" %}</a>
+
+      <div class="flex items-center justify-center gap-2 mt-3 text-xs" :class="left > 0 ? 'text-ink-2' : 'text-warn'">
+        <span class="relative flex w-2 h-2"><span class="absolute inline-flex w-full h-full rounded-full bg-accent opacity-75 animate-ping" x-show="left > 0"></span><span class="relative inline-flex w-2 h-2 rounded-full" :class="left > 0 ? 'bg-accent' : 'bg-warn'"></span></span>
+        <span x-show="left > 0">{% trans "Botdan tasdiq kutilmoqda" %} · <b class="tabular" x-text="mmss"></b></span>
+        <span x-show="left <= 0" x-cloak>{% trans "So'rov muddati tugadi." %} <a href="" class="underline">{% trans "Yangilash" %}</a></span>
+      </div>
+
+      <div class="flex items-center gap-3 my-6 text-xs text-ink-3"><span class="flex-1 divider"></span>{% trans "yoki botdagi kodni kiriting" %}<span class="flex-1 divider"></span></div>
+
+      <form hx-post="{% url 'accounts:verify_code' %}" hx-target="#code-error" hx-swap="innerHTML" x-data="otp()" class="flex flex-col gap-4">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <input type="hidden" name="code" :value="digits.join('')">
+        <div class="otp" @paste.prevent="paste($event)">
+          <template x-for="(d, i) in digits" :key="i">
+            <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" :aria-label="'{% trans "Raqam" %} ' + (i + 1)" x-model="digits[i]" @input="onInput(i, $event)" @keydown.backspace="onBack(i, $event)">
+          </template>
+        </div>
+        <div id="code-error" class="min-h-[1.25rem] text-center text-sm text-danger" aria-live="polite"></div>
+        <button class="btn btn-light w-full py-3" :disabled="digits.join('').length !== 6">{% trans "Kirish" %}<i data-lucide="arrow-right"></i></button>
+        <p class="text-[11px] text-center text-ink-3">{% blocktrans with ttl=code_ttl %}Kod {{ ttl }} soniya amal qiladi. Kodni hech kimga bermang.{% endblocktrans %}</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="glass p-5 sm:p-6 mt-4 mb-2">
+  <ol class="grid md:grid-cols-3 gap-4">
+    {% blocktrans asvar step1 with bot=bot_username %}@{{ bot }} botini oching{% endblocktrans %}
+    <li class="flex items-start gap-3"><span class="grid place-items-center w-9 h-9 rounded-full bg-accent-strong text-white font-semibold shrink-0">1</span><div><div class="font-semibold">{{ step1 }}</div><div class="text-sm text-ink-3">{% trans "Pastdagi tugmani bosing yoki QR kodni telefoningizda skanerlang" %}</div></div></li>
+    <li class="flex items-start gap-3"><span class="grid place-items-center w-9 h-9 rounded-full bg-accent-strong text-white font-semibold shrink-0">2</span><div><div class="font-semibold">{% trans "Ism, familiya va telefonni yuboring" %}</div><div class="text-sm text-ink-3">{% trans "Faqat birinchi marta. Telefon Telegram tugmasi orqali tasdiqlanadi" %}</div></div></li>
+    <li class="flex items-start gap-3"><span class="grid place-items-center w-9 h-9 rounded-full bg-accent-strong text-white font-semibold shrink-0">3</span><div><div class="font-semibold">{% trans "Kirishni tasdiqlang yoki kodni kiriting" %}</div><div class="text-sm text-ink-3">{% trans "Bu sahifa avtomatik yangilanadi" %}</div></div></li>
+  </ol>
+</section>
+{% endblock %}
+
+{% block scripts %}<script defer src="{% static 'vendor/qrcode.js' %}"></script>{% endblock %}
+{% block body_end %}
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("loginCard", (createdAt) => ({
+      left: 600, mmss: "10:00",
+      init() {
+        const expires = (createdAt + 600) * 1000;
+        const tick = () => {
+          this.left = Math.max(0, Math.round((expires - Date.now()) / 1000));
+          this.mmss = `${Math.floor(this.left / 60)}:${String(this.left % 60).padStart(2, "0")}`;
+        };
+        tick(); setInterval(tick, 1000);
+        this.$nextTick(() => {
+          if (!window.qrcode || !this.$refs.qr) return;
+          const qr = qrcode(0, "M"); qr.addData("{{ deep_link|escapejs }}"); qr.make();
+          this.$refs.qr.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+          this.$refs.qr.querySelector("svg").setAttribute("style", "width:100%;height:100%");
+        });
+      },
+    }));
+    Alpine.data("otp", () => ({
+      digits: ["", "", "", "", "", ""],
+      inputs() { return this.$root.querySelectorAll(".otp input"); },
+      onInput(i, e) {
+        const v = e.target.value.replace(/\D/g, "").slice(-1);
+        this.digits[i] = v; e.target.value = v;
+        if (v && i < 5) this.inputs()[i + 1].focus();
+        if (this.digits.join("").length === 6) this.$nextTick(() => htmx.trigger(this.$root, "submit"));
+      },
+      onBack(i) { if (!this.digits[i] && i > 0) this.inputs()[i - 1].focus(); },
+      paste(e) {
+        const v = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6).split("");
+        v.forEach((c, k) => (this.digits[k] = c));
+        if (v.length === 6) this.$nextTick(() => htmx.trigger(this.$root, "submit"));
+      },
+    }));
+  });
+</script>
+{% endblock %}

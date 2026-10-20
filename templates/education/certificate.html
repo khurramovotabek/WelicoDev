@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Sertifikat" %} {{ cert.code }}{% endblock %}
+{% block content %}
+<section class="py-10 grid place-items-center">
+  <div class="glass glass--strong w-full max-w-3xl p-8 sm:p-12 text-center relative overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-accent-strong/30 blur-3xl" aria-hidden="true"></div>
+    <div class="flex justify-center">{% include "partials/logo_mark.html" with size=56 %}</div>
+    <p class="text-xs uppercase tracking-[.3em] text-ink-3 mt-6">{% trans "Kursni tugatganlik sertifikati" %}</p>
+    <h1 class="text-4xl sm:text-5xl font-semibold mt-4">{{ cert.enrollment.user.get_full_name|default:cert.enrollment.user.display_name }}</h1>
+    <p class="text-ink-2 mt-4">{% trans "quyidagi kursni muvaffaqiyatli tugatdi" %}</p>
+    <h2 class="text-2xl font-semibold mt-2">{{ cert.enrollment.course.title }}</h2>
+    <div class="grid grid-cols-2 gap-4 mt-10 text-sm">
+      <div><div class="text-ink-3 text-xs">{% trans "Sana" %}</div><div class="font-semibold tabular">{{ cert.issued_at|date:"d.m.Y" }}</div></div>
+      <div><div class="text-ink-3 text-xs">{% trans "Sertifikat raqami" %}</div><div class="font-semibold font-mono">{{ cert.code }}</div></div>
+    </div>
+    <p class="mt-8 font-display text-lg">{{ site.owner_name }} · {{ site.brand_name }}</p>
+  </div>
+  <button onclick="wcdCopy(location.href)" class="btn btn-glass mt-6"><i data-lucide="link"></i>{% trans "Havolani nusxalash" %}</button>
+</section>
+{% endblock %}

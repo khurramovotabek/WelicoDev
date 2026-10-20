@@ -1,0 +1,93 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Kanal posti" %}{% endblock %}
+{% block dash %}
+{% trans "Kanal postlari" as parent %}{% url 'dashboard:channel' as parent_url %}
+{% if obj %}{% trans "Postni tahrirlash" as t %}{% else %}{% trans "Yangi kanal posti" as t %}{% endif %}
+{% if obj.message_id %}{% trans "Post kanalda turibdi: saqlasangiz, kanaldagi post ham yangilanadi." as st %}{% else %}{% trans "Matnni rich text bilan yozing: Telegram formatiga avtomatik o'giriladi." as st %}{% endif %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st parent=parent parent_url=parent_url %}
+{% if form.non_field_errors %}<div class="glass glass--sm p-3 text-sm text-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_400px] gap-4 pb-28" x-data="channelForm('{% url 'dashboard:channel_preview' %}', {{ obj.image|yesno:'true,false' }})">
+  {% csrf_token %}
+  <div class="flex flex-col gap-4 min-w-0">
+    <section class="panel flex flex-col gap-4">
+      {% include "dashboard/partials/field.html" with field=form.title %}
+      <div>
+        <div class="flex items-center justify-between mb-1.5"><span class="field-label !mb-0">{% trans "Post matni" %} <span class="text-danger">*</span></span><span class="text-[11px] tabular" :class="length > limit ? 'text-danger' : 'text-ink-3'" x-text="length + ' / ' + limit"></span></div>
+        {{ form.body }}{% for e in form.body.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}
+        <p class="text-[11px] text-ink-3 mt-1">{% trans "Qalin, kursiv, havola, kod, kod bloki, iqtibos va ro'yxatlar Telegram'da xuddi shunday ko'rinadi. Ichki havolalar to'liq manzilga aylantiriladi." %}</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div><span class="field-label">{% trans "Rasm (ixtiyoriy)" %}</span><input type="file" name="image" accept="image/*" class="field" @change="hasImage = !!$event.target.files.length; img = hasImage ? URL.createObjectURL($event.target.files[0]) : img; refresh()" {% if obj.message_id %}disabled{% endif %}></div>
+        <div class="grid grid-cols-2 gap-2">{% include "dashboard/partials/field.html" with field=form.button_text %}{% include "dashboard/partials/field.html" with field=form.button_url %}</div>
+      </div>
+    </section>
+    <section class="panel flex flex-col gap-1">
+      <h2 class="text-lg font-semibold mb-2">{% trans "Yuborish sozlamalari" %}</h2>
+      {% trans "Ovozsiz yuborish" as l %}{% trans "Obunachilarga bildirishnoma ovozsiz keladi" as h %}{% include "dashboard/partials/toggle.html" with field=form.silent label=l hint=h %}
+      {% trans "Kanalda qadash" as l %}{% include "dashboard/partials/toggle.html" with field=form.pin label=l %}
+      {% trans "Havola preview'ini o'chirish" as l %}{% include "dashboard/partials/toggle.html" with field=form.disable_preview label=l %}
+      {% if not obj.message_id %}<div class="mt-2">{% trans "Rejalashtirish (bo'sh qolsa — qoralama)" as sl %}{% include "dashboard/partials/field.html" with field=form.scheduled_at label=sl %}</div>{% endif %}
+    </section>
+  </div>
+  <aside>
+    <section class="panel xl:sticky xl:top-4">
+      <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-semibold">{% trans "Telegram'da ko'rinishi" %}</h2><span class="text-xs text-ink-3">{{ channel_id|default:"@kanal" }}</span></div>
+      <div class="rounded-2xl p-4 min-h-[320px]" style="background:linear-gradient(160deg,#0e1a2b,#17263b)">
+        <div class="max-w-[94%] rounded-2xl rounded-bl-md overflow-hidden bg-[#182533] text-[#e9eef5] shadow-lg">
+          <img :src="img" x-show="img" alt="" class="w-full max-h-60 object-cover">
+          <div class="tg-preview px-3 py-2 text-[14px] leading-snug whitespace-pre-wrap break-words" x-html="html || '…'"></div>
+          <div class="text-[11px] text-right px-3 pb-1.5 text-[#7d8b99]">👁 1 · {% now "H:i" %}</div>
+        </div>
+        <div x-show="btn" class="max-w-[94%] mt-1 rounded-xl bg-[#2b5278]/70 text-center text-sm py-2 text-white" x-text="btn"></div>
+      </div>
+      <div class="flex flex-col gap-2 mt-4">
+        {% if obj.message_id %}
+          <button name="action" value="save" class="btn btn-primary py-3"><i data-lucide="refresh-cw"></i>{% trans "Kanaldagi postni yangilash" %}</button>
+        {% else %}
+          <button name="action" value="save" class="btn btn-glass"><i data-lucide="save"></i>{% trans "Saqlash / rejalashtirish" %}</button>
+          <button name="action" value="send" class="btn btn-primary py-3"><i data-lucide="send"></i>{% trans "Hozir joylash" %}</button>
+        {% endif %}
+      </div>
+    </section>
+  </aside>
+</form>
+{% if obj %}
+<form method="post" action="{% url 'dashboard:channel_action' obj.pk 'delete' %}" class="glass p-4 flex flex-wrap items-center gap-3 text-sm" x-data="{ c: false }">{% csrf_token %}
+  <span class="text-ink-2 flex-1">{% trans "Postni o'chirish" %}</span>
+  {% if obj.message_id %}<label class="flex items-center gap-2"><input type="checkbox" name="from_channel" value="1" checked>{% trans "Kanaldan ham o'chirish" %}</label>{% endif %}
+  <button type="button" class="btn btn-danger btn-sm" x-show="!c" @click="c = true"><i data-lucide="trash-2"></i>{% trans "O'chirish" %}</button>
+  <button class="btn btn-danger btn-sm !bg-danger !text-white" x-show="c" x-cloak>{% trans "Ha, o'chirish" %}</button>
+</form>
+{% endif %}
+{% endblock %}
+{% block body_end %}
+<style>.tg-preview a{color:#6ab3f3}.tg-preview code{background:rgba(0,0,0,.3);padding:0 .25em;border-radius:4px;font-family:var(--font-mono,monospace)}.tg-preview pre{background:rgba(0,0,0,.35);padding:.6em;border-radius:8px;overflow-x:auto;white-space:pre}.tg-preview blockquote{border-left:3px solid #6ab3f3;padding-left:.6em;margin:.2em 0}</style>
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("channelForm", (previewUrl, hasImage) => ({
+      html: "{{ preview|escapejs }}", length: 0, limit: hasImage ? 1024 : 4096, hasImage,
+      img: "{% if obj.image %}{{ obj.image.url }}{% endif %}", btn: "{{ form.button_text.value|default:''|escapejs }}", timer: null,
+      init() {
+        this.$el.querySelector('[name="button_text"]').addEventListener("input", (e) => (this.btn = e.target.value));
+        // CKEditor yuklanishini kutib, har o'zgarishda preview'ni yangilaymiz
+        const attach = () => {
+          const ed = window.editors && window.editors["id_body"];
+          if (!ed) return setTimeout(attach, 200);
+          ed.model.document.on("change:data", () => { clearTimeout(this.timer); this.timer = setTimeout(() => this.refresh(), 350); });
+          this.refresh();
+        };
+        attach();
+      },
+      refresh() {
+        const ed = window.editors && window.editors["id_body"];
+        const fd = new FormData();
+        fd.append("body", ed ? ed.getData() : "");
+        fd.append("has_image", this.hasImage ? "1" : "0");
+        fetch(previewUrl, { method: "POST", body: fd, headers: { "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content } })
+          .then((r) => r.json()).then((d) => { this.html = d.html; this.length = d.length; this.limit = d.limit; });
+      },
+    }));
+  });
+</script>
+{% endblock %}

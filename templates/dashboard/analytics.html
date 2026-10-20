@@ -1,0 +1,38 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd humanize %}
+{% block dash_title %}{% trans "Analitika" %}{% endblock %}
+{% block dash %}
+{% trans "Analitika" as t %}{% trans "Oxirgi 30 kun: tashriflar, mashhur kontent va kurslar." as st %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st %}
+<section class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+  <div class="glass p-5"><div class="text-sm text-ink-2">{% trans "Sahifa ko'rishlar" %}</div><div class="stat-num mt-1">{{ totals.views|intcomma }}</div></div>
+  <div class="glass p-5"><div class="text-sm text-ink-2">{% trans "Noyob tashrifchilar" %}</div><div class="stat-num mt-1">{{ totals.visitors|intcomma }}</div></div>
+  <div class="glass p-5"><div class="text-sm text-ink-2">{% trans "Loyiha ko'rishlari (jami)" %}</div><div class="stat-num mt-1">{{ totals.project_views|intcomma }}</div></div>
+  <div class="glass p-5"><div class="text-sm text-ink-2">{% trans "Maqola o'qishlar (jami)" %}</div><div class="stat-num mt-1">{{ totals.article_views|intcomma }}</div></div>
+</section>
+<section class="panel"><h2 class="text-xl font-semibold mb-3">{% trans "Tashriflar" %}</h2><div class="relative h-[300px]"><canvas id="visits-chart" role="img" aria-label="Visits"></canvas></div></section>
+<section class="grid xl:grid-cols-3 gap-4">
+  <div class="panel"><h2 class="text-lg font-semibold mb-3">{% trans "Mashhur loyihalar" %}</h2><ol class="flex flex-col gap-2 text-sm">{% for p in top_projects %}<li class="flex items-center gap-3"><span class="w-5 text-ink-3 tabular">{{ forloop.counter }}</span><img src="{% thumb p.cover 120 %}" alt="" class="w-10 h-8 rounded object-cover"><span class="truncate flex-1">{{ p.title }}</span><span class="tabular text-ink-2">{{ p.views_count|compact }}</span></li>{% endfor %}</ol></div>
+  <div class="panel"><h2 class="text-lg font-semibold mb-3">{% trans "Mashhur maqolalar" %}</h2><ol class="flex flex-col gap-2 text-sm">{% for a in top_articles %}<li class="flex items-center gap-3"><span class="w-5 text-ink-3 tabular">{{ forloop.counter }}</span><img src="{% thumb a.cover 120 %}" alt="" class="w-10 h-8 rounded object-cover"><span class="truncate flex-1">{{ a.title }}</span><span class="tabular text-ink-2">{{ a.views_count|compact }}</span></li>{% endfor %}</ol></div>
+  <div class="panel"><h2 class="text-lg font-semibold mb-3">{% trans "Kurslar" %}</h2><ul class="flex flex-col gap-3 text-sm">{% for c, n, done in progress %}<li><div class="flex justify-between"><span class="truncate">{{ c.title }}</span><span class="tabular text-ink-3">{{ done }}/{{ n }}</span></div><div class="h-1.5 rounded-full bg-ink/15 mt-1"><div class="h-full rounded-full bg-ok" style="width:{% if n %}{% widthratio done n 100 %}{% else %}0{% endif %}%"></div></div></li>{% empty %}<li class="text-ink-3">—</li>{% endfor %}</ul></div>
+</section>
+{% endblock %}
+{% block body_end %}
+{{ chart|json_script:"visits-data" }}{% trans "Ko'rishlar" as l1 %}{% trans "Tashrifchilar" as l2 %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const d = JSON.parse(document.getElementById("visits-data").textContent);
+    const css = (v) => `rgb(${getComputedStyle(document.documentElement).getPropertyValue(v).trim()})`;
+    Chart.defaults.color = css("--ink-3");
+    new Chart(document.getElementById("visits-chart"), {
+      type: "line",
+      data: { labels: d.labels, datasets: [
+        { label: "{{ l1|escapejs }}", data: d.views, borderColor: css("--accent"), backgroundColor: "rgba(91,140,255,.15)", fill: true, tension: .4, pointRadius: 0, borderWidth: 2.5 },
+        { label: "{{ l2|escapejs }}", data: d.visitors, borderColor: css("--ok"), tension: .4, pointRadius: 0, borderWidth: 2 },
+      ] },
+      options: { maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } } },
+        scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }, y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: "rgba(140,160,210,.1)" } } } },
+    });
+  });
+</script>
+{% endblock %}

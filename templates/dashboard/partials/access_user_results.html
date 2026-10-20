@@ -1,0 +1,9 @@
+{% load i18n %}
+{% for u in users %}
+  <button type="button" class="flex items-center gap-2 rounded-xl px-2 py-1.5 text-left text-sm hover:bg-ink/10" data-id="{{ u.pk }}" data-name="{{ u.display_name }}" @click="user = $el.dataset.id; name = $el.dataset.name">
+    {% include "partials/avatar.html" with u=u size="w-7 h-7" %}
+    <span class="min-w-0"><span class="block truncate font-medium">{{ u.display_name }}</span><span class="block text-[11px] text-ink-3">{{ u.phone|default:"" }}{% if u.telegram_username %} · @{{ u.telegram_username }}{% endif %}</span></span>
+  </button>
+{% empty %}
+  {% if q|length >= 2 %}<p class="text-xs text-ink-3 px-2">{% trans "Topilmadi" %}</p>{% endif %}
+{% endfor %}

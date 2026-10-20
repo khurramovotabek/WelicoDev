@@ -1,0 +1,32 @@
+{% load i18n wcd %}
+{% if selected %}
+<div class="glass glass--strong p-4 flex flex-col gap-4 xl:sticky xl:top-4" x-data="{ tab: 'overview' }">
+  <img src="{% thumb selected.cover 640 %}" alt="" class="w-full aspect-[16/9] rounded-xl object-cover">
+  <div class="flex items-center gap-2"><h2 class="text-2xl font-semibold flex-1 truncate">{{ selected.title }}</h2>{% if selected.status == "published" %}<span class="badge badge-ok">{% trans "Nashr" %}</span>{% else %}<span class="badge badge-warn">{{ selected.get_status_display }}</span>{% endif %}</div>
+  <div class="grid grid-cols-2 gap-2">
+    <a href="{{ selected.get_absolute_url }}" target="_blank" class="btn btn-primary btn-sm">{% trans "Ko'rish" %}<i data-lucide="arrow-right"></i></a>
+    <a href="{% url 'dashboard:project_edit' selected.pk %}" class="btn btn-glass btn-sm"><i data-lucide="pencil"></i>{% trans "Tahrirlash" %}</a>
+  </div>
+  <div class="tabs w-full"><button class="tab flex-1" :class="tab === 'overview' && 'is-active'" @click="tab = 'overview'">{% trans "Umumiy" %}</button><button class="tab flex-1" :class="tab === 'media' && 'is-active'" @click="tab = 'media'">Media ({{ selected.images.count }})</button><button class="tab flex-1" :class="tab === 'seo' && 'is-active'" @click="tab = 'seo'">SEO</button></div>
+  <div x-show="tab === 'overview'" class="flex flex-col gap-3 text-sm">
+    <div><div class="text-xs text-ink-3 mb-1">{% trans "Tavsif" %}</div><p class="text-ink-2">{{ selected.short_description }}</p></div>
+    {% if selected.category %}<div><div class="text-xs text-ink-3 mb-1">{% trans "Turkum" %}</div><span class="chip">{{ selected.category.name }}</span></div>{% endif %}
+    <div><div class="text-xs text-ink-3 mb-1">{% trans "Teglar" %}</div><div class="flex flex-wrap gap-1.5">{% for t in selected.tags.all %}<span class="chip">{{ t.name }}</span>{% empty %}—{% endfor %}</div></div>
+    <div class="grid grid-cols-2 gap-3"><div><div class="text-xs text-ink-3">{% trans "Yaratilgan" %}</div>{{ selected.created_at|date:"M d, Y" }}</div><div><div class="text-xs text-ink-3">{% trans "Yangilangan" %}</div>{{ selected.updated_at|date:"M d, Y" }}</div></div>
+    {% if selected.live_url %}<div><div class="text-xs text-ink-3">URL</div><a href="{{ selected.live_url }}" target="_blank" rel="noopener" class="text-accent break-all">{{ selected.live_url }}</a></div>{% endif %}
+    <div class="grid grid-cols-3 gap-2 text-center">
+      <div class="glass glass--sm p-3"><div class="font-semibold tabular">{{ selected.views_count|compact }}</div><div class="text-[11px] text-ink-3">{% trans "Ko'rish" %}</div></div>
+      <div class="glass glass--sm p-3"><div class="font-semibold tabular text-danger">{{ sel_stats.likes }}</div><div class="text-[11px] text-ink-3">Like</div></div>
+      <div class="glass glass--sm p-3"><div class="font-semibold tabular text-accent">{{ sel_stats.comments }}</div><div class="text-[11px] text-ink-3">{% trans "Izoh" %}</div></div>
+    </div>
+  </div>
+  <div x-show="tab === 'media'" x-cloak class="grid grid-cols-3 gap-2">{% for img in selected.images.all %}<img src="{% thumb img.image 640 %}" alt="" class="w-full aspect-square rounded-lg object-cover">{% empty %}<p class="col-span-3 text-sm text-ink-3">{% trans "Rasm yo'q" %}</p>{% endfor %}</div>
+  <div x-show="tab === 'seo'" x-cloak class="text-sm flex flex-col gap-2"><div><div class="text-xs text-ink-3">Meta title</div>{{ selected.meta_title|default:selected.title }}</div><div><div class="text-xs text-ink-3">Meta description</div>{{ selected.meta_description|default:selected.short_description }}</div></div>
+  {% if selected.status == "published" %}<form method="post" action="{% url 'dashboard:channel_from' 'project' selected.pk %}" class="grid grid-cols-2 gap-2">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button name="mode" value="draft" class="btn btn-glass btn-sm"><i data-lucide="radio-tower"></i>{% trans "Kanal posti" %}</button><button name="mode" value="send" class="btn btn-glass btn-sm"><i data-lucide="send"></i>{% trans "Hozir joylash" %}</button></form>{% endif %}
+  <div class="grid grid-cols-2 gap-2 pt-2 border-t border-ink/10" x-data="{ confirm: false }">
+    <form method="post" action="{% url 'dashboard:project_action' selected.pk 'toggle_publish' %}">{% csrf_token %}<button class="btn btn-danger btn-sm w-full !text-warn !border-warn/40 !bg-warn/10"><i data-lucide="{% if selected.status == 'published' %}eye-off{% else %}eye{% endif %}"></i>{% if selected.status == "published" %}{% trans "Yashirish" %}{% else %}{% trans "Nashr qilish" %}{% endif %}</button></form>
+    <button type="button" class="btn btn-danger btn-sm" x-show="!confirm" @click="confirm = true"><i data-lucide="trash-2"></i>{% trans "O'chirish" %}</button>
+    <form method="post" action="{% url 'dashboard:project_action' selected.pk 'delete' %}" x-show="confirm" x-cloak>{% csrf_token %}<button class="btn btn-danger btn-sm w-full !bg-danger !text-white">{% trans "Ha, o'chirish" %}</button></form>
+  </div>
+</div>
+{% else %}<div class="glass p-8 text-center text-ink-3 text-sm">{% trans "Loyihani tanlang" %}</div>{% endif %}

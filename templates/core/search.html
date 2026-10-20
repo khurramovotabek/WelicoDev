@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block title %}{% trans "Qidiruv" %}{% endblock %}
+{% block content %}
+{% trans "Loyiha, maqola, kurs yoki texnologiya..." as ph %}
+<section class="max-w-3xl mx-auto pt-10">
+  <h1 class="text-5xl font-semibold text-center">{% trans "Qidiruv" %}</h1>
+  <form action="" class="glass glass--pill flex items-center gap-2 p-2 pl-5 mt-6">
+    <i data-lucide="search" class="w-5 h-5 text-ink-3"></i>
+    <input name="q" value="{{ q }}" autofocus class="flex-1 bg-transparent outline-none py-2 placeholder:text-ink-3" placeholder="{{ ph }}" hx-get="{% url 'core:search' %}" hx-trigger="input changed delay:300ms" hx-target="#results" hx-push-url="true">
+    <button class="btn btn-primary !p-0 w-10 h-10" aria-label="{% trans 'Qidirish' %}"><i data-lucide="arrow-right"></i></button>
+  </form>
+  <div id="results" class="mt-6">{% include "core/partials/search_results.html" %}</div>
+</section>
+{% endblock %}

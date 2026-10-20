@@ -1,0 +1,11 @@
+{% load i18n wcd %}
+{% if page.paginator.num_pages > 1 %}
+<div class="flex flex-wrap items-center gap-3 mt-4 text-sm">
+  <span class="text-ink-3">{% blocktrans with a=page.start_index b=page.end_index n=page.paginator.count %}{{ a }}–{{ b }} / {{ n }}{% endblocktrans %}</span>
+  <div class="flex gap-1.5 ml-auto">
+    {% if page.has_previous %}<a href="{% query page=page.previous_page_number %}" class="btn-icon w-9 h-9 rounded-xl"><i data-lucide="chevron-left"></i></a>{% endif %}
+    {% for n in page.paginator.page_range %}{% if n == page.number %}<span class="grid place-items-center w-9 h-9 rounded-xl bg-accent-strong text-white font-semibold glow-accent">{{ n }}</span>{% elif n == 1 or n == page.paginator.num_pages or n|add:"-2" <= page.number and n|add:"2" >= page.number %}<a href="{% query page=n %}" class="btn-icon w-9 h-9 rounded-xl text-sm">{{ n }}</a>{% elif n == page.number|add:"-3" or n == page.number|add:"3" %}<span class="px-1 text-ink-3">…</span>{% endif %}{% endfor %}
+    {% if page.has_next %}<a href="{% query page=page.next_page_number %}" class="btn-icon w-9 h-9 rounded-xl"><i data-lucide="chevron-right"></i></a>{% endif %}
+  </div>
+</div>
+{% endif %}

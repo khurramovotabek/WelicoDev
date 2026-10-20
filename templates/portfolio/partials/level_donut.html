@@ -1,0 +1,5 @@
+{% load i18n %}
+<div class="relative w-28 h-28 shrink-0">
+  {% include "partials/donut.html" with segments=level_donut %}
+  <div class="absolute inset-0 grid place-items-center text-center leading-tight"><div><div class="font-display text-xl font-semibold tabular">{{ total }}+</div><div class="text-[10px] text-ink-3">{% trans "Jami" %}</div></div></div>
+</div>

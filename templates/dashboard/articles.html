@@ -1,0 +1,56 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Maqolalar" %}{% endblock %}
+{% block dash %}
+{% trans "Maqolalar" as t %}{% trans "Auditoriyangiz uchun kontent yarating va nashr qiling." as st %}{% trans "Maqola qo'shish" as al %}{% url 'dashboard:article_add' as au %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st action_url=au action_label=al %}
+<section class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5"><span class="kpi-icon bg-accent-strong/25 text-accent border border-accent/30"><i data-lucide="file-text"></i></span><div><div class="text-sm text-ink-2">{% trans "Jami" %}</div><div class="flex items-baseline gap-2"><span class="stat-num">{{ stats.total.total }}</span><span class="text-xs text-ok">↑ {{ stats.total.change }}%</span></div><div class="text-xs text-ink-3">+{{ stats.total.month }} {% trans "shu oyda" %}</div></div></div>
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5"><span class="kpi-icon bg-ok/15 text-ok border border-ok/30"><i data-lucide="file-check"></i></span><div><div class="text-sm text-ink-2">{% trans "Nashr qilingan" %}</div><div class="stat-num">{{ stats.published }}</div><div class="text-xs text-ink-3">{% widthratio stats.published stats.n 100 %}%</div></div></div>
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5"><span class="kpi-icon bg-warn/15 text-warn border border-warn/30"><i data-lucide="file-pen"></i></span><div><div class="text-sm text-ink-2">{% trans "Qoralama" %}</div><div class="stat-num">{{ stats.drafts }}</div><div class="text-xs text-ink-3">{% widthratio stats.drafts stats.n 100 %}%</div></div></div>
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5"><span class="kpi-icon bg-violet/15 text-violet border border-violet/30"><i data-lucide="archive"></i></span><div><div class="text-sm text-ink-2">{% trans "Arxiv" %}</div><div class="stat-num">{{ stats.archived }}</div><div class="text-xs text-ink-3">{% widthratio stats.archived stats.n 100 %}%</div></div></div>
+</section>
+<section class="grid xl:grid-cols-[1fr_300px] gap-4">
+  <div class="glass p-4 min-w-0">
+    <div class="table-wrap">
+      <table class="dtable">
+        <thead><tr><th>{% trans "Maqola" %}</th><th>{% trans "Turkum" %}</th><th>{% trans "Muallif" %}</th><th>{% trans "Holat" %}</th><th>{% trans "Ko'rish" %}</th><th>{% trans "Sana" %}</th><th class="text-right">{% trans "Amallar" %}</th></tr></thead>
+        <tbody>
+          {% for a in page %}
+            <tr>
+              <td><a href="{% url 'dashboard:article_edit' a.pk %}" class="flex items-center gap-3 min-w-[240px]"><img src="{% thumb a.cover 120 %}" alt="" class="w-12 h-12 rounded-lg object-cover"><div class="min-w-0"><div class="font-semibold truncate max-w-[280px]">{{ a.title }}</div><div class="text-[11px] text-ink-3 truncate max-w-[280px]">{{ a.excerpt }}</div></div></a></td>
+              <td>{% if a.category %}<span class="chip">{{ a.category.name }}</span>{% endif %}</td>
+              <td class="whitespace-nowrap">{% if a.author %}<span class="flex items-center gap-2">{% include "partials/avatar.html" with u=a.author size="w-7 h-7" %}{{ a.author.first_name|default:a.author.username }}</span>{% endif %}</td>
+              <td>{% if a.status == "published" %}<span class="badge badge-ok">{% trans "Nashr" %}</span>{% elif a.status == "draft" %}<span class="badge badge-warn">{% trans "Qoralama" %}</span>{% else %}<span class="badge badge-violet">{% trans "Arxiv" %}</span>{% endif %}</td>
+              <td class="tabular whitespace-nowrap"><i data-lucide="eye" class="w-3.5 h-3.5 inline text-ink-3"></i> {{ a.views_count|compact }}</td>
+              <td class="text-xs text-ink-3 whitespace-nowrap">{{ a.published_at|date:"M d, Y" }}</td>
+              <td><div class="flex justify-end gap-1.5"><a href="{% url 'dashboard:article_edit' a.pk %}" class="btn-icon w-8 h-8 rounded-lg" aria-label="Edit"><i data-lucide="pencil" class="!w-3.5 !h-3.5"></i></a><a href="{{ a.get_absolute_url }}" target="_blank" class="btn-icon w-8 h-8 rounded-lg" aria-label="View"><i data-lucide="external-link" class="!w-3.5 !h-3.5"></i></a></div></td>
+            </tr>
+          {% empty %}<tr><td colspan="7" class="text-center text-ink-3 py-10">{% trans "Maqola topilmadi" %}</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "dashboard/partials/pagination.html" %}
+  </div>
+  <aside class="flex flex-col gap-4">
+    <form class="glass p-4 flex flex-col gap-3">
+      <div class="flex items-center justify-between"><h2 class="font-semibold flex items-center gap-2"><i data-lucide="filter" class="w-4 h-4"></i>{% trans "Filtrlar" %}</h2><a href="?" class="btn btn-glass btn-sm">{% trans "Tozalash" %}</a></div>
+      <label class="field-icon"><i data-lucide="search"></i><input name="q" value="{{ q }}" class="field" placeholder="{% trans 'Qidirish...' %}"></label>
+      <select name="category" class="field"><option value="">{% trans "Barcha turkumlar" %}</option>{% for c in categories %}<option value="{{ c.slug }}" {% if category == c.slug %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
+      <select name="status" class="field"><option value="">{% trans "Barcha holatlar" %}</option><option value="published" {% if status == "published" %}selected{% endif %}>{% trans "Nashr" %}</option><option value="draft" {% if status == "draft" %}selected{% endif %}>{% trans "Qoralama" %}</option><option value="archived" {% if status == "archived" %}selected{% endif %}>{% trans "Arxiv" %}</option></select>
+      <select name="author" class="field"><option value="">{% trans "Barcha mualliflar" %}</option>{% for u in authors %}<option value="{{ u.pk }}" {% if author == u.pk|stringformat:'s' %}selected{% endif %}>{{ u.display_name }}</option>{% endfor %}</select>
+      <button class="btn btn-primary">{% trans "Qo'llash" %}</button>
+    </form>
+    <div class="glass p-4">
+      <div class="flex items-center justify-between mb-2"><h2 class="font-semibold">{% trans "Turkumlar" %}</h2><a href="{% url 'admin:blog_articlecategory_changelist' %}" class="btn btn-glass btn-sm">{% trans "Boshqarish" %}</a></div>
+      <ul class="flex flex-col gap-1 text-sm">{% for c in categories %}<li><a href="?category={{ c.slug }}" class="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-ink/10"><span class="icon-tile w-7 h-7"><i data-lucide="{{ c.icon|default:'hash' }}" class="!w-3.5 !h-3.5"></i></span>{{ c.name }}<span class="ml-auto tabular text-ink-3">{{ c.n }}</span></a></li>{% endfor %}</ul>
+    </div>
+    <a href="{% url 'dashboard:article_add' %}" class="glass p-5 relative overflow-hidden bg-gradient-to-br from-accent-strong/40 to-violet/30">
+      <span class="icon-tile"><i data-lucide="pen-line"></i></span>
+      <div class="font-semibold mt-3">{% trans "Bilimingizni ulashing" %}</div>
+      <div class="text-xs text-ink-2">{% trans "Yangi maqola yozing va ilhomlantiring." %}</div>
+      <span class="btn btn-primary btn-sm mt-3">{% trans "Maqola yozish" %}<i data-lucide="arrow-right"></i></span>
+    </a>
+  </aside>
+</section>
+{% endblock %}

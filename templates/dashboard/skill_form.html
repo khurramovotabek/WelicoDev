@@ -1,0 +1,30 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Ko'nikma" %}{% endblock %}
+{% block dash %}
+{% trans "Ko'nikmalar" as parent %}{% url 'dashboard:skills' as parent_url %}{% if obj %}{% trans "Ko'nikmani tahrirlash" as t %}{% else %}{% trans "Yangi ko'nikma" as t %}{% endif %}
+{% include "dashboard/partials/page_head.html" with title=t parent=parent parent_url=parent_url %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_340px] gap-4" x-data="{ p: {{ form.proficiency.value|default:70 }}, lp: {{ form.learning_progress.value|default:0 }}, dev: '{{ form.devicon.value|default:'' }}' }">{% csrf_token %}
+  <section class="panel flex flex-col gap-4">
+    <div class="grid md:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.name %}{% include "dashboard/partials/field.html" with field=form.category %}</div>
+    {% trans "Qisqa izoh (Web Framework...)" as l %}{% include "dashboard/partials/tr_field.html" with name="subtitle" label=l %}
+    <div class="grid md:grid-cols-3 gap-4">{% include "dashboard/partials/field.html" with field=form.level %}{% include "dashboard/partials/field.html" with field=form.years %}{% include "dashboard/partials/field.html" with field=form.started_year %}</div>
+    <div><label class="field-label">{% trans "Bilim darajasi" %}: <b x-text="p + '%'"></b></label><input type="range" name="proficiency" min="0" max="100" step="5" x-model="p" class="w-full accent-[rgb(var(--accent-strong))]"></div>
+    <div class="grid md:grid-cols-2 gap-4 items-end">
+      {% trans "Hozir o'rganilmoqda" as l %}{% include "dashboard/partials/toggle.html" with field=form.is_learning label=l %}
+      <div><label class="field-label">{% trans "O'rganish progressi" %}: <b x-text="lp + '%'"></b></label><input type="range" name="learning_progress" min="0" max="100" step="5" x-model="lp" class="w-full accent-[rgb(var(--accent-strong))]"></div>
+    </div>
+  </section>
+  <aside class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile w-14 h-14 bg-white/10"><img x-show="dev" :src="(() => { const m = dev.match(/^(.+?)-(original-wordmark|plain-wordmark|original|plain|line)$/); return m ? `https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/${m[1]}/${dev}.svg` : `https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/${dev}/${dev}-original.svg`; })()" alt="" class="w-9 h-9">{% if obj.icon %}<img x-show="!dev" src="{{ obj.icon.url }}" alt="" class="w-9 h-9">{% endif %}</span><div class="text-xs text-ink-3">{% trans "Belgi devicon.dev nomidan avtomatik olinadi" %}</div></div>
+      <div><label class="field-label">Devicon</label><input name="devicon" x-model="dev" class="field" placeholder="python, django, docker"></div>
+      <div><span class="field-label">{% trans "O'z belgisi (SVG/PNG)" %}</span><input type="file" name="icon" class="field"></div>
+    </section>
+    <section class="panel flex flex-col gap-1">{% trans "Asosiy ko'nikma" as l %}{% include "dashboard/partials/toggle.html" with field=form.is_featured label=l %}{% include "dashboard/partials/field.html" with field=form.order %}</section>
+    <button class="btn btn-primary"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+    {% if obj %}<div x-data="{ c: false }"><button type="button" class="btn btn-danger btn-sm w-full" x-show="!c" @click="c = true"><i data-lucide="trash-2"></i>{% trans "O'chirish" %}</button><button form="delete-form" class="btn btn-danger btn-sm w-full !bg-danger !text-white" x-show="c" x-cloak>{% trans "Ha, o'chirish" %}</button></div>{% endif %}
+  </aside>
+</form>
+{% if obj %}<form id="delete-form" method="post" action="{% url 'dashboard:skill_action' obj.pk 'delete' %}" hidden>{% csrf_token %}</form>{% endif %}
+{% endblock %}

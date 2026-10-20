@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{% trans "Men haqimda" %}{% endblock %}
+{% block content %}
+<section class="grid lg:grid-cols-[1fr_1.15fr] gap-6 pt-8 lg:pt-12">
+  <div class="flex flex-col justify-end gap-4 order-2 lg:order-1">
+    {% if site.avatar %}<img src="{{ site.avatar.url }}" alt="{{ site.owner_name }}" class="glass w-40 h-40 object-cover rounded-[28px]">{% endif %}
+    {% if hero.quote %}
+    <figure class="panel flex flex-col sm:flex-row gap-5 sm:items-center">
+      <div class="flex-1">
+        <div class="font-display text-3xl text-accent leading-none">“</div>
+        <blockquote class="text-lg leading-snug mt-1">{{ hero.quote }}</blockquote>
+        <a href="#journey" class="inline-flex items-center gap-1 text-sm text-ink-2 hover:text-ink mt-3">{% trans "Yo'lim haqida ko'proq" %}<i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </div>
+      {% if site.intro_video_url %}
+      <a href="{{ site.intro_video_url }}" target="_blank" rel="noopener" class="flex items-center gap-3 sm:border-l sm:border-ink/15 sm:pl-5">
+        <span class="btn-icon w-12 h-12"><i data-lucide="play" class="fill-current"></i></span>
+        <span class="text-sm leading-tight">{% trans "Hikoyamni ko'ring" %}<br><span class="text-ink-3">{{ site.intro_video_duration }}</span></span>
+      </a>
+      {% endif %}
+    </figure>
+    {% endif %}
+  </div>
+  <div class="flex flex-col gap-4 order-1 lg:order-2">
+    {% if site.available_for_work %}<span class="eyebrow w-fit"><span class="dot"></span>{{ hero.eyebrow|default:_("Imkoniyatlarga ochiqman") }}</span>{% endif %}
+    <h1 class="text-5xl sm:text-6xl font-semibold">{{ hero.title|default:_("Men haqimda") }}</h1>
+    <p class="text-lg text-ink-2 max-w-[52ch]">{{ site.owner_bio }}</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+      <div class="panel !p-4"><i data-lucide="coffee" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ site.years_experience }}+</div><div class="stat-label">{% trans "Yillik tajriba" %}</div></div>
+      <div class="panel !p-4"><i data-lucide="file-check-2" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ projects_count }}+</div><div class="stat-label">{% trans "Yakunlangan loyihalar" %}</div></div>
+      <div class="panel !p-4"><i data-lucide="users-round" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ site.people_impacted|default:"—" }}</div><div class="stat-label">{% trans "Foydalanuvchilar" %}</div></div>
+      <div class="panel !p-4"><i data-lucide="infinity" class="w-6 h-6 mb-3"></i><div class="stat-num">∞</div><div class="stat-label">{% trans "Qiziquvchanlik" %}</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="grid lg:grid-cols-[1.5fr_1fr] gap-4 mt-6">
+  <div class="panel grid sm:grid-cols-[1fr_200px] gap-5">
+    <div class="flex flex-col gap-3">
+      <h2 class="text-2xl font-semibold">{% trans "Mening hikoyam" %}</h2>
+      <div class="text-ink-2 leading-7">{{ site.owner_bio|linebreaks }}</div>
+      <div class="flex flex-wrap items-center gap-3 mt-auto pt-2">
+        {% if site.cv_file %}<a href="{{ site.cv_file.url }}" class="btn btn-light" download>{% trans "CV yuklab olish" %}<i data-lucide="download"></i></a>{% endif %}
+        <div class="flex gap-1">{% for s in socials %}<a href="{{ s.url }}" target="_blank" rel="noopener" class="grid place-items-center w-9 h-9 rounded-full text-ink-2 hover:text-ink hover:bg-ink/10" aria-label="{{ s.display_name }}">{% social_icon s.platform %}</a>{% endfor %}</div>
+      </div>
+    </div>
+    {% if interests %}<div class="relative rounded-2xl overflow-hidden min-h-[220px]"><img src="{% thumb interests.0.image 480 %}" alt="" class="absolute inset-0 w-full h-full object-cover"><span class="absolute left-4 bottom-4 text-xs tracking-[.25em] uppercase font-semibold">{% trans "Yangi joylarni kashf etish" %}</span></div>{% endif %}
+  </div>
+  <div class="panel">
+    <h2 class="text-2xl font-semibold mb-4">{% trans "Hozir" %}</h2>
+    <ul class="flex flex-col divide-y divide-ink/10">
+      {% for s in statuses %}
+        <li class="grid grid-cols-[auto_1fr_1.3fr] items-center gap-3 py-2.5 text-sm">{% include "partials/status_dot.html" with color=s.color %}<span class="font-medium">{{ s.label }}</span><span class="text-ink-3">{{ s.value }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="grid lg:grid-cols-[1.5fr_1fr] gap-4 mt-4">
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Ko'nikmalar" %}</h2><a href="{% url 'portfolio:skills' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {% for cat in skill_categories %}
+        <div class="glass glass--sm p-4">
+          <h3 class="text-base font-semibold mb-3">{{ cat.name }}</h3>
+          <ul class="flex flex-col gap-2 text-sm text-ink-2">
+            {% for sk in cat.skills.all|slice:":5" %}<li class="flex items-center gap-2">{% if sk.icon_url %}<img src="{{ sk.icon_url }}" alt="" class="w-4 h-4" loading="lazy">{% endif %}{{ sk.name }}</li>{% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Qiziqishlar" %}</h2></div>
+    <div class="grid grid-cols-3 gap-2">
+      {% for it in interests %}
+        <div class="relative aspect-[4/3] rounded-xl overflow-hidden"><img src="{% thumb it.image 480 %}" alt="" class="w-full h-full object-cover" loading="lazy"><span class="absolute left-2 bottom-1.5 text-xs font-semibold drop-shadow">{{ it.title }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if journey %}
+<section id="journey" class="panel mt-4 scroll-mt-24">
+  <div class="panel-title"><h2>{% trans "Mening yo'lim" %}</h2><a href="{% url 'portfolio:experience_list' %}" class="btn btn-glass btn-sm">{% trans "To'liq vaqt chizig'i" %}</a></div>
+  <ol class="relative grid grid-flow-col auto-cols-[minmax(120px,1fr)] gap-4 overflow-x-auto pb-2 pt-3">
+    <span class="absolute left-2 right-2 top-[18px] h-px bg-ink/25" aria-hidden="true"></span>
+    {% for step in journey %}
+      <li class="relative pt-6"><span class="absolute top-0 left-0 w-3.5 h-3.5 rounded-full bg-ink shadow-[0_0_0_4px_rgba(255,255,255,.12),0_0_14px_rgba(255,255,255,.7)]"></span><div class="font-display font-semibold tabular">{{ step.year }}</div><div class="text-sm text-ink-2">{{ step.title }}</div></li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+{% endblock %}

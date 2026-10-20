@@ -1,0 +1,19 @@
+{% if track.audio %}{% load i18n wcd %}
+{% tracks_json tracks_queue|default_if_none:"" "home-tracks" %}
+<div class="glass flex items-center gap-4 p-4 relative overflow-hidden" x-data>
+  <span class="absolute -left-10 -top-10 w-40 h-40 rounded-full blur-3xl opacity-40 bg-accent-strong transition" :class="$store.player.playing && 'opacity-70'" aria-hidden="true"></span>
+  {% if track.cover %}<img src="{% thumb track.cover 240 %}" alt="" class="relative w-16 h-16 rounded-xl object-cover shrink-0">{% else %}<span class="icon-tile w-16 h-16"><i data-lucide="music"></i></span>{% endif %}
+  <div class="relative min-w-0 flex-1">
+    <div class="text-[11px] text-ink-3 flex items-center gap-1.5"><span x-show="$store.player.playing" x-cloak class="flex items-end gap-[2px] h-3"><i class="eq-bar !bg-accent"></i><i class="eq-bar !bg-accent [animation-delay:.2s]"></i><i class="eq-bar !bg-accent [animation-delay:.1s]"></i></span>{% trans "Hozir tinglayapman" %}</div>
+    <div class="font-semibold truncate" x-text="$store.player.track ? $store.player.track.title : '{{ track.title|escapejs }}'">{{ track.title }}</div>
+    <div class="text-xs text-ink-3 truncate" x-text="$store.player.track ? $store.player.track.artist : '{{ track.artist|escapejs }}'">{{ track.artist }}</div>
+    <div class="mt-2 h-1 rounded-full bg-ink/15 overflow-hidden cursor-pointer" @click="$store.player.track && $store.player.seekTo($event)"><div class="h-full bg-gradient-to-r from-accent-strong to-accent rounded-full" :style="`width:${$store.player.pct}%`"></div></div>
+  </div>
+  <div class="relative flex items-center gap-1">
+    <button type="button" class="btn-icon w-11 h-11" @click="$store.player.track ? $store.player.toggle() : $store.player.playFrom('home-tracks', {{ track.pk }})" :aria-label="$store.player.playing ? '{% trans "Pauza" %}' : '{% trans "Ijro etish" %}'">
+      <span x-show="!$store.player.playing"><i data-lucide="play" class="fill-current"></i></span><span x-show="$store.player.playing" x-cloak><i data-lucide="pause"></i></span>
+    </button>
+    <button type="button" class="btn-icon w-9 h-9 hidden sm:grid" @click="$store.player.track ? $store.player.next() : $store.player.playFrom('home-tracks')" aria-label="{% trans 'Keyingi' %}"><i data-lucide="skip-forward" class="w-4 h-4"></i></button>
+  </div>
+</div>
+{% endif %}

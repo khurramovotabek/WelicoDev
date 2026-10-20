@@ -1,0 +1,127 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd humanize %}
+{% block dash %}
+<section class="grid lg:grid-cols-[1fr_auto_auto] gap-4 items-center">
+  <div>
+    <p class="text-ink-2">{% trans "Xush kelibsiz," %}</p>
+    <h1 class="text-4xl font-semibold">{{ user.first_name|default:user.username }} 👋</h1>
+    <p class="text-sm text-ink-2 mt-1">{% trans "Platformangizda bugun nimalar bo'layotgani." %}</p>
+  </div>
+  <div class="glass glass--sm px-5 py-3 text-sm hidden md:block"><div class="font-display">“Build. Improve. Grow.”</div><div class="text-xs text-ink-3">{% trans "Har kuni bir qadam." %}</div></div>
+  <div class="glass glass--sm flex items-center gap-4 px-5 py-3"><div><div class="text-sm">{% now "l" %}</div><div class="text-lg font-semibold tabular">{% now "M j, Y" %}</div></div><span class="icon-tile bg-accent-strong/30"><i data-lucide="calendar-days"></i></span></div>
+</section>
+
+<section class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+  <a href="{% url 'dashboard:users' %}" class="glass glass--hover flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="kpi-icon bg-gradient-to-br from-accent-strong to-accent-strong/60 text-white shadow-[0_10px_30px_-8px_rgb(var(--accent-strong))]"><i data-lucide="users"></i></span>
+    <div class="min-w-0"><div class="text-sm text-ink-2">{% trans "Foydalanuvchilar" %}</div><div class="flex items-baseline gap-2"><span class="stat-num">{{ kpi_users.total|intcomma }}</span><span class="text-xs font-semibold {% if kpi_users.change >= 0 %}text-ok{% else %}text-danger{% endif %}">{% if kpi_users.change >= 0 %}↑{% else %}↓{% endif %} {{ kpi_users.change|stringformat:"d"|cut:"-" }}%</span></div><div class="text-xs text-ink-3">+{{ kpi_users.month }} {% trans "shu oyda" %}</div></div>
+  </a>
+  <a href="{% url 'dashboard:projects' %}" class="glass glass--hover flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="kpi-icon bg-sky-950/60 border border-accent/30 text-accent"><i data-lucide="folder"></i></span>
+    <div><div class="text-sm text-ink-2">{% trans "Loyihalar" %}</div><div class="flex items-baseline gap-2"><span class="stat-num">{{ kpi_projects.total }}</span><span class="text-xs font-semibold {% if kpi_projects.change >= 0 %}text-ok{% else %}text-danger{% endif %}">{% if kpi_projects.change >= 0 %}↑{% else %}↓{% endif %} {{ kpi_projects.change|stringformat:"d"|cut:"-" }}%</span></div><div class="text-xs text-ink-3">+{{ kpi_projects.month }} {% trans "shu oyda" %}</div></div>
+  </a>
+  <a href="{% url 'dashboard:articles' %}" class="glass glass--hover flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="kpi-icon bg-sky-950/60 border border-accent/30 text-accent"><i data-lucide="file-text"></i></span>
+    <div><div class="text-sm text-ink-2">{% trans "Maqolalar" %}</div><div class="flex items-baseline gap-2"><span class="stat-num">{{ kpi_articles.total }}</span><span class="text-xs font-semibold {% if kpi_articles.change >= 0 %}text-ok{% else %}text-danger{% endif %}">{% if kpi_articles.change >= 0 %}↑{% else %}↓{% endif %} {{ kpi_articles.change|stringformat:"d"|cut:"-" }}%</span></div><div class="text-xs text-ink-3">+{{ kpi_articles.month }} {% trans "shu oyda" %}</div></div>
+  </a>
+  <a href="{% url 'dashboard:courses' %}" class="glass glass--hover flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="kpi-icon bg-sky-950/60 border border-accent/30 text-accent"><i data-lucide="graduation-cap"></i></span>
+    <div><div class="text-sm text-ink-2">{% trans "O'quvchilar" %}</div><div class="flex items-baseline gap-2"><span class="stat-num">{{ kpi_students.total }}</span><span class="text-xs font-semibold {% if kpi_students.change >= 0 %}text-ok{% else %}text-danger{% endif %}">{% if kpi_students.change >= 0 %}↑{% else %}↓{% endif %} {{ kpi_students.change|stringformat:"d"|cut:"-" }}%</span></div><div class="text-xs text-ink-3">{{ kpi_reviews.total }} {% trans "sharh" %}</div></div>
+  </a>
+</section>
+
+<section class="grid xl:grid-cols-[1.7fr_1fr] gap-4">
+  <div class="panel">
+    <div class="flex flex-wrap items-start gap-3 mb-4">
+      <div class="mr-auto"><h2 class="text-xl font-semibold">{% trans "Platforma ko'rinishi" %}</h2><p class="text-xs text-ink-3">{% trans "Tashriflar, yangi foydalanuvchilar va izohlar" %}</p></div>
+      <div class="tabs">{% for d in "7,30,90"|split %}<a href="?days={{ d }}" class="tab !normal-case {% if days|stringformat:'s' == d %}is-active{% endif %}">{{ d }} {% trans "kun" %}</a>{% endfor %}</div>
+    </div>
+    <div class="relative h-[280px]"><canvas id="overview-chart" aria-label="Platform overview" role="img"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="flex items-start justify-between mb-2"><div><h2 class="text-xl font-semibold">{% trans "Foydalanuvchilar" %}</h2><p class="text-xs text-ink-3">{% trans "tanlangan til bo'yicha" %}</p></div><a href="{% url 'dashboard:users' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}<i data-lucide="chevron-right"></i></a></div>
+    <div class="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row items-center gap-6 mt-4">
+      <div class="relative w-44 h-44 shrink-0">{% include "partials/donut.html" with segments=lang_donut stroke=4.5 %}<div class="absolute inset-0 grid place-items-center text-center"><div><div class="font-display text-3xl font-semibold tabular">{{ lang_total|compact }}</div><div class="text-xs text-ink-3">{% trans "Foydalanuvchi" %}</div></div></div></div>
+      <ul class="flex-1 w-full flex flex-col gap-3 text-sm">{% for s in lang_donut %}<li class="flex items-center gap-3"><span class="w-3 h-3 rounded-full" style="background:{{ s.color }}"></span>{{ s.label }}<span class="ml-auto tabular text-ink-2">{{ s.pct }}%</span></li>{% endfor %}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="grid lg:grid-cols-2 xl:grid-cols-[1fr_1.1fr_0.9fr] gap-4">
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Yangi foydalanuvchilar" %}</h2><a href="{% url 'dashboard:users' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}<i data-lucide="arrow-right"></i></a></div>
+    <ul class="flex flex-col gap-3">
+      {% for u in recent_users %}
+        <li><a href="{% url 'dashboard:users' %}?user={{ u.pk }}" class="flex items-center gap-3 rounded-xl hover:bg-ink/5 -mx-2 px-2 py-1">{% include "partials/avatar.html" with u=u %}<div class="min-w-0 flex-1 text-sm"><div class="font-semibold truncate">{{ u.display_name }}</div><div class="text-xs text-ink-3 truncate">{{ u.phone|default:u.telegram_username }}</div></div><span class="text-[11px] text-ink-3 whitespace-nowrap">{{ u.date_joined|naturaltime }}</span>{% if u.is_registered %}<span class="badge badge-info">{% trans "Faol" %}</span>{% else %}<span class="badge badge-ok">{% trans "Yangi" %}</span>{% endif %}</a></li>
+      {% empty %}<li class="text-sm text-ink-3 py-6 text-center">{% trans "Hali foydalanuvchi yo'q. Bot ulanishi bilan shu yerda paydo bo'ladi." %}</li>{% endfor %}
+    </ul>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "So'nggi faollik" %}</h2></div>
+    <ul class="flex flex-col gap-3">
+      {% for when, icon, color, title, text in activity %}
+        <li class="flex items-center gap-3 text-sm"><span class="icon-tile {% if color == 'info' %}bg-accent-strong/30 text-accent{% elif color == 'violet' %}bg-violet/20 text-violet{% elif color == 'warn' %}bg-warn/20 text-warn{% else %}bg-ok/20 text-ok{% endif %}"><i data-lucide="{{ icon }}"></i></span><div class="min-w-0 flex-1"><div class="font-semibold">{{ title }}</div><div class="text-xs text-ink-3 truncate">{{ text }}</div></div><span class="text-[11px] text-ink-3 whitespace-nowrap">{{ when|naturaltime }}</span></li>
+      {% empty %}<li class="text-sm text-ink-3 py-6 text-center">{% trans "Hali faollik yo'q" %}</li>{% endfor %}
+    </ul>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><h2>{% trans "Tezkor amallar" %}</h2></div>
+    <div class="flex flex-col gap-2">
+      <a href="{% url 'dashboard:article_add' %}" class="glass glass--sm glass--hover flex items-center gap-3 p-3 text-sm"><span class="icon-tile w-9 h-9"><i data-lucide="file-plus"></i></span>{% trans "Maqola qo'shish" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto"></i></a>
+      <a href="{% url 'dashboard:project_add' %}" class="glass glass--sm glass--hover flex items-center gap-3 p-3 text-sm"><span class="icon-tile w-9 h-9"><i data-lucide="folder-plus"></i></span>{% trans "Loyiha yaratish" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto"></i></a>
+      <a href="{% url 'admin:education_lesson_add' %}" class="glass glass--sm glass--hover flex items-center gap-3 p-3 text-sm"><span class="icon-tile w-9 h-9"><i data-lucide="video"></i></span>{% trans "Video dars qo'shish" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto"></i></a>
+      <a href="{% url 'dashboard:broadcast_add' %}" class="glass glass--sm glass--hover flex items-center gap-3 p-3 text-sm"><span class="icon-tile w-9 h-9"><i data-lucide="megaphone"></i></span>{% trans "Bot orqali xabar" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto"></i></a>
+      <a href="{% url 'dashboard:settings' %}" class="glass glass--sm glass--hover flex items-center gap-3 p-3 text-sm"><span class="icon-tile w-9 h-9"><i data-lucide="settings"></i></span>{% trans "Sayt sozlamalari" %}<i data-lucide="chevron-right" class="w-4 h-4 ml-auto"></i></a>
+    </div>
+  </div>
+</section>
+
+<section class="grid md:grid-cols-3 gap-4">
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="grid place-items-center w-12 h-12 rounded-full {% if system.ok %}bg-ok/15 text-ok{% else %}bg-danger/15 text-danger{% endif %}"><i data-lucide="{% if system.ok %}sparkle{% else %}triangle-alert{% endif %}"></i></span>
+    <div class="flex-1"><div class="text-sm font-semibold">{% trans "Tizim holati" %}</div><div class="text-sm {% if system.ok %}text-ok{% else %}text-danger{% endif %}">{% if system.ok %}{% trans "Hammasi ishlayapti" %}{% else %}{% trans "Muammo bor" %}{% endif %}</div><div class="flex gap-3 text-[11px] text-ink-3 mt-1"><span>DB {{ system.db|yesno:"✓,✗" }}</span><span>Redis {{ system.redis|yesno:"✓,✗" }}</span><span>Bot {{ system.bot|yesno:"✓,—" }}</span></div></div>
+    <i data-lucide="activity" class="w-8 h-8 text-ok"></i>
+  </div>
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="icon-tile w-12 h-12"><i data-lucide="hard-drive"></i></span>
+    <div class="flex-1"><div class="text-sm text-ink-2">{% trans "Disk" %}</div><div class="text-2xl font-semibold tabular">{{ storage.pct }}% <span class="text-sm font-normal text-ink-3">{% trans "band" %}</span></div><div class="text-[11px] text-ink-3">{{ storage.used|filesizeformat }} / {{ storage.total|filesizeformat }}</div><div class="h-1.5 rounded-full bg-ink/15 mt-2"><div class="h-full rounded-full bg-accent-strong" style="width:{{ storage.pct }}%"></div></div></div>
+  </div>
+  <div class="glass flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-5">
+    <span class="kpi-icon w-12 h-12 bg-accent-strong text-white"><i data-lucide="users"></i></span>
+    <div class="flex-1"><div class="text-sm text-ink-2">{% trans "Faol sessiyalar" %}</div><div class="text-2xl font-semibold tabular">{{ sessions }}</div><div class="text-[11px] text-ink-3">{% trans "Bugun" %}: {{ today_views }} {% trans "ko'rish" %}</div></div>
+    <div class="flex items-end gap-1 h-10" aria-hidden="true">{% for h in "4,7,5,9,6,10,8,12,9"|split %}<span class="w-1.5 rounded-full bg-ok/80" style="height:{{ h }}0%"></span>{% endfor %}</div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_end %}
+{{ chart|json_script:"overview-data" }}
+{% trans "Ko'rishlar" as lbl_views %}{% trans "Yangi foydalanuvchilar" as lbl_users %}{% trans "Izohlar" as lbl_comments %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const data = JSON.parse(document.getElementById("overview-data").textContent);
+    const css = (v, a = 1) => `rgb(${getComputedStyle(document.documentElement).getPropertyValue(v).trim()} / ${a})`;
+    const ctx = document.getElementById("overview-chart");
+    const grad = (c, v) => { const g = c.chart.ctx.createLinearGradient(0, 0, 0, 280); g.addColorStop(0, css(v, .35)); g.addColorStop(1, css(v, 0)); return g; };
+    const accent = css("--accent"), violet = css("--violet"), ok = css("--ok"), ink3 = css("--ink-3");
+    Chart.defaults.color = ink3;
+    Chart.defaults.font.family = "'Plus Jakarta Sans', system-ui, sans-serif";
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: data.labels,
+        datasets: [
+          { label: "{{ lbl_views|escapejs }}", data: data.views, borderColor: accent, backgroundColor: (c) => grad(c, "--accent"), fill: true, tension: .4, pointRadius: 0, borderWidth: 2.5 },
+          { label: "{{ lbl_users|escapejs }}", data: data.users, borderColor: violet, backgroundColor: (c) => grad(c, "--violet"), fill: true, tension: .4, pointRadius: 0, borderWidth: 2 },
+          { label: "{{ lbl_comments|escapejs }}", data: data.comments, borderColor: ok, backgroundColor: (c) => grad(c, "--ok"), fill: true, tension: .4, pointRadius: 0, borderWidth: 2 },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
+        plugins: { legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } }, tooltip: { backgroundColor: "rgba(10,20,50,.9)", borderColor: "rgba(120,160,255,.3)", borderWidth: 1, padding: 12 } },
+        scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { beginAtZero: true, grid: { color: "rgba(140,160,210,.1)" }, ticks: { precision: 0 } } },
+      },
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{{ video.title }}{% endblock %}
+{% block og_image %}<meta property="og:image" content="{{ SITE_URL }}{{ video.thumbnail.url }}">{% endblock %}
+{% block content %}
+<a href="{% url 'gallery:index' %}#videos" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Videolarga qaytish" %}</a>
+<section class="grid lg:grid-cols-[1fr_320px] gap-4 mt-3">
+  <div class="flex flex-col gap-4 min-w-0">
+    <div class="glass p-2.5">
+      {% if video.file %}<video src="{{ video.file.url }}" controls preload="metadata" poster="{{ video.thumbnail.url }}" class="w-full rounded-2xl aspect-video bg-black"></video>
+      {% elif video.youtube_id %}
+        <div class="relative rounded-2xl overflow-hidden aspect-video bg-black" x-data="{ play: false }">
+          <template x-if="play"><iframe class="absolute inset-0 w-full h-full" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/{{ video.youtube_id }}?autoplay=1&rel=0" title="{{ video.title }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></template>
+          <button x-show="!play" @click="play = true" class="absolute inset-0 w-full h-full group" aria-label="Play"><img src="{% thumb video.thumbnail 320 %}" alt="" class="w-full h-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="btn-icon w-16 h-16 group-hover:scale-110 transition"><i data-lucide="play" class="w-6 h-6 fill-current"></i></span></span></button>
+        </div>
+      {% endif %}
+    </div>
+    <div class="panel">
+      <div class="flex flex-wrap items-start gap-3">
+        <div class="mr-auto"><h1 class="text-2xl sm:text-3xl font-semibold">{{ video.title }}</h1><p class="text-xs text-ink-3 mt-1">{{ video.category.name }} · {{ video.recorded_at|date:"M d, Y" }} · {{ video.views_count|compact }} {% trans "ko'rish" %}</p></div>
+        {% if "like" in reactions %}{% include "interactions/partials/reaction_button.html" with obj=video kind="video" reaction="like" active=True count=likes %}{% else %}{% include "interactions/partials/reaction_button.html" with obj=video kind="video" reaction="like" active=False count=likes %}{% endif %}
+        <a href="{% url 'core:share' 'video' video.slug %}" class="btn btn-glass btn-sm"><i data-lucide="share"></i>{% trans "Ulashish" %}</a>
+      </div>
+      {% if video.description %}<p class="text-sm text-ink-2 mt-3 whitespace-pre-line">{{ video.description }}</p>{% endif %}
+    </div>
+    <section id="comments" class="panel" hx-get="{% url 'interactions:comments' 'video' video.pk %}" hx-trigger="revealed" hx-swap="innerHTML"><div class="h-24 grid place-items-center text-ink-3 text-sm">…</div></section>
+  </div>
+  <aside class="panel h-fit">
+    <h2 class="text-lg font-semibold mb-3">{% trans "Boshqa videolar" %}</h2>
+    <div class="flex flex-col gap-3">{% for r in related %}<a href="{{ r.get_absolute_url }}" class="flex gap-3 group"><span class="relative w-32 shrink-0 rounded-lg overflow-hidden"><img src="{% thumb r.thumbnail 320 %}" alt="" class="w-full aspect-video object-cover" loading="lazy"><span class="absolute right-1 bottom-1 text-[10px] px-1 rounded bg-black/60 tabular">{{ r.duration }}</span></span><span class="text-sm"><span class="font-medium line-clamp-2 group-hover:underline">{{ r.title }}</span><span class="text-[11px] text-ink-3">{{ r.views_count|compact }} {% trans "ko'rish" %}</span></span></a>{% endfor %}</div>
+  </aside>
+</section>
+{% endblock %}

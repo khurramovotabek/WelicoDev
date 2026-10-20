@@ -1,0 +1,5 @@
+/home/welicodev/Backend/Cloud/portfolio/designs/blog-detail.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/blog.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/contact.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/dash-projects.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/dashboard\.jpg

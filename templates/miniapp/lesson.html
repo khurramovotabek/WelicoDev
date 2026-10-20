@@ -1,0 +1,60 @@
+{% load i18n wcd %}
+{% if video_src or youtube_id or lesson.video_url %}
+<section class="-mx-4 sm:mx-0" x-data="tmaPlayer({ heartbeat: '{% url 'miniapp:heartbeat' course.slug lesson.slug %}', start: {{ progress.last_position|default:0 }}, done: {{ progress.video_completed|yesno:'true,false' }} })">
+  {% if video_src %}
+    <video x-ref="video" src="{{ video_src }}" controls controlslist="nodownload" playsinline preload="metadata" {% if lesson.thumbnail %}poster="{{ lesson.thumbnail.url }}"{% endif %} class="w-full aspect-video bg-black sm:rounded-2xl"></video>
+    <div class="flex items-center justify-between px-4 sm:px-1 pt-2 text-xs">
+      <span class="text-ink-2" x-show="!done">{% trans "Ko'rilgan" %}: <b class="tabular" x-text="pct + '%'">0%</b></span>
+      <span class="text-ok flex items-center gap-1" x-show="done" {% if not progress.video_completed %}x-cloak{% endif %}><i data-lucide="circle-check" class="w-3.5 h-3.5"></i>{% trans "Video ko'rildi" %}</span>
+      <span class="text-ink-3 tabular">{{ lesson.duration_label }}</span>
+    </div>
+  {% elif youtube_id %}
+    <div class="relative aspect-video bg-black sm:rounded-2xl overflow-hidden"><iframe class="absolute inset-0 w-full h-full" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1&playsinline=1" title="{{ lesson.title }}" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+    <div class="px-4 sm:px-0 pt-3">
+      {% if progress.video_completed %}<span class="text-ok text-sm flex items-center gap-1.5"><i data-lucide="circle-check" class="w-4 h-4"></i>{% trans "Video ko'rildi" %}</span>
+      {% else %}<button class="btn btn-glass w-full" hx-post="{% url 'miniapp:watched' course.slug lesson.slug %}" hx-target="#view"><i data-lucide="check"></i>{% trans "Videoni ko'rdim" %}</button>{% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if not video_src and not youtube_id and not lesson.video_url %}<div class="glass glass--sm p-4 flex items-center gap-3"><i data-lucide="clapperboard" class="w-6 h-6 text-accent"></i><div class="text-sm"><div class="font-semibold">{% trans "Video tez orada" %}</div><div class="text-xs text-ink-3">{% trans "Hozircha konspekt va uyga vazifa bilan o'rganing." %}</div></div></div>{% endif %}
+<section class="glass glass--sm p-4">
+  <span class="chip !text-[10px] uppercase tracking-wider">{{ lesson.order }}-{% trans "dars" %}{% if lesson.module %} · {{ lesson.module.title }}{% endif %}</span>
+  <h2 class="text-xl font-semibold mt-2 leading-snug">{{ lesson.title }}</h2>
+  {% if lesson.summary %}<p class="text-sm text-ink-2 mt-1">{{ lesson.summary }}</p>{% endif %}
+  {% if lesson.content %}<div class="richtext mt-4">{{ lesson.content|safe }}</div>{% endif %}
+</section>
+
+{% with resources=lesson.resources.all %}{% if resources %}
+<section class="flex flex-col gap-2">
+  <h3 class="tma-section-title">{% trans "Havolalar va materiallar" %}</h3>
+  <div class="glass glass--sm p-1.5">{% for r in resources %}<a href="#" data-external="{% if r.file %}{{ SITE_URL }}{% url 'education:resource_download' r.pk %}{% else %}{{ r.url }}{% endif %}" class="tma-list-item"><span class="icon-tile w-9 h-9"><i data-lucide="{% if r.kind == 'file' %}file-down{% elif r.kind == 'docs' %}book-open{% else %}external-link{% endif %}"></i></span><div class="min-w-0 flex-1 text-sm"><div class="font-medium truncate">{{ r.title }}</div><div class="text-[11px] text-ink-3 truncate">{{ r.url }}</div></div></a>{% endfor %}</div>
+</section>
+{% endif %}{% endwith %}
+
+{% if lesson.homework_mode != "none" %}
+<section class="glass glass--sm p-4 flex flex-col gap-3">
+  <div class="flex items-center gap-2"><i data-lucide="clipboard-list" class="w-5 h-5"></i><h3 class="font-semibold mr-auto">{% trans "Uyga vazifa" %}</h3>{% if lesson.homework_mode == "approval" %}<span class="badge badge-warn">{% trans "Admin qabul qilishi kerak" %}</span>{% elif lesson.homework_mode == "submit" %}<span class="badge badge-info">{% trans "Topshirish majburiy" %}</span>{% endif %}</div>
+  {% if lesson.homework %}<div class="richtext">{{ lesson.homework|safe }}</div>{% endif %}
+  {% for s in submissions %}
+    <div class="glass glass--sm p-3 text-sm">{% if s.status == "approved" %}<span class="badge badge-ok">{{ s.get_status_display }}</span>{% elif s.status == "rejected" %}<span class="badge badge-danger">{{ s.get_status_display }}</span>{% else %}<span class="badge badge-warn">{{ s.get_status_display }}</span>{% endif %}{% if s.link %}<div class="text-accent break-all mt-1">{{ s.link }}</div>{% endif %}{% if s.feedback %}<p class="text-xs mt-1"><b>{% trans "Izoh" %}:</b> {{ s.feedback }}</p>{% endif %}</div>
+  {% endfor %}
+  {% if not homework_ok or lesson.homework_mode == "optional" or submissions.0.status == "rejected" %}
+    <form class="flex flex-col gap-2" hx-post="{% url 'miniapp:homework' course.slug lesson.slug %}" hx-target="#view" hx-encoding="multipart/form-data">
+      <input type="url" name="link" class="field" placeholder="https://github.com/username/repo" inputmode="url">
+      <textarea name="text" rows="3" class="field" placeholder="{% trans 'Javobingiz, izohlar yoki kod...' %}"></textarea>
+      <input type="file" name="file" class="field text-xs">
+      <button class="btn btn-primary"><i data-lucide="send"></i>{% trans "Topshirish" %}</button>
+    </form>
+  {% endif %}
+</section>
+{% endif %}
+
+<nav class="grid grid-cols-2 gap-3">
+  {% if prev_lesson %}<a href="#" data-go="{% url 'miniapp:lesson' course.slug prev_lesson.slug %}" class="tma-card flex items-center gap-2 text-sm"><i data-lucide="arrow-left" class="w-4 h-4 shrink-0"></i><span class="truncate">{{ prev_lesson.title }}</span></a>{% else %}<span></span>{% endif %}
+  {% if next_lesson %}
+    {% if next_unlocked %}<a href="#" data-go="{% url 'miniapp:lesson' course.slug next_lesson.slug %}" class="tma-card flex items-center justify-end gap-2 text-sm glow-accent"><span class="truncate">{{ next_lesson.title }}</span><i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i></a>
+    {% else %}<div class="tma-card flex items-center justify-end gap-2 text-sm opacity-60"><span class="truncate">{% trans "Keyingi dars yopiq" %}</span><i data-lucide="lock" class="w-4 h-4 shrink-0"></i></div>{% endif %}
+  {% endif %}
+</nav>

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load i18n wcd static %}
+{% block head %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
+{% block scripts %}<script defer src="{% static 'vendor/leaflet/leaflet.js' %}"></script><script defer src="{% static 'js/map.js' %}?v={{ ASSET_V }}"></script>{% endblock %}
+{% block title %}{% trans "Aloqa" %}{% endblock %}
+{% block jsonld %}{% if faq_jsonld %}{% ld faq_jsonld %}{% endif %}{% endblock %}
+{% block content %}
+<section class="grid lg:grid-cols-[1fr_auto_auto] gap-4 items-start pt-8 lg:pt-12 pb-6">
+  <div class="flex flex-col gap-3 animate-fade-up max-w-xl">
+    {% if hero.eyebrow %}<span class="eyebrow w-fit"><span class="dot"></span>{{ hero.eyebrow }}</span>{% endif %}
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-semibold">{% firstof hero.title "Contact" %}</h1>
+    {% if hero.subtitle %}<p class="text-xl text-ink">{{ hero.subtitle }}</p>{% endif %}
+    <p class="text-ink-2">{% firstof hero.description _("Yangi imkoniyatlar, qiziqarli loyihalar va hamkorlikka doimo ochiqman. Formani to'ldiring yoki quyidagi kanallardan foydalaning.") %}</p>
+  </div>
+  {% if hero.quote %}<figure class="quote-card lg:w-[230px]"><div class="mark">“</div><blockquote class="font-display text-lg leading-snug">{{ hero.quote }}</blockquote><div class="rule"></div></figure>{% endif %}
+  {% if site.available_for_work %}<div class="glass glass--sm flex items-center gap-2 px-4 py-3 text-sm lg:self-end"><span class="dot"></span>{% trans "Yangi imkoniyatlarga ochiqman" %}</div>{% endif %}
+</section>
+
+<section class="grid lg:grid-cols-[1.5fr_1fr] gap-4">
+  <div class="panel" id="contact-form-wrap">
+    <div class="flex items-center gap-3 mb-5"><span class="icon-tile"><i data-lucide="mail"></i></span><div><h2 class="text-xl font-semibold">{% trans "Xabar yuborish" %}</h2><p class="text-xs text-ink-3">{% trans "Formani to'ldiring, imkon qadar tez javob beraman." %}</p></div></div>
+    {% include "core/partials/contact_form.html" %}
+  </div>
+  <div class="flex flex-col gap-4">
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="user-round"></i></span><h2 class="text-lg font-semibold">{% trans "Aloqa ma'lumotlari" %}</h2></div>
+      <ul class="flex flex-col gap-2">
+        {% if site.email %}<li class="glass glass--sm flex items-center gap-3 p-3"><span class="icon-tile w-9 h-9"><i data-lucide="mail"></i></span><div class="flex-1 min-w-0 text-sm"><div class="font-medium">Email</div><div class="text-ink-3 truncate">{{ site.email }}</div></div><button type="button" class="btn btn-glass btn-sm" onclick="wcdCopy('{{ site.email|escapejs }}')"><i data-lucide="copy"></i>Copy</button></li>{% endif %}
+        {% if site.phone %}<li class="glass glass--sm flex items-center gap-3 p-3"><span class="icon-tile w-9 h-9"><i data-lucide="phone"></i></span><div class="flex-1 text-sm"><div class="font-medium">{% trans "Telefon" %}</div><div class="text-ink-3 tabular">{{ site.phone }}</div></div><button type="button" class="btn btn-glass btn-sm" onclick="wcdCopy('{{ site.phone|escapejs }}')"><i data-lucide="copy"></i>Copy</button></li>{% endif %}
+        <li class="glass glass--sm flex items-center gap-3 p-3"><span class="icon-tile w-9 h-9"><i data-lucide="map-pin"></i></span><div class="flex-1 text-sm"><div class="font-medium">{% trans "Manzil" %}</div><div class="text-ink-3">{{ site.location }}</div></div><button type="button" class="btn btn-glass btn-sm" onclick="wcdCopy('{{ site.location|escapejs }}')"><i data-lucide="copy"></i>Copy</button></li>
+        <li class="glass glass--sm flex items-center gap-3 p-3"><span class="icon-tile w-9 h-9"><i data-lucide="calendar-clock"></i></span><div class="flex-1 text-sm"><div class="font-medium">{% trans "Ish vaqti" %}</div><div class="text-ink-3">{{ site.working_hours }}</div></div><span class="chip">{{ site.timezone_label }}</span></li>
+      </ul>
+    </div>
+    {% if contact_socials %}
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="share-2"></i></span><div><h2 class="text-lg font-semibold">{% trans "Ijtimoiy tarmoqlar" %}</h2><p class="text-xs text-ink-3">{% trans "Meni boshqa platformalarda toping" %}</p></div></div>
+      <div class="grid grid-cols-4 gap-2">{% for s in contact_socials %}<a href="{{ s.url }}" target="_blank" rel="noopener" class="glass glass--sm glass--hover flex flex-col items-center gap-1.5 p-3 text-[11px]">{% social_icon s.platform "w-6 h-6" %}<span class="truncate max-w-full">{{ s.display_name }}</span></a>{% endfor %}</div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="grid lg:grid-cols-[1.5fr_1fr] gap-4 mt-4">
+  <div class="panel">
+    <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="map-pin"></i></span><div class="mr-auto"><h2 class="text-lg font-semibold">{% trans "Meni bu yerda toping" %}</h2><p class="text-xs text-ink-3">{{ site.location }}</p></div><a href="{% if site.map_url %}{{ site.map_url }}{% else %}https://www.google.com/maps?q={{ site.latitude|stringformat:'f' }},{{ site.longitude|stringformat:'f' }}{% endif %}" target="_blank" rel="noopener" class="btn btn-glass btn-sm">{% trans "Xaritada ochish" %}<i data-lucide="external-link"></i></a></div>
+    <div class="map-frame relative rounded-2xl overflow-hidden h-64 sm:h-72">
+      <div data-map data-lat="{{ site.latitude|stringformat:'f' }}" data-lng="{{ site.longitude|stringformat:'f' }}" data-zoom="{{ site.map_zoom }}" class="absolute inset-0" role="img" aria-label="{{ site.location }}"></div>
+    </div>
+    <div class="flex items-center gap-2 mt-3 text-xs text-ink-3" x-data="localClock('{{ site.timezone_name }}')"><i data-lucide="clock" class="w-3.5 h-3.5"></i>{% trans "Mahalliy vaqt" %}: <b class="tabular text-ink-2" x-text="time">--:--</b> · {{ site.timezone_label }}<a href="https://www.google.com/maps/dir/?api=1&destination={{ site.latitude|stringformat:'f' }},{{ site.longitude|stringformat:'f' }}" target="_blank" rel="noopener" class="ml-auto text-accent hover:underline flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i>{% trans "Yo'nalish" %}</a></div>
+  </div>
+  <div class="panel">
+    <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="zap"></i></span><h2 class="text-lg font-semibold">{% trans "Tez javob" %}</h2></div>
+    <div class="glass glass--sm p-4 flex items-start gap-4">
+      <div class="flex-1"><p class="text-sm text-ink-3">{% trans "Odatda javob beraman" %}</p><p class="font-display text-3xl font-semibold mt-1">{{ site.response_time }}</p><p class="text-sm text-ink-2 mt-2">{% trans "Shoshilinch masalalar uchun Telegram yoki telefon orqali yozing." %}</p></div>
+      <i data-lucide="clock" class="w-10 h-10 text-accent"></i>
+    </div>
+  </div>
+</section>
+
+<section class="grid lg:grid-cols-[1.2fr_1fr] gap-4 mt-4">
+  {% if faqs %}
+  <div class="panel">
+    <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="circle-help"></i></span><div><h2 class="text-lg font-semibold">{% trans "Ko'p beriladigan savollar" %}</h2><p class="text-xs text-ink-3">{% trans "Tez-tez so'raladigan savollarga javoblar" %}</p></div></div>
+    <div class="flex flex-col gap-2" x-data="{ open: null }">
+      {% for f in faqs %}
+        <div class="glass glass--sm">
+          <button type="button" class="w-full flex items-center justify-between gap-3 p-3.5 text-sm text-left font-medium" @click="open = open === {{ forloop.counter }} ? null : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">{{ f.question }}<span class="transition" :class="open === {{ forloop.counter }} && 'rotate-45'"><i data-lucide="plus" class="w-4 h-4"></i></span></button>
+          <div x-show="open === {{ forloop.counter }}" x-collapse x-cloak><p class="px-3.5 pb-3.5 text-sm text-ink-2">{{ f.answer }}</p></div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div class="panel relative overflow-hidden">
+    <span class="icon-tile"><i data-lucide="message-square"></i></span>
+    <h2 class="text-2xl font-semibold mt-4">{% trans "To'g'ridan-to'g'ri yozmoqchimisiz?" %}</h2>
+    <p class="text-ink-2 mt-2 max-w-[34ch]">{% trans "Ba'zan tezkor suhbat eng yaxshi boshlanish. Telegram orqali yozing." %}</p>
+    <a href="https://t.me/{{ bot_username }}" target="_blank" rel="noopener" class="btn btn-light mt-5">{% social_icon "telegram" "w-4 h-4" %}{% trans "Suhbatni boshlash" %}<i data-lucide="arrow-right"></i></a>
+    <div class="absolute -right-6 -bottom-6 w-40 h-40 rounded-[36px] rotate-12 grid place-items-center bg-gradient-to-br from-sky-400 to-accent-strong shadow-[0_20px_60px_-10px_rgb(var(--accent-strong))] opacity-90" aria-hidden="true">{% social_icon "telegram" "w-20 h-20 text-white" %}</div>
+  </div>
+</section>
+{% endblock %}

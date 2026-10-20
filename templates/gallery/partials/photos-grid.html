@@ -1,0 +1,10 @@
+{% load i18n wcd %}
+<div id="photos-grid" class="grid grid-flow-dense grid-cols-2 md:grid-cols-4 lg:grid-cols-6 auto-rows-[110px] sm:auto-rows-[120px] gap-2.5">
+  {% for p in photos %}
+    <a href="{{ p.get_absolute_url }}" class="relative rounded-xl overflow-hidden group {% if forloop.first %}col-span-2 row-span-2 md:col-span-2{% elif forloop.counter == 5 %}col-span-2 row-span-2{% endif %}">
+      <img src="{% thumb p.image 720 %}" alt="{{ p.title }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
+      {% if forloop.first or forloop.counter == 5 %}<span class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent text-sm"><span class="font-semibold block">{{ p.title }}</span><span class="text-xs text-ink-2">{{ p.location }}</span></span>{% endif %}
+    </a>
+  {% empty %}<p class="col-span-full text-center text-ink-3 py-10">{% trans "Hali foto yo'q" %}</p>{% endfor %}
+  {% if photos_more %}<a href="{% url 'gallery:photo_list' %}" class="glass glass--sm grid place-items-center text-center"><span><span class="font-display text-2xl font-semibold">+{{ photos_more }}</span><span class="block text-xs text-ink-3">{% trans "ko'proq foto" %}</span></span></a>{% endif %}
+</div>

@@ -1,0 +1,14 @@
+{% load i18n wcd %}
+<div class="tma-rail">
+  <button class="chip-btn !py-1.5 {% if not active %}is-active{% endif %}" hx-get="{% url 'miniapp:journal' %}" hx-target="#view">{% trans "Barchasi" %}</button>
+  {% for c in categories %}<button class="chip-btn !py-1.5 {% if active == c.slug %}is-active{% endif %}" hx-get="{% url 'miniapp:journal' %}?category={{ c.slug }}" hx-target="#view">{{ c.name }}</button>{% endfor %}
+</div>
+<div class="flex flex-col gap-3">
+  {% for a in items %}
+    {% if forloop.first and not active %}
+      <a href="#" data-go="{% url 'miniapp:article' a.slug %}" class="glass glass--sm overflow-hidden"><img src="{% thumb a.cover 640 %}" alt="" class="w-full aspect-[16/9] object-cover"><div class="p-4"><div class="text-[11px] text-ink-3">{{ a.category.name }} · {{ a.published_at|date:"d.m.Y" }}</div><h3 class="font-semibold text-lg leading-snug mt-1">{{ a.title }}</h3><p class="text-sm text-ink-2 line-clamp-2 mt-1">{{ a.excerpt }}</p></div></a>
+    {% else %}
+      <a href="#" data-go="{% url 'miniapp:article' a.slug %}" class="tma-card flex gap-3"><img src="{% thumb a.cover 640 %}" alt="" class="w-20 h-20 rounded-xl object-cover shrink-0" loading="lazy"><div class="min-w-0"><div class="text-[11px] text-ink-3">{{ a.category.name }} · {{ a.reading_minutes }} {% trans "daq" %}</div><h3 class="font-semibold leading-snug line-clamp-2 mt-0.5">{{ a.title }}</h3><p class="text-xs text-ink-3 line-clamp-1 mt-1">{{ a.excerpt }}</p></div></a>
+    {% endif %}
+  {% empty %}<div class="glass p-10 text-center text-ink-3">{% trans "Maqola topilmadi" %}</div>{% endfor %}
+</div>

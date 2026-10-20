@@ -1,0 +1,5 @@
+/home/welicodev/Backend/Cloud/portfolio/designs/media.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/projects-detail.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/projects.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/share.jpg
+/home/welicodev/Backend/Cloud/portfolio/designs/skills.jpg

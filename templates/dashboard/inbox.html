@@ -1,0 +1,73 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd humanize %}
+{% block dash_title %}{% trans "Xabarlar" %}{% endblock %}
+{% block dash %}
+{% trans "Xabarlar" as t %}{% trans "Bot orqali yozishmalar va saytdagi aloqa formasi." as st %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st %}
+<div class="flex gap-2">
+  <a href="?tab=bot" class="chip-btn {% if tab == 'bot' %}is-active{% endif %}">{% social_icon "telegram" "w-4 h-4" %}{% trans "Bot suhbatlari" %}</a>
+  <a href="?tab=site" class="chip-btn {% if tab == 'site' %}is-active{% endif %}"><i data-lucide="mail" class="w-4 h-4"></i>{% trans "Sayt formasi" %}</a>
+</div>
+{% if tab == "site" %}
+<section class="grid xl:grid-cols-[420px_1fr] gap-4">
+  <div class="glass p-2 flex flex-col gap-1 max-h-[70vh] overflow-y-auto">
+    {% for m in page %}
+      <a href="?tab=site&open={{ m.pk }}&page={{ page.number }}" class="flex gap-3 rounded-xl p-3 hover:bg-ink/10 {% if opened.pk == m.pk %}bg-accent-strong/15 ring-1 ring-accent/40{% endif %}">
+        <span class="w-2 h-2 rounded-full mt-2 shrink-0 {% if m.status == 'new' %}bg-danger{% else %}bg-transparent{% endif %}"></span>
+        <div class="min-w-0 flex-1 text-sm"><div class="flex justify-between gap-2"><span class="font-semibold truncate">{{ m.name }}</span><span class="text-[11px] text-ink-3 whitespace-nowrap">{{ m.created_at|naturaltime }}</span></div><div class="truncate">{{ m.subject|default:"—" }}</div><div class="text-xs text-ink-3 truncate">{{ m.message }}</div></div>
+      </a>
+    {% empty %}<p class="text-center text-ink-3 py-10 text-sm">{% trans "Xabar yo'q" %}</p>{% endfor %}
+    {% include "dashboard/partials/pagination.html" %}
+  </div>
+  <div class="glass p-5">
+    {% if opened %}
+      <div class="flex flex-wrap items-start gap-3">
+        <div class="mr-auto"><h2 class="text-xl font-semibold">{{ opened.subject|default:_("Mavzusiz") }}</h2><p class="text-sm text-ink-2">{{ opened.name }} · <a href="mailto:{{ opened.email }}" class="text-accent">{{ opened.email }}</a></p><p class="text-xs text-ink-3">{{ opened.created_at|date:"d.m.Y H:i" }} · IP {{ opened.ip_address|default:"—" }}</p></div>
+        <form method="post" action="{% url 'dashboard:contact_status' opened.pk %}" class="flex gap-2">{% csrf_token %}
+          <select name="status" class="field !w-auto !py-2" onchange="this.form.submit()">{% for v, l in opened.Status.choices %}<option value="{{ v }}" {% if opened.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+        </form>
+      </div>
+      <div class="glass glass--sm p-4 mt-4 whitespace-pre-line text-sm leading-6">{{ opened.message }}</div>
+      {% if opened.attachment %}<a href="{{ opened.attachment.url }}" target="_blank" class="chip chip-lg mt-3"><i data-lucide="paperclip" class="w-4 h-4"></i>{% trans "Ilova" %}</a>{% endif %}
+      <div class="flex flex-wrap gap-2 mt-4">
+        <a href="mailto:{{ opened.email }}?subject=Re: {{ opened.subject|urlencode }}" class="btn btn-primary"><i data-lucide="reply"></i>{% trans "Email orqali javob" %}</a>
+        {% if opened.user and opened.user.telegram_id %}<a href="?tab=bot&chat={{ opened.user.pk }}" class="btn btn-glass">{% social_icon "telegram" "w-4 h-4" %}{% trans "Telegramda yozish" %}</a>{% endif %}
+      </div>
+    {% else %}<div class="h-full grid place-items-center text-ink-3 text-sm py-20">{% trans "Xabarni tanlang" %}</div>{% endif %}
+  </div>
+</section>
+{% else %}
+<section class="grid xl:grid-cols-[360px_1fr] gap-4">
+  <div class="glass p-2 flex flex-col gap-1 max-h-[72vh] overflow-y-auto">
+    {% for u in threads %}
+      <a href="?tab=bot&chat={{ u.pk }}" class="flex items-center gap-3 rounded-xl p-2.5 hover:bg-ink/10 {% if chat_user.pk == u.pk %}bg-accent-strong/15 ring-1 ring-accent/40{% endif %}">
+        {% include "partials/avatar.html" with u=u size="w-10 h-10" %}
+        <div class="min-w-0 flex-1 text-sm"><div class="flex justify-between gap-2"><span class="font-semibold truncate">{{ u.display_name }}</span><span class="text-[11px] text-ink-3 whitespace-nowrap">{{ u.last|naturaltime }}</span></div><div class="text-xs text-ink-3 truncate">{{ u.phone }}</div></div>
+        {% if u.unread %}<span class="badge badge-danger">{{ u.unread }}</span>{% endif %}
+      </a>
+    {% empty %}<div class="text-center text-ink-3 py-12 text-sm px-4">{% social_icon "telegram" "w-8 h-8 mx-auto mb-2" %}{% trans "Botga yozilgan xabarlar shu yerda ko'rinadi." %}</div>{% endfor %}
+  </div>
+  <div class="glass flex flex-col min-h-[60vh]">
+    {% if chat_user %}
+      <div class="flex items-center gap-3 p-4 border-b border-ink/10">{% include "partials/avatar.html" with u=chat_user %}<div class="text-sm"><div class="font-semibold">{{ chat_user.display_name }}</div><div class="text-xs text-ink-3">{{ chat_user.phone }}{% if chat_user.telegram_username %} · @{{ chat_user.telegram_username }}{% endif %}</div></div><a href="{% url 'dashboard:users' %}?user={{ chat_user.pk }}" class="btn btn-glass btn-sm ml-auto">{% trans "Profil" %}</a></div>
+      <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-2 max-h-[55vh]" x-init="$el.scrollTop = $el.scrollHeight">
+        {% for m in chat %}
+          <div class="max-w-[75%] {% if m.direction == 'out' %}self-end{% endif %}">
+            <div class="rounded-2xl px-4 py-2.5 text-sm whitespace-pre-line {% if m.direction == 'out' %}bg-accent-strong text-white rounded-br-md{% else %}glass glass--sm rounded-bl-md{% endif %}">{{ m.text }}</div>
+            <div class="text-[10px] text-ink-3 mt-0.5 {% if m.direction == 'out' %}text-right{% endif %}">{{ m.created_at|date:"d.m H:i" }}{% if m.sent_by %} · {{ m.sent_by.first_name }}{% endif %}</div>
+          </div>
+        {% endfor %}
+      </div>
+      {% if chat_user.bot_blocked %}<p class="p-4 text-sm text-warn border-t border-ink/10">{% trans "Foydalanuvchi botni to'xtatgan — xabar yetib bormaydi." %}</p>
+      {% else %}
+      <form method="post" action="{% url 'dashboard:user_message' chat_user.pk %}" class="flex gap-2 p-3 border-t border-ink/10">{% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <textarea name="text" rows="1" required maxlength="4000" class="field !rounded-2xl" placeholder="{% trans 'Javob yozing...' %}" @keydown.enter.prevent.exact="$el.form.requestSubmit()"></textarea>
+        <button class="btn btn-primary !px-4" aria-label="Send"><i data-lucide="send-horizontal"></i></button>
+      </form>
+      {% endif %}
+    {% else %}<div class="flex-1 grid place-items-center text-ink-3 text-sm">{% trans "Suhbatni tanlang" %}</div>{% endif %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

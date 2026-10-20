@@ -1,0 +1,86 @@
+{% load i18n wcd %}{% get_current_language as LANG %}
+<header class="site-header sticky z-40 gutter pt-4 pb-3" style="top:env(safe-area-inset-top, 0px)" x-data="{ open: false }" @keydown.escape.window="open = false">
+  <div class="mx-auto max-w-site flex items-center gap-3">
+    <a href="{% url 'core:home' %}" class="glass glass--sm flex items-center gap-3 pl-2.5 pr-4 py-2 shrink-0" aria-label="{{ site.brand_name }}">
+      {% include "partials/logo_mark.html" with size=34 %}
+      <span class="leading-tight">
+        <span class="block font-display text-[15px] font-semibold tracking-[.18em] uppercase">{{ site.brand_name }}</span>
+        <span class="hidden sm:block text-[10px] tracking-[.16em] uppercase text-ink-3">{{ site.brand_tagline }}</span>
+      </span>
+    </a>
+
+    <nav class="hidden lg:flex glass glass--pill items-center gap-1 p-1.5 mx-auto" aria-label="{% trans 'Asosiy menyu' %}">
+      <a class="nav-link {% nav_active '/' %}" href="{% url 'core:home' %}">{% trans "Bosh sahifa" %}</a>
+      <a class="nav-link {% nav_active '/about' '/skills' %}" href="{% url 'portfolio:about' %}">{% trans "Men haqimda" %}</a>
+      <a class="nav-link {% nav_active '/projects' %}" href="{% url 'portfolio:project_list' %}">{% trans "Loyihalar" %}</a>
+      <a class="nav-link {% nav_active '/blog' %}" href="{% url 'blog:article_list' %}">Blog</a>
+      <a class="nav-link {% nav_active '/education' %}" href="{% url 'education:course_list' %}">Education</a>
+      <a class="nav-link {% nav_active '/media' %}" href="{% url 'gallery:index' %}">{% trans "Media" %}</a>
+      <a class="nav-link {% nav_active '/experience' %}" href="{% url 'portfolio:experience_list' %}">{% trans "Tajriba" %}</a>
+      <a class="nav-link {% nav_active '/contact' %}" href="{% url 'core:contact' %}">{% trans "Aloqa" %}</a>
+    </nav>
+
+    <div class="ml-auto lg:ml-0 flex items-center gap-2">
+      <div class="hidden sm:flex glass glass--pill items-center gap-1 p-1">
+        <a href="{% url 'core:search' %}" class="grid place-items-center w-9 h-9 rounded-full text-ink-2 hover:text-ink" aria-label="{% trans 'Qidiruv' %}"><i data-lucide="search" class="w-[17px] h-[17px]"></i></a>
+        <span class="w-px h-5 bg-ink/15"></span>
+        {% for code, name in LANGUAGES %}
+          <a href="{% lang_url code %}" hreflang="{{ code }}" title="{{ name }}"
+             class="grid place-items-center w-9 h-9 rounded-full text-[12px] font-semibold uppercase {% if code == LANG %}text-ink bg-ink/10{% else %}text-ink-3 hover:text-ink{% endif %}">{{ code }}</a>
+        {% endfor %}
+      </div>
+      <button type="button" class="btn-icon" onclick="wcdTheme.toggle()" aria-label="{% trans 'Mavzuni almashtirish' %}">
+        <i data-lucide="sun" class="only-dark"></i><i data-lucide="moon" class="only-light"></i>
+      </button>
+      {% if user.is_authenticated %}
+        <div class="relative" x-data="{ menu: false }" @click.outside="menu = false">
+          <button type="button" class="btn-icon overflow-hidden p-0" @click="menu = !menu" aria-label="{% trans 'Profil' %}">
+            {% if user.avatar %}<img src="{{ user.avatar.url }}" alt="" class="w-full h-full object-cover">{% else %}<span class="text-xs font-semibold">{{ user.initials }}</span>{% endif %}
+          </button>
+          <div x-cloak x-show="menu" x-transition class="absolute right-0 mt-2 w-56 glass glass--strong glass--sm p-2 text-sm">
+            <div class="px-3 py-2">
+              <div class="font-semibold">{{ user.display_name }}</div>
+              <div class="text-xs text-ink-3">{{ user.phone }}</div>
+            </div>
+            <div class="divider my-1"></div>
+            <a class="flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-ink/10" href="{% url 'accounts:profile' %}"><i data-lucide="user-round" class="w-4 h-4"></i>{% trans "Profilim" %}</a>
+            <a class="flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-ink/10" href="{% url 'education:my_courses' %}"><i data-lucide="graduation-cap" class="w-4 h-4"></i>{% trans "Kurslarim" %}</a>
+            {% if user.is_staff %}<a class="flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-ink/10" href="{% url 'dashboard:home' %}"><i data-lucide="layout-dashboard" class="w-4 h-4"></i>Dashboard</a>{% endif %}
+            <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+              <button class="w-full flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-ink/10 text-danger"><i data-lucide="log-out" class="w-4 h-4"></i>{% trans "Chiqish" %}</button>
+            </form>
+          </div>
+        </div>
+      {% else %}
+        <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-light hidden sm:inline-flex">{% social_icon "telegram" "w-4 h-4" %}{% trans "Kirish" %}</a>
+      {% endif %}
+      <button type="button" class="btn-icon lg:hidden" @click="open = true" aria-label="{% trans 'Menyu' %}"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+
+  {# Mobil menyu #}
+  <div x-cloak x-show="open" x-transition.opacity class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm lg:hidden" @click="open = false"></div>
+  <aside x-cloak x-show="open" x-transition:enter="transition duration-300" x-transition:enter-start="translate-x-full" x-transition:leave="transition duration-200" x-transition:leave-end="translate-x-full"
+         class="fixed top-0 right-0 bottom-0 z-50 w-[min(86vw,340px)] glass glass--strong rounded-r-none p-5 flex flex-col gap-1 lg:hidden"
+         style="padding-top:calc(20px + env(safe-area-inset-top, 0px)); padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px)); padding-right:max(20px, env(safe-area-inset-right, 0px))">
+    <div class="flex items-center justify-between mb-4">
+      <span class="font-display font-semibold tracking-[.18em] uppercase">{{ site.brand_name }}</span>
+      <button class="btn-icon" @click="open = false" aria-label="{% trans 'Yopish' %}"><i data-lucide="x"></i></button>
+    </div>
+    <a class="nav-link text-base {% nav_active '/' %}" href="{% url 'core:home' %}">{% trans "Bosh sahifa" %}</a>
+    <a class="nav-link text-base {% nav_active '/about' '/skills' %}" href="{% url 'portfolio:about' %}">{% trans "Men haqimda" %}</a>
+    <a class="nav-link text-base {% nav_active '/projects' %}" href="{% url 'portfolio:project_list' %}">{% trans "Loyihalar" %}</a>
+    <a class="nav-link text-base {% nav_active '/blog' %}" href="{% url 'blog:article_list' %}">Blog</a>
+    <a class="nav-link text-base {% nav_active '/education' %}" href="{% url 'education:course_list' %}">Education</a>
+    <a class="nav-link text-base {% nav_active '/media' %}" href="{% url 'gallery:index' %}">{% trans "Media" %}</a>
+    <a class="nav-link text-base {% nav_active '/experience' %}" href="{% url 'portfolio:experience_list' %}">{% trans "Tajriba" %}</a>
+    <a class="nav-link text-base {% nav_active '/skills' %}" href="{% url 'portfolio:skills' %}">{% trans "Ko'nikmalar" %}</a>
+    <a class="nav-link text-base {% nav_active '/contact' %}" href="{% url 'core:contact' %}">{% trans "Aloqa" %}</a>
+    <div class="mt-auto flex flex-col gap-3">
+      <div class="flex gap-2">
+        {% for code, name in LANGUAGES %}<a href="{% lang_url code %}" class="chip-btn flex-1 justify-center {% if code == LANG %}is-active{% endif %}">{{ code|upper }}</a>{% endfor %}
+      </div>
+      {% if not user.is_authenticated %}<a href="{% url 'accounts:login' %}" class="btn btn-light w-full">{% social_icon "telegram" "w-4 h-4" %}{% trans "Telegram orqali kirish" %}</a>{% endif %}
+    </div>
+  </aside>
+</header>

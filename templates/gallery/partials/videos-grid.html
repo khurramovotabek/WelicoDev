@@ -1,0 +1,14 @@
+{% load i18n wcd %}
+<div id="videos-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+  {% for v in videos %}
+    <a href="{{ v.get_absolute_url }}" class="media-card">
+      <span class="media-card__img block m-2 mb-0 rounded-xl"><img src="{% thumb v.thumbnail 480 %}" alt="" loading="lazy"><span class="absolute inset-0 grid place-items-center"><span class="btn-icon w-11 h-11"><i data-lucide="play" class="fill-current"></i></span></span>{% if v.duration %}<span class="absolute right-2 bottom-2 chip !bg-black/50 !text-[10px] tabular">{{ v.duration }}</span>{% endif %}</span>
+      <span class="p-3 flex flex-col gap-1">
+        <span class="font-semibold text-sm">{{ v.title }}</span>
+        <span class="text-[11px] text-ink-3">{{ v.category.name }} · {{ v.recorded_at|date:"M d, Y" }}</span>
+        <span class="flex items-center gap-3 text-[11px] text-ink-3 mt-1"><span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>{{ v.views_count|compact }}</span><span class="flex items-center gap-1"><i data-lucide="message-circle" class="w-3 h-3"></i>{{ v.comments_n }}</span><span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i>{{ v.likes_n }}</span></span>
+      </span>
+    </a>
+  {% empty %}<p class="col-span-full text-center text-ink-3 py-10">{% trans "Hali video yo'q" %}</p>{% endfor %}
+  {% if videos_more %}<a href="{% url 'gallery:video_list' %}" class="glass glass--sm grid place-items-center text-center min-h-[140px]"><span><span class="font-display text-2xl font-semibold">+{{ videos_more }}</span><span class="block text-xs text-ink-3">{% trans "ko'proq video" %}</span></span></a>{% endif %}
+</div>

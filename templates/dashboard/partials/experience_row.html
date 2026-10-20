@@ -1,0 +1,6 @@
+{% load i18n %}
+<li><a href="{% url 'dashboard:experience_edit' e.pk %}" class="glass glass--sm glass--hover p-3 flex items-center gap-3 {% if not e.is_published %}opacity-60{% endif %}">
+  {% if e.logo %}<img src="{{ e.logo.url }}" alt="" class="w-11 h-11 rounded-xl object-cover">{% else %}<span class="icon-tile w-11 h-11"><i data-lucide="{% if e.kind == 'education' %}graduation-cap{% else %}building-2{% endif %}"></i></span>{% endif %}
+  <div class="min-w-0 flex-1"><div class="font-semibold truncate">{{ e.company }}</div><div class="text-xs text-ink-3 truncate">{% if e.kind == 'education' %}{{ e.field_of_study|default:e.role }}{% else %}{{ e.role }}{% endif %}</div></div>
+  <div class="text-right text-xs"><div class="tabular">{{ e.start_date|date:"Y" }} – {% if e.is_current %}{% trans "hozir" %}{% else %}{{ e.end_date|date:"Y" }}{% endif %}</div>{% if e.is_current %}<span class="badge badge-ok mt-1">{% trans "Hozirgi" %}</span>{% else %}<span class="text-ink-3">{{ e.get_kind_display }}</span>{% endif %}</div>
+</a></li>

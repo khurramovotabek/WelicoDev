@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Videolar" %}{% endblock %}
+{% block content %}
+<section class="pt-8 pb-5"><a href="{% url 'gallery:index' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink"><i data-lucide="arrow-left" class="w-4 h-4"></i>Media</a><h1 class="text-5xl font-semibold mt-3">{% trans "Videolar" %}</h1></section>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-4"><a href="?" class="chip-btn {% if not active %}is-active{% endif %}">{% trans "Barchasi" %}</a>{% for c in categories %}<a href="?category={{ c.slug }}" class="chip-btn {% if active == c.slug %}is-active{% endif %}">{{ c.name }}</a>{% endfor %}</div>
+{% include "gallery/partials/videos-grid.html" %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load i18n wcd humanize %}
+{% if selected %}
+<div class="glass glass--strong p-5 flex flex-col gap-4 xl:sticky xl:top-4">
+  <div class="flex flex-col items-center text-center">
+    {% include "partials/avatar.html" with u=selected size="w-20 h-20 text-xl" %}
+    <h2 class="text-xl font-semibold mt-3">{{ selected.display_name }}</h2>
+    {% if selected.telegram_username %}<a href="https://t.me/{{ selected.telegram_username }}" target="_blank" rel="noopener" class="text-sm text-accent">@{{ selected.telegram_username }}</a>{% endif %}
+    <div class="flex gap-1.5 mt-2">{% if selected.is_registered %}<span class="badge badge-ok">{% trans "Ro'yxatdan o'tgan" %}</span>{% endif %}{% if selected.is_blocked %}<span class="badge badge-danger">{% trans "Bloklangan" %}</span>{% endif %}{% if selected.bot_blocked %}<span class="badge badge-warn">{% trans "Botni to'xtatgan" %}</span>{% endif %}</div>
+  </div>
+  <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+    <dt class="text-ink-3">{% trans "Telefon" %}</dt><dd class="tabular">{{ selected.phone|default:"—" }}</dd>
+    <dt class="text-ink-3">Telegram ID</dt><dd class="font-mono text-xs">{{ selected.telegram_id|default:"—" }}</dd>
+    <dt class="text-ink-3">{% trans "Til" %}</dt><dd class="uppercase">{{ selected.language }}</dd>
+    <dt class="text-ink-3">{% trans "Qo'shilgan" %}</dt><dd>{{ selected.date_joined|date:"d.m.Y H:i" }}</dd>
+    <dt class="text-ink-3">{% trans "Saytga kirgan" %}</dt><dd>{{ selected.last_login|naturaltime|default:"—" }}</dd>
+    <dt class="text-ink-3">{% trans "Botda" %}</dt><dd>{{ selected.last_bot_activity|naturaltime|default:"—" }}</dd>
+  </dl>
+  {% if selected_courses %}
+    <div><h3 class="text-sm font-semibold mb-2">{% trans "Kurslar" %}</h3>{% for e, pct in selected_courses %}<div class="text-sm mb-2"><div class="flex justify-between"><span class="truncate">{{ e.course.title }}</span><span class="tabular text-ink-3">{{ pct }}%</span></div><div class="h-1.5 rounded-full bg-ink/15 mt-1"><div class="h-full rounded-full bg-accent" style="width:{{ pct }}%"></div></div></div>{% endfor %}</div>
+  {% endif %}
+  {% if selected.telegram_id and not selected.bot_blocked %}
+    <form method="post" action="{% url 'dashboard:user_message' selected.pk %}" class="flex flex-col gap-2">{% csrf_token %}
+      <label class="text-sm font-semibold" for="msg-text">{% trans "Bot orqali xabar" %}</label>
+      <textarea id="msg-text" name="text" rows="3" required maxlength="4000" class="field" placeholder="{% trans 'Xabar matni' %}"></textarea>
+      <button class="btn btn-primary">{% social_icon "telegram" "w-4 h-4" %}{% trans "Yuborish" %}</button>
+    </form>
+  {% endif %}
+  <div class="grid grid-cols-2 gap-2">
+    <a href="{% url 'admin:accounts_user_change' selected.pk %}" class="btn btn-glass btn-sm"><i data-lucide="pencil"></i>{% trans "Tahrirlash" %}</a>
+    {% if not selected.is_superuser %}<form method="post" action="{% url 'dashboard:user_block' selected.pk %}">{% csrf_token %}<button class="btn {% if selected.is_blocked %}btn-glass{% else %}btn-danger{% endif %} btn-sm w-full"><i data-lucide="{% if selected.is_blocked %}unlock{% else %}ban{% endif %}"></i>{% if selected.is_blocked %}{% trans "Blokdan chiqarish" %}{% else %}{% trans "Bloklash" %}{% endif %}</button></form>{% endif %}
+  </div>
+</div>
+{% else %}
+<div class="glass p-8 text-center text-ink-3 text-sm"><i data-lucide="mouse-pointer-click" class="w-8 h-8 mx-auto mb-2"></i>{% trans "Batafsil ko'rish uchun foydalanuvchini tanlang" %}</div>
+{% endif %}

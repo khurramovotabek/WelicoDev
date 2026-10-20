@@ -1,0 +1,4 @@
+<svg viewBox="0 0 42 42" class="w-full h-full -rotate-90" aria-hidden="true">
+  <circle cx="21" cy="21" r="15.9155" fill="none" stroke="rgb(var(--ink) / .1)" stroke-width="{{ stroke|default:5 }}"></circle>
+  {% for s in segments %}{% if s.value %}<circle cx="21" cy="21" r="15.9155" fill="none" stroke="{{ s.color }}" stroke-width="{{ stroke|default:5 }}" stroke-dasharray="{{ s.dash }}" stroke-dashoffset="{{ s.offset }}"></circle>{% endif %}{% endfor %}
+</svg>

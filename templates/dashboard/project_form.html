@@ -1,0 +1,128 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% if project %}{% trans "Loyihani tahrirlash" %}{% else %}{% trans "Yangi loyiha" %}{% endif %}{% endblock %}
+{% block dash %}
+{% trans "Loyihalar" as parent %}{% url 'dashboard:projects' as parent_url %}
+{% if project %}{% trans "Loyihani tahrirlash" as t %}{% trans "Loyiha ma'lumotlari, media va sozlamalarini yangilang." as st %}{% else %}{% trans "Yangi loyiha qo'shish" as t %}{% trans "Ishingizni namoyish qiling. Quyidagi ma'lumotlarni to'ldiring." as st %}{% endif %}
+<div class="flex flex-wrap items-end gap-3">
+  <div class="flex-1">{% include "dashboard/partials/page_head.html" with title=t subtitle=st parent=parent parent_url=parent_url %}</div>
+  {% if project %}<a href="{{ project.get_absolute_url }}" target="_blank" class="btn btn-glass"><i data-lucide="eye"></i>{% trans "Saytda ko'rish" %}</a>{% endif %}
+</div>
+{% if form.non_field_errors %}<div class="glass glass--sm p-3 text-sm text-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_380px] gap-4 pb-28" x-data="projectForm()" @input="sync($event)">
+  {% csrf_token %}
+  <div class="flex flex-col gap-4 min-w-0">
+    <section class="panel flex flex-col gap-4">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="square-pen"></i></span><div class="mr-auto"><h2 class="text-lg font-semibold">{% trans "Loyiha ma'lumotlari" %}</h2><p class="text-xs text-ink-3">{% trans "Asosiy ma'lumotlar (har bir til uchun alohida)" %}</p></div></div>
+      <div class="grid md:grid-cols-[1fr_280px] gap-4">
+        {% trans "Loyiha nomi" as l %}{% include "dashboard/partials/tr_field.html" with name="title" label=l required=True %}
+        <div><label class="field-label" for="{{ form.slug.id_for_label }}">Slug (URL)</label><div class="flex gap-2"><div class="field-icon flex-1"><i data-lucide="link"></i>{{ form.slug }}</div><button type="button" class="btn btn-glass btn-sm" @click="genSlug()">{% trans "Yaratish" %}</button></div>{% for e in form.slug.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+      </div>
+      {% trans "Qisqa shior" as l %}{% include "dashboard/partials/tr_field.html" with name="subtitle" label=l %}
+      {% trans "Qisqa tavsif" as l %}{% include "dashboard/partials/tr_field.html" with name="short_description" label=l required=True %}
+      {% trans "To'liq tavsif" as l %}{% include "dashboard/partials/tr_field.html" with name="description" label=l %}
+    </section>
+
+    <section class="panel flex flex-col gap-4">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="images"></i></span><div><h2 class="text-lg font-semibold">{% trans "Media" %}</h2><p class="text-xs text-ink-3">{% trans "Muqova, skrinshotlar va video" %}</p></div></div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="dropzone min-h-[150px]" :class="over && 'is-over'" @dragover.prevent="over = true" @dragleave="over = false" @drop="over = false">
+          <input type="file" name="cover" accept="image/*" class="sr-only" @change="preview($event)">
+          <span><span class="icon-tile mx-auto mb-2"><i data-lucide="upload"></i></span><span class="block text-sm font-semibold">{% trans "Muqovani yuklang" %}{% if not project %} <span class="text-danger">*</span>{% endif %}</span><span class="block text-xs text-ink-3">{% trans "yoki shu yerga tashlang" %} · JPG, PNG, WEBP</span>{% for e in form.cover.errors %}<span class="block text-xs text-danger mt-1">{{ e }}</span>{% endfor %}</span>
+        </label>
+        <div>
+          <span class="field-label">{% trans "Galereya (bir nechta fayl)" %}</span>
+          <input type="file" name="gallery" multiple accept="image/*" class="field">
+          {% if project %}<div class="grid grid-cols-4 gap-2 mt-3">{% for img in project.images.all %}<label class="relative group cursor-pointer"><img src="{{ img.image.url }}" alt="" class="w-full aspect-square rounded-lg object-cover"><input type="checkbox" name="remove_image" value="{{ img.pk }}" class="peer sr-only"><span class="absolute inset-0 rounded-lg grid place-items-center bg-danger/70 opacity-0 peer-checked:opacity-100 transition"><i data-lucide="trash-2" class="text-white"></i></span><span class="absolute top-1 right-1 btn-icon w-6 h-6 opacity-0 group-hover:opacity-100"><i data-lucide="x" class="w-3 h-3"></i></span></label>{% endfor %}</div><p class="text-[11px] text-ink-3 mt-1">{% trans "O'chirish uchun rasmni bosing" %}</p>{% endif %}
+        </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        {% include "dashboard/partials/field.html" with field=form.video %}
+        {% include "dashboard/partials/field.html" with field=form.video_url %}
+        {% include "dashboard/partials/field.html" with field=form.video_duration %}
+      </div>
+    </section>
+
+    <section class="panel flex flex-col gap-4">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="info"></i></span><h2 class="text-lg font-semibold">{% trans "Loyiha tafsilotlari" %}</h2></div>
+      <div class="grid md:grid-cols-2 gap-4">
+        {% trans "Turi" as l %}{% include "dashboard/partials/tr_field.html" with name="project_type" label=l %}
+        {% trans "Rolim" as l %}{% include "dashboard/partials/tr_field.html" with name="role" label=l %}
+        {% trans "Davomiyligi" as l %}{% include "dashboard/partials/tr_field.html" with name="duration" label=l %}
+        {% trans "Jamoa" as l %}{% include "dashboard/partials/tr_field.html" with name="team_size" label=l %}
+      </div>
+      <div>
+        <span class="field-label">{% trans "Texnologiyalar" %}</span>
+        <div class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">{% for cb in form.tech_stack %}<label class="cursor-pointer">{{ cb.tag }}<span class="chip chip-lg !cursor-pointer select-none">{{ cb.choice_label }}</span></label>{% endfor %}</div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="flex flex-col gap-4">
+    <section class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="eye"></i></span><div><h2 class="text-lg font-semibold">{% trans "Jonli ko'rinish" %}</h2><p class="text-xs text-ink-3">{% trans "Saytdagi kartochka ko'rinishi" %}</p></div></div>
+      <div class="media-card pointer-events-none">
+        <div class="media-card__img m-2 mb-0 rounded-xl bg-ink/10"><img :src="cover" x-show="cover" alt=""></div>
+        <div class="p-4"><div class="font-semibold text-lg" x-text="title || '{% trans "Loyiha nomi" %}'"></div><div class="text-xs text-ink-3" x-text="subtitle"></div><p class="text-sm text-ink-2 mt-2 line-clamp-3" x-text="desc"></p></div>
+      </div>
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="tag"></i></span><h2 class="text-lg font-semibold">{% trans "Turkum va teglar" %}</h2></div>
+      {% include "dashboard/partials/field.html" with field=form.category %}
+      {% include "dashboard/partials/field.html" with field=form.tags %}
+      {% include "dashboard/partials/field.html" with field=form.completed_year %}
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="link"></i></span><h2 class="text-lg font-semibold">{% trans "Havolalar" %}</h2></div>
+      <div class="field-icon"><i data-lucide="globe"></i>{{ form.live_url }}</div>
+      <div class="field-icon">{% social_icon "github" "w-4 h-4" %}{{ form.source_url }}</div>
+    </section>
+    <section class="panel flex flex-col gap-1">
+      <div class="flex items-center gap-3 mb-2"><span class="icon-tile"><i data-lucide="settings-2"></i></span><h2 class="text-lg font-semibold">{% trans "Sozlamalar" %}</h2></div>
+      {% trans "Tanlangan loyiha" as l %}{% trans "Bosh sahifada ko'rsatiladi" as h %}{% include "dashboard/partials/toggle.html" with field=form.is_featured label=l hint=h %}
+      {% trans "Izohlar" as l %}{% include "dashboard/partials/toggle.html" with field=form.allow_comments label=l %}
+      {% trans "Sharhlar" as l %}{% include "dashboard/partials/toggle.html" with field=form.allow_reviews label=l %}
+      {% include "dashboard/partials/field.html" with field=form.order %}
+    </section>
+    <section class="panel flex flex-col gap-3">
+      <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="search"></i></span><h2 class="text-lg font-semibold">SEO</h2></div>
+      {% include "dashboard/partials/tr_field.html" with name="meta_title" label="Meta title" %}
+      {% include "dashboard/partials/tr_field.html" with name="meta_description" label="Meta description" %}
+    </section>
+  </aside>
+
+  <div class="fixed bottom-4 left-4 right-4 lg:left-[290px] z-30 glass glass--strong flex flex-wrap items-center gap-2 sm:gap-3 p-3" style="margin-bottom:env(safe-area-inset-bottom, 0px)">
+    <a href="{% url 'dashboard:projects' %}" class="btn btn-glass max-sm:hidden">{% trans "Bekor qilish" %}</a>
+    {% if project %}<span class="text-xs text-ink-3 hidden md:block">{% trans "Holati" %}: {{ project.get_status_display }} · {{ project.updated_at|date:"d.m.Y H:i" }}</span>{% endif %}
+    <button name="draft" value="1" class="btn btn-glass ml-auto"><i data-lucide="file"></i>{% trans "Qoralama" %}</button>
+    <button class="btn btn-primary sm:px-8"><i data-lucide="send"></i>{% if project %}{% trans "Yangilash" %}{% else %}{% trans "Nashr qilish" %}{% endif %}</button>
+  </div>
+</form>
+{% endblock %}
+{% block body_end %}
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("projectForm", () => ({
+      over: false,
+      cover: "{% if project %}{{ project.cover.url }}{% endif %}",
+      title: "{{ form.title_uz.value|default:''|escapejs }}",
+      subtitle: "{{ form.subtitle_uz.value|default:''|escapejs }}",
+      desc: "{{ form.short_description_uz.value|default:''|escapejs }}",
+      sync(e) {
+        const n = e.target.name;
+        if (n === "title_uz") this.title = e.target.value;
+        if (n === "subtitle_uz") this.subtitle = e.target.value;
+        if (n === "short_description_uz") this.desc = e.target.value;
+      },
+      preview(e) { const f = e.target.files[0]; if (f) this.cover = URL.createObjectURL(f); },
+      genSlug() {
+        const src = (document.querySelector('[name="title_en"]').value || this.title || "").toLowerCase();
+        const map = { "oʻ": "o", "gʻ": "g", "o'": "o", "g'": "g", "sh": "sh", "ch": "ch" };
+        let s = src; Object.entries(map).forEach(([k, v]) => (s = s.split(k).join(v)));
+        document.querySelector('[name="slug"]').value = s.normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").replace(/-+/g, "-");
+      },
+    }));
+  });
+</script>
+{% endblock %}

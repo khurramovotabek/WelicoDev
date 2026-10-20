@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block title %}{% blocktrans with t=course.title %}{{ t }} — sotib olish{% endblocktrans %}{% endblock %}
+{% block content %}
+<a href="{{ course.get_absolute_url }}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Kursga qaytish" %}</a>
+
+<section class="grid lg:grid-cols-[1fr_420px] gap-6 mt-4 items-start">
+  <div class="flex flex-col gap-4 min-w-0">
+    {# Kurs kartasi #}
+    <div class="glass p-3 sm:p-4 flex flex-col sm:flex-row gap-4">
+      <img src="{% thumb course.cover 640 %}" alt="" class="w-full sm:w-56 aspect-[16/10] rounded-2xl object-cover shrink-0">
+      <div class="flex flex-col gap-2 min-w-0 py-1">
+        <div class="flex flex-wrap gap-1.5"><span class="badge badge-info">{{ course.get_level_display }}</span>{% if course.is_private %}<span class="badge badge-violet"><i data-lucide="lock" class="w-3 h-3"></i>{% trans "Yopiq kurs" %}</span>{% endif %}{% if course.has_certificate %}<span class="badge badge-ok"><i data-lucide="award" class="w-3 h-3"></i>{% trans "Sertifikat" %}</span>{% endif %}</div>
+        <h1 class="text-2xl sm:text-3xl font-semibold leading-tight">{{ course.title }}</h1>
+        <p class="text-ink-2 text-sm">{{ course.subtitle }}</p>
+        <div class="flex flex-wrap gap-4 text-xs text-ink-3 mt-auto">
+          <span class="flex items-center gap-1.5"><i data-lucide="play-circle" class="w-4 h-4"></i>{{ lessons_total }} {% trans "dars" %}</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4"></i>{{ course.total_seconds|seconds_hms }}</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="infinity" class="w-4 h-4"></i>{% trans "Umrbod kirish" %}</span>
+        </div>
+      </div>
+    </div>
+
+    {# Qanday sotib olinadi #}
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-4"><span class="icon-tile"><i data-lucide="route"></i></span><h2 class="text-xl font-semibold">{% trans "Qanday sotib olinadi" %}</h2></div>
+      <ol class="flex flex-col gap-4">
+        <li class="flex gap-4"><span class="grid place-items-center w-9 h-9 rounded-full bg-accent-strong text-white font-semibold shrink-0">1</span><div><div class="font-semibold">{% trans "So'rov qoldiring va Telegram'da yozing" %}</div><p class="text-sm text-ink-3">{% trans "Tugmani bosganingizda so'rov raqamingiz bilan tayyor xabar ochiladi. Uni yuboring." %}</p></div></li>
+        <li class="flex gap-4"><span class="grid place-items-center w-9 h-9 rounded-full bg-accent-strong text-white font-semibold shrink-0">2</span><div><div class="font-semibold">{% trans "To'lovni amalga oshiring" %}</div><p class="text-sm text-ink-3">{% trans "To'lov usuli Telegram'da kelishiladi: Click, Payme, karta yoki naqd." %}</p></div></li>
+        <li class="flex gap-4"><span class="grid place-items-center w-9 h-9 rounded-full bg-ok text-white font-semibold shrink-0">3</span><div><div class="font-semibold">{% trans "Kurs ochiladi" %}</div><p class="text-sm text-ink-3">{% trans "To'lov tasdiqlangach kurs profilingizda ochiladi va bot sizga xabar yuboradi." %}</p></div></li>
+      </ol>
+      {% if site.payment_note %}<div class="mt-5 glass glass--sm p-4 text-sm text-ink-2 whitespace-pre-line flex gap-3"><i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5 text-accent"></i><div>{{ site.payment_note }}</div></div>{% endif %}
+    </div>
+
+    {% if course.what_you_learn %}
+      <div class="panel"><div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="target"></i></span><h2 class="text-xl font-semibold">{% trans "Nimalarni o'rganasiz" %}</h2></div><div class="richtext">{{ course.what_you_learn|safe }}</div></div>
+    {% endif %}
+    {% if modules %}
+      <div class="panel">
+        <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="layers"></i></span><h2 class="text-xl font-semibold">{% trans "Kurs dasturi" %}</h2></div>
+        <ul class="grid sm:grid-cols-2 gap-2">{% for m in modules %}<li class="glass glass--sm px-4 py-3 flex items-center gap-3 text-sm"><span class="tabular text-ink-3 w-6">{{ forloop.counter|stringformat:"02d" }}</span>{{ m.title }}</li>{% endfor %}</ul>
+      </div>
+    {% endif %}
+  </div>
+
+  {# Narx va harakat #}
+  <aside class="relative lg:sticky" style="top:calc(90px + env(safe-area-inset-top, 0px))">
+    <div class="absolute -inset-4 rounded-[36px] bg-gradient-to-br from-accent-strong/35 via-violet/20 to-transparent blur-3xl opacity-70" aria-hidden="true"></div>
+    <div class="relative glass glass--strong p-6 flex flex-col gap-5">
+      <div>
+        <div class="text-xs uppercase tracking-wider text-ink-3">{% trans "Kurs narxi" %}</div>
+        <div class="flex items-end gap-3 mt-1 flex-wrap">
+          <span class="font-display text-4xl font-semibold tabular">{{ course.price|money }}</span><span class="text-ink-2 mb-1">{% trans "so'm" %}</span>
+          {% if course.discount_percent %}<span class="text-ink-3 line-through mb-1 tabular">{{ course.old_price|money }}</span><span class="badge badge-danger mb-1.5">−{{ course.discount_percent }}%</span>{% endif %}
+        </div>
+      </div>
+      <ul class="flex flex-col gap-2 text-sm">
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-ok shrink-0 mt-0.5"></i>{% blocktrans with n=lessons_total %}{{ n }} ta video dars, konspekt va kodlar{% endblocktrans %}</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-ok shrink-0 mt-0.5"></i>{% trans "Uyga vazifalar va shaxsiy tekshiruv" %}</li>
+        {% if course.has_certificate %}<li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-ok shrink-0 mt-0.5"></i>{% trans "Tugatganlik sertifikati" %}</li>{% endif %}
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-ok shrink-0 mt-0.5"></i>{% trans "Sayt va Telegram Mini App'da o'qish" %}</li>
+      </ul>
+
+      {% if access_request.status == "pending" %}
+        <div class="glass glass--sm p-4 flex gap-3 items-start">
+          <span class="relative flex w-2.5 h-2.5 mt-1.5"><span class="absolute inline-flex w-full h-full rounded-full bg-warn opacity-75 animate-ping"></span><span class="relative inline-flex w-2.5 h-2.5 rounded-full bg-warn"></span></span>
+          <div class="text-sm"><div class="font-semibold">{% trans "So'rovingiz ko'rib chiqilmoqda" %}</div><div class="text-ink-3">{% trans "So'rov raqami" %}: <b class="tabular text-ink">{{ access_request.reference }}</b> · {{ access_request.created_at|date:"d.m.Y H:i" }}</div></div>
+        </div>
+      {% elif access_request.status == "rejected" %}
+        <div class="glass glass--sm p-4 text-sm flex gap-3"><i data-lucide="circle-alert" class="w-4 h-4 text-danger shrink-0 mt-0.5"></i><div><div class="font-semibold">{% trans "Oldingi so'rov rad etilgan" %}</div>{% if access_request.admin_note %}<div class="text-ink-3">{{ access_request.admin_note }}</div>{% endif %}</div></div>
+      {% endif %}
+
+      <form method="post" class="flex flex-col gap-3">{% csrf_token %}
+        {% trans "Izoh (ixtiyoriy): qulay to'lov usuli, savollar..." as note_ph %}
+        <textarea name="note" rows="2" maxlength="300" class="field resize-none text-sm" placeholder="{{ note_ph }}">{{ access_request.note|default:"" }}</textarea>
+        <button name="go" value="telegram" class="btn btn-primary w-full py-3.5 text-[15px]">{% social_icon "telegram" "w-5 h-5" %}{% if access_request.status == "pending" %}{% trans "Telegram'da yozish" %}{% else %}{% trans "Sotib olish · Telegram" %}{% endif %}</button>
+        {% if access_request.status != "pending" %}<button name="go" value="request" class="btn btn-glass w-full">{% trans "Faqat so'rov qoldirish" %}</button>{% endif %}
+      </form>
+      <p class="text-[11px] text-ink-3 flex gap-2"><i data-lucide="shield-check" class="w-4 h-4 shrink-0 text-ok"></i>{% trans "To'lov faqat rasmiy Telegram akkaunt orqali qabul qilinadi. Begona havolalarga ishonmang." %}</p>
+      {% if preview_lessons %}
+        <div class="divider"></div>
+        <div class="text-sm font-semibold">{% trans "Bepul darslar" %}</div>
+        <div class="flex flex-col gap-1.5 -mt-2">{% for l in preview_lessons %}<a href="{{ l.get_absolute_url }}" class="flex items-center gap-2 text-sm text-ink-2 hover:text-ink"><i data-lucide="play-circle" class="w-4 h-4 text-accent"></i><span class="truncate">{{ l.title }}</span></a>{% endfor %}</div>
+      {% endif %}
+    </div>
+  </aside>
+</section>
+{% endblock %}

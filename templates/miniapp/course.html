@@ -1,0 +1,51 @@
+{% load i18n wcd %}
+<section class="glass overflow-hidden">
+  <img src="{% thumb course.cover 720 %}" alt="" class="w-full aspect-[16/9] object-cover">
+  <div class="p-4 flex flex-col gap-2">
+    <div class="flex flex-wrap gap-1.5"><span class="badge badge-info">{{ course.get_level_display }}</span>{% if course.is_free %}<span class="badge badge-ok">{% trans "Bepul" %}</span>{% else %}<span class="badge badge-warn"><i data-lucide="gem" class="w-3 h-3"></i>Premium</span>{% endif %}{% if course.is_private %}<span class="badge badge-violet"><i data-lucide="lock" class="w-3 h-3"></i>{% trans "Yopiq" %}</span>{% endif %}{% if course.sequential %}<span class="badge badge-violet">{% trans "Ketma-ket ochiladi" %}</span>{% endif %}</div>
+    <h2 class="text-xl font-semibold leading-snug">{{ course.title }}</h2>
+    <p class="text-sm text-ink-2">{{ course.subtitle }}</p>
+    <div class="flex gap-4 text-xs text-ink-3"><span class="flex items-center gap-1"><i data-lucide="play-circle" class="w-3.5 h-3.5"></i>{{ states|length }} {% trans "dars" %}</span><span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i>{{ course.total_seconds|seconds_hms }}</span></div>
+    {% if enrollment %}
+      <div class="flex items-center justify-between text-xs mt-2"><span class="text-ink-2">{{ completed }}/{{ states|length }} {% trans "tugatilgan" %}</span><b class="tabular">{{ progress }}%</b></div>
+      <div class="h-2 rounded-full bg-ink/15 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent" style="width:{{ progress }}%"></div></div>
+      {% if next_lesson %}<a href="#" data-go="{% url 'miniapp:lesson' course.slug next_lesson.slug %}" class="btn btn-primary w-full py-3 mt-2"><i data-lucide="play"></i>{% if completed %}{% trans "Davom ettirish" %}{% else %}{% trans "Boshlash" %}{% endif %}</a>{% endif %}
+      {% if enrollment.completed_at and enrollment.certificate %}<a href="#" data-external="{{ SITE_URL }}{% url 'education:certificate' enrollment.certificate.code %}" class="btn btn-light w-full mt-2"><i data-lucide="award"></i>{% trans "Sertifikat" %}</a>{% endif %}
+    {% elif course.is_free %}
+      <button class="btn btn-primary w-full py-3 mt-2" hx-post="{% url 'miniapp:enroll' course.slug %}" hx-target="#view"><i data-lucide="plus"></i>{% trans "Kursga yozilish" %}</button>
+    {% else %}
+      <div class="glass glass--sm p-4 mt-2 flex flex-col gap-3">
+        <div class="flex items-end gap-2 flex-wrap"><span class="font-display text-3xl font-semibold tabular">{{ course.price|money }}</span><span class="text-ink-2 mb-0.5">{% trans "so'm" %}</span>{% if course.discount_percent %}<span class="text-ink-3 line-through text-sm mb-0.5 tabular">{{ course.old_price|money }}</span><span class="badge badge-danger mb-1">−{{ course.discount_percent }}%</span>{% endif %}</div>
+        {% if access_request.status == "pending" %}
+          <div class="flex items-center gap-2 text-sm"><span class="relative flex w-2.5 h-2.5"><span class="absolute inline-flex w-full h-full rounded-full bg-warn opacity-75 animate-ping"></span><span class="relative inline-flex w-2.5 h-2.5 rounded-full bg-warn"></span></span>{% trans "So'rovingiz ko'rib chiqilmoqda" %} · <b class="tabular">{{ access_request.reference }}</b></div>
+          <a href="#" data-external="{{ payment_link }}" class="btn btn-primary w-full py-3">{% social_icon "telegram" "w-5 h-5" %}{% trans "Telegram'da yozish" %}</a>
+        {% else %}
+          <ol class="text-xs text-ink-2 flex flex-col gap-1.5">
+            <li class="flex gap-2"><span class="chip !px-2 !py-0">1</span>{% trans "So'rov qoldiring va Telegram'da yozing" %}</li>
+            <li class="flex gap-2"><span class="chip !px-2 !py-0">2</span>{% trans "To'lovni amalga oshiring" %}</li>
+            <li class="flex gap-2"><span class="chip !px-2 !py-0">3</span>{% trans "Kurs ochiladi va bot xabar beradi" %}</li>
+          </ol>
+          <button class="btn btn-primary w-full py-3" hx-post="{% url 'miniapp:buy' course.slug %}" hx-target="#view"><i data-lucide="shopping-bag"></i>{% trans "Sotib olish" %}</button>
+        {% endif %}
+        {% if payment_note %}<p class="text-[11px] text-ink-3 whitespace-pre-line">{{ payment_note }}</p>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+<section class="flex flex-col gap-2">
+  <h3 class="tma-section-title">{% trans "Darslar" %}</h3>
+  <div class="glass glass--sm p-1.5 flex flex-col">
+    {% for lesson, state in states %}
+      {% if state == "locked" %}
+        <div class="tma-list-item opacity-55"><span class="grid place-items-center w-9 h-9 rounded-full bg-ink/10 shrink-0"><i data-lucide="lock" class="w-4 h-4"></i></span><div class="flex-1 min-w-0"><div class="text-sm truncate">{{ lesson.order }}. {{ lesson.title }}</div><div class="text-[11px] text-ink-3">{{ lesson.duration_label }}</div></div></div>
+      {% else %}
+        <a href="#" data-go="{% url 'miniapp:lesson' course.slug lesson.slug %}" class="tma-list-item">
+          <span class="grid place-items-center w-9 h-9 rounded-full shrink-0 {% if state == 'completed' %}bg-ok/20 text-ok{% elif state == 'current' %}bg-accent-strong text-white shadow-[0_0_14px_rgb(var(--accent-strong))]{% else %}bg-ink/10{% endif %}">{% if state == "completed" %}<i data-lucide="check" class="w-4 h-4"></i>{% else %}<i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>{% endif %}</span>
+          <div class="flex-1 min-w-0"><div class="text-sm font-medium truncate">{{ lesson.order }}. {{ lesson.title }}</div><div class="text-[11px] text-ink-3 flex gap-2"><span>{{ lesson.duration_label }}</span>{% if lesson.homework_mode != "none" %}<span class="flex items-center gap-0.5"><i data-lucide="clipboard-list" class="w-3 h-3"></i>{% trans "Vazifa" %}</span>{% endif %}{% if lesson.is_preview and not enrollment %}<span class="text-ok">{% trans "Bepul ko'rish" %}</span>{% endif %}</div></div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-ink-3"></i>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% if course.what_you_learn %}<section class="glass glass--sm p-4"><h3 class="font-semibold mb-2">{% trans "Nimalarni o'rganasiz" %}</h3><div class="richtext">{{ course.what_you_learn|safe }}</div></section>{% endif %}

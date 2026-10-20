@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{% trans "Ko'nikmalar" %}{% endblock %}
+{% block content %}
+<section class="grid lg:grid-cols-[1fr_auto_auto] gap-4 items-start pt-8 lg:pt-12 pb-6">
+  <div class="flex flex-col gap-3 animate-fade-up">
+    <span class="eyebrow w-fit"><span class="dot"></span>{{ hero.eyebrow|default:"Skills & Technologies" }}</span>
+    <h1 class="text-5xl sm:text-6xl font-semibold">{{ hero.title }}</h1>
+    <p class="text-xl text-ink">{{ hero.subtitle }}</p>
+  </div>
+  {% if hero.quote %}<figure class="quote-card lg:w-[220px]"><div class="mark">“</div><blockquote class="font-display text-lg leading-snug">{{ hero.quote }}</blockquote><div class="rule"></div></figure>{% endif %}
+  <div class="panel grid grid-cols-2 gap-4 lg:w-[260px]">
+    <div class="flex gap-2"><span class="icon-tile w-9 h-9"><i data-lucide="box"></i></span><div><div class="font-semibold tabular">{{ total }}+</div><div class="stat-label">{% trans "Texnologiya" %}</div></div></div>
+    <div class="flex gap-2"><span class="icon-tile w-9 h-9"><i data-lucide="shield-check"></i></span><div><div class="font-semibold tabular">{{ site.years_experience }}+</div><div class="stat-label">{% trans "Yil" %}</div></div></div>
+    <div class="flex gap-2"><span class="icon-tile w-9 h-9"><i data-lucide="folder"></i></span><div><div class="font-semibold tabular">{{ projects_count }}+</div><div class="stat-label">{% trans "Loyiha" %}</div></div></div>
+    <div class="flex gap-2"><span class="icon-tile w-9 h-9"><i data-lucide="link-2"></i></span><div><div class="font-semibold">{% trans "Doimo" %}</div><div class="stat-label">{% trans "o'rganaman" %}</div></div></div>
+  </div>
+</section>
+
+<section class="grid lg:grid-cols-[1fr_300px] gap-4">
+  <div class="flex flex-col gap-4 min-w-0">
+    <div class="glass glass--pill p-1.5 flex gap-1.5 overflow-x-auto">
+      <a href="?" class="chip-btn {% if not active_category %}is-active{% endif %}">{% trans "Barchasi" %}</a>
+      {% for c in categories %}<a href="?category={{ c.slug }}" class="chip-btn {% if active_category == c.slug %}is-active{% endif %}">{{ c.name }}</a>{% endfor %}
+    </div>
+
+    {% if not active_category and not q %}
+    <div class="panel">
+      <div class="panel-title"><div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="zap"></i></span><div><h2>{% trans "Asosiy ko'nikmalar" %}</h2><p class="text-xs text-ink-3">{% trans "Eng ko'p ishlaydigan texnologiyalarim" %}</p></div></div></div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {% for sk in featured %}
+          <div class="glass glass--sm glass--hover p-4 flex flex-col gap-2">
+            <span class="icon-tile w-11 h-11 bg-white/10">{% if sk.icon_url %}<img src="{{ sk.icon_url }}" alt="" class="w-7 h-7">{% endif %}</span>
+            <div><div class="font-semibold">{{ sk.name }}</div><div class="text-xs text-ink-3">{{ sk.subtitle }}</div></div>
+            <div class="h-1.5 rounded-full bg-ink/15 overflow-hidden mt-1"><div class="h-full rounded-full {% if sk.level == 'expert' %}bg-ok{% elif sk.level == 'advanced' %}bg-accent{% else %}bg-warn{% endif %}" style="width:{{ sk.proficiency }}%"></div></div>
+            <div class="flex justify-between text-[11px] text-ink-3"><span>{{ sk.get_level_display }}</span><span>{{ sk.years }}+ {% trans "yil" %}</span></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="panel">
+      <div class="panel-title">
+        <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="layout-grid"></i></span><div><h2>{% trans "Barcha texnologiyalar" %}</h2><p class="text-xs text-ink-3">{% trans "Men ishlaydigan texnologiyalarning to'liq ro'yxati" %}</p></div></div>
+        <form class="field-icon w-48 hidden sm:block"><i data-lucide="search"></i><input name="q" value="{{ q }}" class="field !py-2" placeholder="{% trans 'Qidirish...' %}">{% if active_category %}<input type="hidden" name="category" value="{{ active_category }}">{% endif %}</form>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        {% for sk in skills %}
+          <div class="glass glass--sm flex items-center gap-2.5 px-3 py-2.5 text-sm">{% if sk.icon_url %}<img src="{{ sk.icon_url }}" alt="" class="w-6 h-6 shrink-0" loading="lazy">{% else %}<i data-lucide="box" class="w-5 h-5"></i>{% endif %}<span class="truncate">{{ sk.name }}</span></div>
+        {% empty %}<p class="text-ink-3 text-sm col-span-full">{% trans "Hech narsa topilmadi" %}</p>{% endfor %}
+      </div>
+    </div>
+
+    {% if chart %}
+    <div class="panel">
+      <div class="panel-title"><div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="chart-no-axes-column"></i></span><div><h2>{% trans "O'rganish yo'li" %}</h2><p class="text-xs text-ink-3">{% trans "Yillar davomida texnologiyalar soni" %}</p></div></div></div>
+      {% include "portfolio/partials/learning_chart.html" %}
+    </div>
+    {% endif %}
+  </div>
+
+  <aside class="flex flex-col gap-4">
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-4"><span class="icon-tile"><i data-lucide="hexagon"></i></span><h2 class="text-lg font-semibold">{% trans "Umumiy ko'rinish" %}</h2></div>
+      <div class="flex items-center gap-4">
+        {% include "portfolio/partials/level_donut.html" %}
+        <ul class="flex flex-col gap-2 text-sm flex-1">
+          <li class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-accent"></span>{% trans "Ekspert" %}<span class="ml-auto tabular">{{ levels.expert }}</span></li>
+          <li class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-ok"></span>{% trans "Yuqori" %}<span class="ml-auto tabular">{{ levels.advanced }}</span></li>
+          <li class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-warn"></span>{% trans "O'rta" %}<span class="ml-auto tabular">{{ levels.intermediate }}</span></li>
+          <li class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-danger"></span>{% trans "Boshlang'ich" %}<span class="ml-auto tabular">{{ levels.beginner }}</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-3">{% trans "Turkumlar" %}</h2>
+      <ul class="flex flex-col gap-1">
+        {% for c in categories %}<li><a href="?category={{ c.slug }}" class="flex items-center gap-3 rounded-xl px-2 py-2 text-sm hover:bg-ink/10"><span class="icon-tile w-8 h-8"><i data-lucide="folder"></i></span>{{ c.name }}<span class="ml-auto text-ink-3 tabular">{{ c.n }}</span></a></li>{% endfor %}
+      </ul>
+    </div>
+    {% if learning %}
+    <div class="panel">
+      <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-semibold">{% trans "Hozir o'rganyapman" %}</h2><span class="chip">{{ learning|length }} {% trans "jarayonda" %}</span></div>
+      <ul class="flex flex-col gap-3">
+        {% for sk in learning %}
+          <li class="flex items-center gap-3 text-sm">{% if sk.icon_url %}<img src="{{ sk.icon_url }}" alt="" class="w-6 h-6">{% endif %}<div class="flex-1"><div class="font-medium">{{ sk.name }}</div><div class="h-1 rounded-full bg-ink/15 mt-1.5"><div class="h-full rounded-full bg-accent" style="width:{{ sk.learning_progress }}%"></div></div></div><span class="text-xs text-ink-3 tabular">{{ sk.learning_progress }}%</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <div class="panel flex flex-col gap-3">
+      <h2 class="text-lg font-semibold">{% trans "Bog'lanish" %}</h2>
+      <p class="text-sm text-ink-2">{% trans "Birga ishlash yoki texnologiya haqida suhbatlashishni xohlaysizmi?" %}</p>
+      <a href="{% url 'core:contact' %}" class="btn btn-light w-fit">{% trans "Gaplashamiz" %}<i data-lucide="arrow-right"></i></a>
+    </div>
+  </aside>
+</section>
+{% endblock %}

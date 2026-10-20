@@ -1,0 +1,16 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Izoh va sharhlar" %}{% endblock %}
+{% block dash %}
+{% trans "Izoh va sharhlar" as t %}{% trans "Moderatsiya: tasdiqlash, yashirish, qadash va o'chirish." as st %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st %}
+<div class="flex flex-wrap items-center gap-2">
+  <a href="?tab=comments" class="chip-btn {% if tab == 'comments' %}is-active{% endif %}"><i data-lucide="message-circle" class="w-4 h-4"></i>{% trans "Izohlar" %}</a>
+  <a href="?tab=reviews" class="chip-btn {% if tab == 'reviews' %}is-active{% endif %}"><i data-lucide="star" class="w-4 h-4"></i>{% trans "Sharhlar" %}{% if badges.reviews %}<span class="badge badge-warn">{{ badges.reviews }}</span>{% endif %}</a>
+  <form class="ml-auto"><input type="hidden" name="tab" value="{{ tab }}"><label class="field-icon"><i data-lucide="search"></i><input name="q" value="{{ q }}" class="field !py-2" placeholder="{% trans 'Qidirish...' %}"></label></form>
+</div>
+<div class="glass p-2"><table class="dtable"><tbody>
+  {% for o in page %}{% include "dashboard/partials/moderation_row.html" %}{% empty %}<tr><td class="text-center text-ink-3 py-10">{% trans "Hech narsa yo'q" %}</td></tr>{% endfor %}
+</tbody></table></div>
+{% include "dashboard/partials/pagination.html" %}
+{% endblock %}

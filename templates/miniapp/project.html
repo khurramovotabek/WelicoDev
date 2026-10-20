@@ -1,0 +1,27 @@
+{% load i18n %}
+<section class="flex flex-col gap-4" x-data="{ i: 0 }">
+  {% with images=project.images.all %}
+  <div class="relative -mx-4"><div class="tma-rail !px-0 !mx-0">
+    <img src="{{ project.cover.url }}" alt="" class="w-full aspect-[16/10] object-cover">
+    {% for img in images %}<img src="{{ img.image.url }}" alt="{{ img.caption }}" class="w-full aspect-[16/10] object-cover" loading="lazy">{% endfor %}
+  </div>{% if images %}<span class="absolute right-4 bottom-3 chip !bg-black/50 text-ink">{{ images|length|add:1 }} {% trans "rasm" %} →</span>{% endif %}</div>
+  {% endwith %}
+  <div>
+    <h2 class="text-2xl font-semibold">{{ project.title }}</h2>
+    <p class="text-ink">{{ project.subtitle }}</p>
+    <p class="text-sm text-ink-2 mt-2">{{ project.short_description }}</p>
+  </div>
+  <div class="flex flex-wrap gap-1.5">{% for s in project.tech_stack.all %}<span class="chip">{% if s.icon_url %}<img src="{{ s.icon_url }}" alt="" class="w-3.5 h-3.5">{% endif %}{{ s.name }}</span>{% endfor %}</div>
+  <div class="grid grid-cols-2 gap-2 text-sm">
+    {% if project.role %}<div class="glass glass--sm p-3"><div class="text-[11px] text-ink-3">{% trans "Rolim" %}</div>{{ project.role }}</div>{% endif %}
+    {% if project.duration %}<div class="glass glass--sm p-3"><div class="text-[11px] text-ink-3">{% trans "Davomiyligi" %}</div>{{ project.duration }}</div>{% endif %}
+    {% if project.team_size %}<div class="glass glass--sm p-3"><div class="text-[11px] text-ink-3">{% trans "Jamoa" %}</div>{{ project.team_size }}</div>{% endif %}
+    {% if project.completed_year %}<div class="glass glass--sm p-3"><div class="text-[11px] text-ink-3">{% trans "Yil" %}</div>{{ project.completed_year }}</div>{% endif %}
+  </div>
+  {% if project.features.all %}<div class="glass glass--sm p-1.5">{% for f in project.features.all %}<div class="tma-list-item"><span class="icon-tile w-9 h-9"><i data-lucide="{{ f.icon|default:'check' }}"></i></span><div class="text-sm"><div class="font-medium">{{ f.title }}</div><div class="text-[11px] text-ink-3">{{ f.description }}</div></div></div>{% endfor %}</div>{% endif %}
+  {% if project.description %}<div class="glass glass--sm p-4"><div class="richtext">{{ project.description|safe }}</div></div>{% endif %}
+  <div class="grid grid-cols-2 gap-3">
+    {% if project.live_url %}<a href="#" data-external="{{ project.live_url }}" class="btn btn-primary"><i data-lucide="external-link"></i>{% trans "Saytga o'tish" %}</a>{% endif %}
+    <a href="#" data-external="{{ site_url }}" class="btn btn-glass"><i data-lucide="globe"></i>{% trans "Batafsil" %}</a>
+  </div>
+</section>

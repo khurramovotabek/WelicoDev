@@ -1,0 +1,30 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Ko'nikmalar" %}{% endblock %}
+{% block dash %}
+{% trans "Ko'nikmalar" as t %}{% trans "Texnologiyalar, daraja va o'rganish jarayoni." as st %}{% trans "Ko'nikma qo'shish" as al %}{% url 'dashboard:skill_add' as au %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st action_url=au action_label=al %}
+<section class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Jami" %}</div><div class="stat-num">{{ stats.total }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Asosiy" %}</div><div class="stat-num text-accent">{{ stats.featured }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Ekspert" %}</div><div class="stat-num text-ok">{{ stats.expert }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "O'rganilmoqda" %}</div><div class="stat-num text-warn">{{ stats.learning }}</div></div>
+</section>
+<div class="flex gap-2 overflow-x-auto no-scrollbar"><a href="?" class="chip-btn {% if not active %}is-active{% endif %}">{% trans "Barchasi" %}</a>{% for c in categories %}<a href="?category={{ c.slug }}" class="chip-btn {% if active == c.slug %}is-active{% endif %}">{{ c.name }} <span class="text-ink-3">{{ c.n }}</span></a>{% endfor %}<a href="{% url 'admin:portfolio_skillcategory_changelist' %}" class="chip-btn"><i data-lucide="settings-2" class="w-4 h-4"></i>{% trans "Turkumlar" %}</a></div>
+<div class="glass p-2"><div class="table-wrap"><table class="dtable">
+  <thead><tr><th>{% trans "Ko'nikma" %}</th><th>{% trans "Turkum" %}</th><th>{% trans "Daraja" %}</th><th>%</th><th>{% trans "Yil" %}</th><th>{% trans "Holat" %}</th><th></th></tr></thead>
+  <tbody>
+    {% for s in skills %}
+      <tr>
+        <td><a href="{% url 'dashboard:skill_edit' s.pk %}" class="flex items-center gap-3 font-semibold hover:underline">{% if s.icon_url %}<img src="{{ s.icon_url }}" alt="" class="w-7 h-7" loading="lazy">{% else %}<span class="icon-tile w-7 h-7"><i data-lucide="box"></i></span>{% endif %}{{ s.name }}</a></td>
+        <td class="text-ink-2">{{ s.category.name }}</td>
+        <td>{% if s.level == 'expert' %}<span class="badge badge-ok">{{ s.get_level_display }}</span>{% elif s.level == 'advanced' %}<span class="badge badge-info">{{ s.get_level_display }}</span>{% elif s.level == 'intermediate' %}<span class="badge badge-warn">{{ s.get_level_display }}</span>{% else %}<span class="badge badge-danger">{{ s.get_level_display }}</span>{% endif %}</td>
+        <td class="min-w-[120px]"><div class="flex items-center gap-2"><div class="h-1.5 flex-1 rounded-full bg-ink/15"><div class="h-full rounded-full bg-accent" style="width:{{ s.proficiency }}%"></div></div><span class="text-xs tabular text-ink-3">{{ s.proficiency }}</span></div></td>
+        <td class="tabular">{{ s.years }}+</td>
+        <td class="whitespace-nowrap">{% if s.is_learning %}<span class="badge badge-warn">{% trans "O'rganilmoqda" %} {{ s.learning_progress }}%</span>{% endif %}</td>
+        <td><form method="post" action="{% url 'dashboard:skill_action' s.pk 'featured' %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn-icon w-8 h-8 rounded-lg {% if s.is_featured %}!text-warn{% endif %}" title="{% trans 'Asosiy' %}"><i data-lucide="star" class="!w-3.5 !h-3.5 {% if s.is_featured %}fill-current{% endif %}"></i></button></form></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table></div></div>
+{% endblock %}

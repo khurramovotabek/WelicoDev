@@ -1,0 +1,9 @@
+{% load i18n wcd %}
+{% if channel_url %}
+<a href="{{ channel_url }}" target="_blank" rel="noopener" class="glass glass--hover p-4 flex items-center gap-3 relative overflow-hidden {{ extra_class }}">
+  <span class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-[#2AABEE]/30 blur-2xl" aria-hidden="true"></span>
+  <span class="grid place-items-center w-11 h-11 rounded-2xl bg-[#2AABEE] text-white shrink-0">{% social_icon "telegram" "w-5 h-5" %}</span>
+  <span class="min-w-0 flex-1"><span class="block font-semibold">{% trans "Telegram kanalimiz" %}</span><span class="block text-xs text-ink-3">{% trans "Yangi maqola va darslar birinchi bo'lib kanalda" %}</span></span>
+  <span class="btn btn-light btn-sm shrink-0">{% trans "Obuna" %}</span>
+</a>
+{% endif %}

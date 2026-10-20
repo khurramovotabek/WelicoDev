@@ -1,0 +1,1 @@
+<button type="button" class="flex items-center gap-1 hover:text-ink {% if is_liked %}text-danger{% endif %}" hx-post="{% url 'interactions:comment_like' c.pk %}" hx-swap="outerHTML"><i data-lucide="heart" class="w-3.5 h-3.5 {% if is_liked %}fill-current{% endif %}"></i><span class="tabular">{{ c.likes_count }}</span></button>

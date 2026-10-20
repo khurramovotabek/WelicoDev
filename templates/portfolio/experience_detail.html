@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{{ exp.company }} — {{ exp.role }}{% endblock %}
+{% block meta_description %}{{ exp.summary|truncatechars:160 }}{% endblock %}
+{% block content %}
+{% with images=exp.images.all %}
+<a href="{% url 'portfolio:experience_list' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Tajribaga qaytish" %}</a>
+
+<section class="grid lg:grid-cols-[1.6fr_1fr] gap-4 mt-4">
+  <div class="panel">
+    <div class="flex flex-wrap items-start gap-4">
+      {% if exp.logo %}<img src="{% thumb exp.logo 480 %}" alt="" class="w-20 h-20 rounded-2xl object-cover">{% endif %}
+      <div>
+        <h1 class="text-4xl font-semibold">{{ exp.company }}</h1>
+        <p class="text-lg text-ink-2">{{ exp.role }}</p>
+        <div class="flex flex-wrap items-center gap-3 mt-2 text-sm text-ink-2">
+          {% if exp.location %}<span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i>{{ exp.location }}</span>{% endif %}
+          <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i>{{ exp.start_date|date:"M Y" }} – {% if exp.is_current %}{% trans "Hozir" %}{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}</span>
+          {% if exp.is_current %}<span class="badge badge-ok">{% trans "Hozirgi" %}</span>{% endif %}
+        </div>
+      </div>
+    </div>
+    <p class="text-ink-2 mt-4">{{ exp.summary }}</p>
+    <div class="flex flex-wrap gap-1.5 mt-4">{% for t in exp.technologies.all %}<span class="chip">{{ t.name }}</span>{% endfor %}</div>
+  </div>
+  {% if images %}
+  <div class="glass overflow-hidden relative min-h-[240px]" x-data="{ i: 0, n: {{ images|length }} }">
+    {% for img in images %}<img x-show="i === {{ forloop.counter0 }}" {% if not forloop.first %}x-cloak{% endif %} src="{% thumb img.image 1000 %}" alt="{{ img.caption }}" class="absolute inset-0 w-full h-full object-cover" x-transition.opacity>{% endfor %}
+    <div class="absolute left-3 bottom-3 right-3 flex items-center justify-between">
+      <span class="chip !bg-black/40 tabular" x-text="`${i + 1} / ${n}`"></span>
+      <div class="flex gap-2"><button class="btn-icon w-9 h-9" @click="i = (i + n - 1) % n" aria-label="Prev"><i data-lucide="chevron-left"></i></button><button class="btn-icon w-9 h-9" @click="i = (i + 1) % n" aria-label="Next"><i data-lucide="chevron-right"></i></button></div>
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+<section class="grid lg:grid-cols-[1.6fr_1fr] gap-4 mt-4">
+  <div class="flex flex-col gap-4 min-w-0">
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="briefcase"></i></span><h2 class="text-xl font-semibold">{% trans "Umumiy" %}</h2></div>
+      <div class="richtext">{{ exp.description|safe }}</div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+        <div class="glass glass--sm p-3 flex items-center gap-2"><i data-lucide="calendar" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ exp.years }}+</div><div class="text-[11px] text-ink-3">{% trans "yil" %}</div></div></div>
+        <div class="glass glass--sm p-3 flex items-center gap-2"><i data-lucide="folder" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ exp.projects.count }}</div><div class="text-[11px] text-ink-3">{% trans "Loyihalar" %}</div></div></div>
+        {% if exp.team_size %}<div class="glass glass--sm p-3 flex items-center gap-2"><i data-lucide="users" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ exp.team_size }}+</div><div class="text-[11px] text-ink-3">{% trans "Jamoa" %}</div></div></div>{% endif %}
+        {% if exp.products_count %}<div class="glass glass--sm p-3 flex items-center gap-2"><i data-lucide="box" class="w-5 h-5"></i><div><div class="font-semibold tabular">{{ exp.products_count }}+</div><div class="text-[11px] text-ink-3">{% trans "Mahsulotlar" %}</div></div></div>{% endif %}
+      </div>
+      {% if exp.quote %}<blockquote class="glass glass--sm flex gap-3 p-4 mt-4"><span class="font-display text-3xl text-accent leading-none">“</span><p>{{ exp.quote }}</p></blockquote>{% endif %}
+    </div>
+    {% if exp.responsibilities.all %}
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="list-checks"></i></span><h2 class="text-xl font-semibold">{% trans "Asosiy vazifalar" %}</h2></div>
+      <ul class="flex flex-col gap-2.5 text-sm text-ink-2">{% for r in exp.responsibilities.all %}<li class="flex gap-2"><i data-lucide="circle-check" class="w-4 h-4 mt-0.5 shrink-0"></i>{{ r.text }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% if exp.projects.all %}
+    <div class="panel">
+      <div class="panel-title"><div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="monitor"></i></span><h2 class="!text-xl">{% trans "Loyihalar" %}</h2></div><a href="{% url 'portfolio:project_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+      <div class="grid sm:grid-cols-3 gap-3">
+        {% for p in exp.projects.all %}<a href="{{ p.get_absolute_url }}" class="glass glass--sm glass--hover overflow-hidden"><img src="{% thumb p.cover 480 %}" alt="" class="w-full aspect-[16/10] object-cover" loading="lazy"><div class="p-3"><div class="font-semibold text-sm">{{ p.title }}</div><div class="text-[11px] text-ink-3">{{ p.subtitle }}</div><div class="flex flex-wrap gap-1 mt-2">{% for t in p.tags.all|slice:":2" %}<span class="chip !text-[10px]">{{ t.name }}</span>{% endfor %}</div></div></a>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <aside class="flex flex-col gap-4">
+    {% if exp.company_description or exp.website %}
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="building-2"></i></span><h2 class="text-lg font-semibold">{% trans "Kompaniya" %}</h2></div>
+      <ul class="flex flex-col gap-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="building" class="w-4 h-4 text-ink-3"></i>{{ exp.company }}</li>
+        {% if exp.company_industry %}<li class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-ink-3"></i>{{ exp.company_industry }}</li>{% endif %}
+        {% if exp.location %}<li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-ink-3"></i>{{ exp.location }}</li>{% endif %}
+        {% if exp.website %}<li class="flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-ink-3"></i><a href="{{ exp.website }}" target="_blank" rel="noopener" class="hover:underline">{{ exp.website }}</a></li>{% endif %}
+      </ul>
+      {% if exp.company_description %}<p class="text-sm text-ink-2 mt-3">{{ exp.company_description }}</p>{% endif %}
+      {% if exp.map_url %}<a href="{{ exp.map_url }}" target="_blank" rel="noopener" class="btn btn-glass btn-sm mt-3"><i data-lucide="map"></i>{% trans "Xaritada ochish" %}</a>{% endif %}
+    </div>
+    {% endif %}
+    {% if exp.milestones.all %}
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="history"></i></span><h2 class="text-lg font-semibold">{% trans "Ish vaqt chizig'i" %}</h2></div>
+      <ol class="relative flex flex-col gap-4 pl-5 before:absolute before:left-[5px] before:top-1 before:bottom-1 before:w-px before:bg-accent/40">
+        {% for m in exp.milestones.all %}<li class="relative grid grid-cols-[70px_1fr] gap-2 text-sm"><span class="absolute -left-5 top-1 w-[11px] h-[11px] rounded-full bg-accent shadow-[0_0_10px_rgb(var(--accent))]"></span><span class="text-ink-3 text-xs pt-0.5">{{ m.date_label }}</span><div><div class="font-medium">{{ m.title }}</div><div class="text-xs text-ink-3">{{ m.description }}</div></div></li>{% endfor %}
+      </ol>
+    </div>
+    {% endif %}
+    {% if related %}
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-3">{% trans "Boshqa tajribalar" %}</h2>
+      <div class="flex flex-col gap-2">{% for r in related %}<a href="{{ r.get_absolute_url }}" class="glass glass--sm glass--hover p-3 flex items-center gap-3"><span class="icon-tile"><i data-lucide="briefcase"></i></span><div class="text-sm"><div class="font-semibold">{{ r.company }}</div><div class="text-xs text-ink-3">{{ r.role }} · {{ r.start_date|date:"Y" }}</div></div></a>{% endfor %}</div>
+    </div>
+    {% endif %}
+  </aside>
+</section>
+
+<section class="panel mt-4">
+  <div class="flex items-center gap-3 mb-4"><span class="icon-tile"><i data-lucide="box"></i></span><h2 class="text-xl font-semibold">{% trans "Texnologiyalar va vositalar" %}</h2></div>
+  <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">{% for t in exp.technologies.all %}<div class="glass glass--sm p-3 flex flex-col items-center gap-2 text-sm">{% if t.icon_url %}<img src="{{ t.icon_url }}" alt="" class="w-8 h-8" loading="lazy">{% else %}<span class="grid place-items-center w-8 h-8 rounded-lg bg-accent-strong/30 font-display font-semibold">{{ t.name|slice:":1" }}</span>{% endif %}{{ t.name }}</div>{% endfor %}</div>
+</section>
+{% endwith %}
+{% endblock %}

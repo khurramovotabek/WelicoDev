@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{% trans "Loyihalar" %}{% endblock %}
+{% block content %}
+{% include "partials/page_hero.html" %}
+
+<div class="flex flex-col lg:flex-row gap-3 lg:items-center mb-4">
+  <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+    <a href="?" hx-get="?" hx-target="#project-grid" hx-push-url="true" class="chip-btn {% if not active_category %}is-active{% endif %}">{% trans "Barchasi" %}</a>
+    {% for c in categories %}<a href="?category={{ c.slug }}" hx-get="?category={{ c.slug }}" hx-target="#project-grid" hx-push-url="true" class="chip-btn {% if active_category == c.slug %}is-active{% endif %}">{{ c.name }}</a>{% endfor %}
+  </div>
+  <form class="flex gap-2 lg:ml-auto" hx-get="{% url 'portfolio:project_list' %}" hx-target="#project-grid" hx-trigger="input changed delay:350ms from:input, change from:select" hx-push-url="true">
+    {% if active_category %}<input type="hidden" name="category" value="{{ active_category }}">{% endif %}
+    <label class="field-icon flex-1 lg:w-64"><i data-lucide="search"></i><input name="q" value="{{ q }}" class="field glass--pill" placeholder="{% trans 'Loyihalarni qidirish...' %}"></label>
+    <select name="sort" class="field !w-auto !rounded-full">
+      <option value="latest" {% if sort == "latest" %}selected{% endif %}>{% trans "Yangi" %}</option>
+      <option value="popular" {% if sort == "popular" %}selected{% endif %}>{% trans "Mashhur" %}</option>
+      <option value="oldest" {% if sort == "oldest" %}selected{% endif %}>{% trans "Eski" %}</option>
+    </select>
+  </form>
+</div>
+
+<div id="project-grid">{% include "portfolio/partials/project_grid.html" %}</div>
+
+<section class="glass grid lg:grid-cols-[1fr_auto] gap-6 items-center p-6 mt-6">
+  <div>
+    <span class="chip uppercase tracking-wider !text-[10px]">{% trans "G'oyangiz bormi?" %}</span>
+    <h2 class="text-2xl sm:text-3xl font-semibold mt-3">{% trans "Keling, ajoyib narsa quramiz." %}</h2>
+    <p class="text-ink-2 mt-1">{% trans "Qiziqarli loyihalar, hamkorlik yoki texnologiya haqida suhbatga doimo ochiqman." %}</p>
+    <a href="{% url 'core:contact' %}" class="btn btn-light mt-4">{% trans "Bog'lanish" %}<i data-lucide="arrow-right"></i></a>
+  </div>
+  <div class="glass glass--sm grid grid-cols-2 sm:grid-cols-4 text-center text-xs">
+    <div class="p-4"><i data-lucide="target" class="w-5 h-5 mx-auto mb-2"></i>{% trans "Yangi imkoniyatlar" %}</div>
+    <div class="p-4"><i data-lucide="users" class="w-5 h-5 mx-auto mb-2"></i>{% trans "Hamkorlik" %}</div>
+    <div class="p-4">{% social_icon "github" "w-5 h-5 mx-auto mb-2" %}Open Source</div>
+    <div class="p-4"><i data-lucide="lightbulb" class="w-5 h-5 mx-auto mb-2"></i>{% trans "Ajoyib g'oyalar" %}</div>
+  </div>
+</section>
+{% endblock %}

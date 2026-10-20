@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block title %}{% trans "Admin: tasdiqlash" %}{% endblock %}
+{% block player %}{% endblock %}
+{% block content %}
+<section class="min-h-[70vh] grid place-items-center py-10">
+  <div class="relative w-full max-w-[440px]">
+    <div class="absolute -inset-6 rounded-[40px] bg-gradient-to-br from-accent-strong/40 via-violet/25 to-transparent blur-3xl opacity-70" aria-hidden="true"></div>
+    <form method="post" class="relative glass glass--strong p-6 sm:p-8 flex flex-col gap-5" x-data="otp()">
+      {% csrf_token %}
+      <input type="hidden" name="step" value="code">
+      <input type="hidden" name="code" :value="digits.join('')">
+      <div class="flex items-center gap-3">
+        <span class="icon-tile w-12 h-12 bg-ok/15 text-ok"><i data-lucide="shield-check"></i></span>
+        <div><h1 class="text-xl font-semibold">{% trans "Ikki bosqichli tasdiqlash" %}</h1><p class="text-xs text-ink-3">{% trans "Kod Telegram botga yuborildi" %} · @{{ bot_username }}</p></div>
+      </div>
+      <div class="otp" @paste.prevent="paste($event)">
+        <template x-for="(d, i) in digits" :key="i">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" :aria-label="'{% trans "Raqam" %} ' + (i + 1)" x-model="digits[i]" @input="onInput(i, $event)" @keydown.backspace="onBack(i, $event)">
+        </template>
+      </div>
+      {% if error %}<p class="text-sm text-danger text-center">{{ error }}</p>{% endif %}
+      <button class="btn btn-primary w-full py-3" :disabled="digits.join('').length !== 6"><i data-lucide="log-in"></i>{% trans "Tasdiqlash" %}</button>
+      <p class="text-[11px] text-ink-3 text-center">{% blocktrans with m=ttl %}Kod {{ m }} soniya amal qiladi. 5 marta noto'g'ri kiritilsa, kirish bloklanadi.{% endblocktrans %}</p>
+    </form>
+  </div>
+</section>
+{% endblock %}
+{% block body_end %}
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("otp", () => ({
+      digits: ["", "", "", "", "", ""],
+      inputs() { return this.$root.querySelectorAll(".otp input"); },
+      init() { this.$nextTick(() => this.inputs()[0] && this.inputs()[0].focus()); },
+      onInput(i, e) {
+        const v = e.target.value.replace(/\D/g, "").slice(-1);
+        this.digits[i] = v; e.target.value = v;
+        if (v && i < 5) this.inputs()[i + 1].focus();
+        if (this.digits.join("").length === 6) this.$nextTick(() => this.$root.requestSubmit());
+      },
+      onBack(i) { if (!this.digits[i] && i > 0) this.inputs()[i - 1].focus(); },
+      paste(e) {
+        const v = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6).split("");
+        v.forEach((c, k) => (this.digits[k] = c));
+        if (v.length === 6) this.$nextTick(() => this.$root.requestSubmit());
+      },
+    }));
+  });
+</script>
+{% endblock %}

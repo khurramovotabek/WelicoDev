@@ -1,0 +1,9 @@
+{% load i18n %}
+<li class="glass glass--sm p-2.5 flex items-center gap-2">
+  <i data-lucide="{{ icon }}" class="w-4 h-4 text-ink-3 shrink-0"></i>
+  <span class="truncate flex-1">{{ obj.title }}</span>
+  <form method="post" action="{% url 'dashboard:channel_from' kind obj.pk %}" class="flex gap-1">{% csrf_token %}
+    <button name="mode" value="draft" class="btn-icon w-7 h-7 rounded-lg" title="{% trans 'Tahrirlab joylash' %}"><i data-lucide="pencil" class="!w-3 !h-3"></i></button>
+    <button name="mode" value="send" class="btn-icon w-7 h-7 rounded-lg text-accent" title="{% trans 'Hozir joylash' %}"><i data-lucide="send" class="!w-3 !h-3"></i></button>
+  </form>
+</li>

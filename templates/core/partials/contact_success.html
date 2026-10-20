@@ -1,0 +1,6 @@
+{% load i18n %}
+<div class="flex flex-col items-center text-center gap-3 py-12 animate-fade-up">
+  <span class="grid place-items-center w-16 h-16 rounded-full bg-ok/15 text-ok"><i data-lucide="check" class="w-8 h-8"></i></span>
+  <h3 class="text-2xl font-semibold">{% trans "Xabaringiz yuborildi!" %}</h3>
+  <p class="text-ink-2 max-w-sm">{% blocktrans with name=msg.name %}Rahmat, {{ name }}. Odatda 24 soat ichida javob beraman.{% endblocktrans %}</p>
+</div>

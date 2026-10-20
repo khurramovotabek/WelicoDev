@@ -1,0 +1,19 @@
+{% load i18n %}{% trans "O'chirilsinmi?" as del_q %}
+<tr id="mod-{{ o.pk }}">
+  <td class="w-12">{% include "partials/avatar.html" with u=o.user size="w-9 h-9" %}</td>
+  <td class="min-w-[260px]">
+    <div class="flex items-center gap-2 text-sm"><span class="font-semibold">{{ o.user.display_name }}</span>{% if tab == "reviews" %}<span class="text-warn">{% for i in "12345" %}{% if forloop.counter <= o.rating %}★{% endif %}{% endfor %}</span>{% endif %}<span class="text-[11px] text-ink-3">{{ o.created_at|timesince }}</span></div>
+    <p class="text-sm text-ink-2 mt-0.5 line-clamp-3">{{ o.body }}</p>
+    <a href="{{ o.target.get_absolute_url }}" target="_blank" class="text-[11px] text-accent hover:underline">{{ o.content_type.name|capfirst }}: {{ o.target|truncatechars:50 }}</a>
+  </td>
+  <td class="whitespace-nowrap">{% if o.is_approved %}<span class="badge badge-ok">{% trans "Ko'rinadi" %}</span>{% else %}<span class="badge badge-warn">{% trans "Kutilmoqda" %}</span>{% endif %}{% if o.is_pinned %} <span class="badge badge-info">{% trans "Qadalgan" %}</span>{% endif %}</td>
+  <td>
+    {% with kind=tab|slice:":-1" %}
+    <div class="flex justify-end gap-1.5" hx-target="#mod-{{ o.pk }}" hx-swap="outerHTML">
+      {% if o.is_approved %}<button class="btn btn-glass btn-sm" hx-post="{% url 'dashboard:moderate' kind o.pk 'hide' %}"><i data-lucide="eye-off"></i>{% trans "Yashirish" %}</button>{% else %}<button class="btn btn-primary btn-sm" hx-post="{% url 'dashboard:moderate' kind o.pk 'approve' %}"><i data-lucide="check"></i>{% trans "Tasdiqlash" %}</button>{% endif %}
+      {% if tab == "comments" %}<button class="btn-icon w-8 h-8 rounded-lg" hx-post="{% url 'dashboard:moderate' kind o.pk 'pin' %}" title="Pin"><i data-lucide="pin" class="!w-3.5 !h-3.5"></i></button>{% endif %}
+      <button class="btn-icon w-8 h-8 rounded-lg text-danger" hx-confirm="{{ del_q }}" hx-post="{% url 'dashboard:moderate' kind o.pk 'delete' %}" title="Delete"><i data-lucide="trash-2" class="!w-3.5 !h-3.5"></i></button>
+    </div>
+    {% endwith %}
+  </td>
+</tr>

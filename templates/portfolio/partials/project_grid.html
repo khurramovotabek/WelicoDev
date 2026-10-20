@@ -1,0 +1,47 @@
+{% load i18n wcd %}
+{% if featured and not active_category and not q %}
+<article class="glass grid lg:grid-cols-[1fr_1.35fr_150px] gap-5 p-5 mb-4">
+  <div class="flex flex-col gap-3">
+    <span class="chip w-fit"><i data-lucide="star" class="w-3.5 h-3.5 text-warn fill-current"></i>{% trans "Tanlangan loyiha" %}</span>
+    <h2 class="text-4xl font-semibold">{{ featured.title }}</h2>
+    <p class="text-ink">{{ featured.subtitle }}</p>
+    <p class="text-sm text-ink-2">{{ featured.short_description }}</p>
+    <div class="flex flex-wrap gap-1.5">{% for t in featured.tags.all %}<span class="chip">{{ t.name }}</span>{% endfor %}</div>
+    <div class="flex flex-wrap gap-2 mt-auto pt-2">
+      <a href="{{ featured.get_absolute_url }}" class="btn btn-light">{% trans "Loyihani ko'rish" %}<i data-lucide="arrow-right"></i></a>
+      {% if featured.live_url %}<a href="{{ featured.live_url }}" target="_blank" rel="noopener" class="btn btn-glass">{% trans "Jonli demo" %}<i data-lucide="external-link"></i></a>{% endif %}
+    </div>
+  </div>
+  <a href="{{ featured.get_absolute_url }}" class="relative rounded-2xl overflow-hidden min-h-[220px] glass glass--sm">
+    <img src="{% thumb featured.cover 640 %}" alt="{{ featured.title }}" class="absolute inset-0 w-full h-full object-cover">
+    {% if featured.images.all %}<span class="absolute right-3 bottom-3 chip !bg-black/40 text-ink">+{{ featured.images.all|length }} {% trans "rasm" %}</span>{% endif %}
+  </a>
+  <div class="grid grid-cols-3 lg:grid-cols-1 gap-3 lg:content-center">
+    <div class="flex items-center gap-3"><i data-lucide="star" class="w-6 h-6 text-warn fill-current"></i><div><div class="font-semibold tabular">{{ featured_rating.avg|default:"—" }}{% if featured_rating.count %}/5{% endif %}</div><div class="stat-label">{{ featured_rating.count }} {% trans "sharh" %}</div></div></div>
+    <div class="flex items-center gap-3"><i data-lucide="eye" class="w-6 h-6"></i><div><div class="font-semibold tabular">{{ featured.views_count|compact }}</div><div class="stat-label">{% trans "ko'rish" %}</div></div></div>
+    <div class="flex items-center gap-3"><i data-lucide="calendar-check" class="w-6 h-6"></i><div><div class="font-semibold tabular">{{ featured.completed_year|default:"—" }}</div><div class="stat-label">{% trans "yakunlangan" %}</div></div></div>
+  </div>
+</article>
+{% endif %}
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  {% for p in projects %}
+    <article class="media-card">
+      <a href="{{ p.get_absolute_url }}" class="media-card__img block m-2.5 mb-0 rounded-xl"><img src="{% thumb p.cover 640 %}" alt="{{ p.title }}" loading="lazy"></a>
+      <div class="flex flex-col gap-2 p-4 flex-1">
+        <h3 class="text-lg font-semibold"><a href="{{ p.get_absolute_url }}" class="hover:underline underline-offset-4">{{ p.title }}</a></h3>
+        <p class="text-xs text-ink-3 -mt-1.5">{{ p.subtitle }}</p>
+        <p class="text-sm text-ink-2 line-clamp-3">{{ p.short_description }}</p>
+        <div class="flex flex-wrap gap-1.5">{% for t in p.tags.all|slice:":3" %}<span class="chip !text-[10px]">{{ t.name }}</span>{% endfor %}</div>
+        <div class="flex items-center gap-4 text-xs text-ink-3 mt-auto pt-2">
+          {% if p.rating_count %}<span class="flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 text-warn fill-current"></i>{{ p.rating_avg|floatformat:1 }} ({{ p.rating_count }})</span>{% endif %}
+          <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3.5 h-3.5"></i>{{ p.views_count|compact }}</span>
+          <span class="flex items-center gap-1"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i>{{ p.comments_n }}</span>
+          <a href="{{ p.get_absolute_url }}" class="ml-auto text-ink-2 hover:text-ink" aria-label="{% trans 'Ochish' %}"><i data-lucide="square-arrow-out-up-right" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+    </article>
+  {% empty %}
+    <div class="panel col-span-full text-center text-ink-2 py-14"><i data-lucide="folder-search" class="w-10 h-10 mx-auto mb-3 text-ink-3"></i>{% trans "Hech qanday loyiha topilmadi" %}</div>
+  {% endfor %}
+</div>

@@ -1,0 +1,1 @@
+{% load static %}{% if site.logo %}<img src="{{ site.logo.url }}" alt="" width="{{ size|default:34 }}" height="{{ size|default:34 }}" class="rounded-xl">{% else %}<img src="{% static 'img/logo-mark.svg' %}" alt="" width="{{ size|default:34 }}" height="{{ size|default:34 }}" class="rounded-xl shadow-[0_6px_20px_-6px_rgba(91,140,255,.7)]">{% endif %}

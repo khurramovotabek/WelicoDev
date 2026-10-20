@@ -1,0 +1,65 @@
+{% load static i18n wcd %}<!doctype html>
+{% get_current_language as LANG %}
+<html lang="{{ LANG }}" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0b1530">
+  <title>{{ site.brand_name }}</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/logo-mark.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{% static 'dist/app.css' %}?v={{ ASSET_V }}">
+  <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+  <script defer src="{% static 'vendor/lucide-subset.js' %}?v={{ ASSET_V }}"></script>
+  <script defer src="{% static 'vendor/htmx.min.js' %}"></script>
+  <script defer src="{% static 'js/app.js' %}?v={{ ASSET_V }}"></script>
+  <script defer src="{% static 'js/miniapp.js' %}?v={{ ASSET_V }}"></script>
+  <script defer src="{% static 'vendor/alpine.min.js' %}"></script>
+</head>
+<body data-hljs="{% static 'vendor/highlight.min.js' %}" data-hljs-css="{% static 'vendor/hljs-tokyo-night.min.css' %}" class="tma" data-lang="{{ LANG }}" data-home="{% url 'miniapp:home' %}" data-me="{% url 'miniapp:me' %}" data-debug-user="{{ debug_user }}">
+  <div class="scene" aria-hidden="true">
+    {% if site.background_url %}
+      <div class="scene__photo" style="--bg-lg:url('{{ site.background_url_sm }}');--bg-blur:{{ site.background_blur }}px"></div>
+      <div class="scene__shade" style="--bg-dim:{{ site.background_dim|bg_dim }}"></div>
+    {% else %}
+      <canvas id="scene-canvas"></canvas>
+      <script defer src="{% static 'js/scene.js' %}?v={{ ASSET_V }}"></script>
+    {% endif %}
+  </div>
+
+  <header class="tma-top">
+    <button type="button" class="tma-icon" data-back hidden aria-label="{% trans 'Orqaga' %}"><i data-lucide="chevron-left"></i></button>
+    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+      <span data-brand>{% include "partials/logo_mark.html" with size=30 %}</span>
+      <h1 class="tma-title" data-title>{{ site.brand_name }}</h1>
+    </div>
+    <button type="button" class="tma-icon" onclick="wcdTheme.toggle()" aria-label="{% trans 'Mavzuni almashtirish' %}"><i data-lucide="sun" class="only-dark"></i><i data-lucide="moon" class="only-light"></i></button>
+  </header>
+
+  <main id="view" class="tma-view" aria-live="polite">
+    {% include "miniapp/partials/skeleton.html" %}
+  </main>
+
+  <nav class="tma-tabs" aria-label="{% trans 'Asosiy menyu' %}">
+    <a href="#" data-tab="{% url 'miniapp:home' %}" class="tma-tab is-active"><i data-lucide="house"></i><span>{% trans "Bosh sahifa" %}</span></a>
+    <a href="#" data-tab="{% url 'miniapp:courses' %}" class="tma-tab"><i data-lucide="graduation-cap"></i><span>{% trans "Kurslar" %}</span></a>
+    <a href="#" data-tab="{% url 'miniapp:journal' %}" class="tma-tab"><i data-lucide="book-open-text"></i><span>Blog</span></a>
+    <a href="#" data-tab="{% url 'miniapp:projects' %}" class="tma-tab"><i data-lucide="folder"></i><span>{% trans "Loyihalar" %}</span></a>
+    <a href="#" data-tab="{% url 'miniapp:profile' %}" class="tma-tab"><i data-lucide="user-round"></i><span>{% trans "Profil" %}</span></a>
+  </nav>
+
+  <div id="toasts" class="fixed z-50 left-4 right-4 flex flex-col items-center gap-2 pointer-events-none" style="bottom:calc(84px + var(--tma-safe-bottom))"></div>
+
+  <div id="tma-outside" hidden class="fixed inset-0 z-50 grid place-items-center p-6 bg-sky-950/90 text-center">
+    <div class="glass p-6 max-w-sm flex flex-col items-center gap-3">
+      {% include "partials/logo_mark.html" with size=52 %}
+      <h2 class="text-xl font-semibold">{% trans "Ilovani Telegram ichida oching" %}</h2>
+      <p class="text-sm text-ink-2">{% trans "Bu Mini App faqat Telegram orqali ishlaydi." %}</p>
+      <a href="https://t.me/{{ bot_username }}" class="btn btn-primary">{% social_icon "telegram" "w-4 h-4" %}@{{ bot_username }}</a>
+    </div>
+  </div>
+</body>
+</html>

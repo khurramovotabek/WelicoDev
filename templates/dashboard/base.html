@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n wcd static %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block title %}{% block dash_title %}Dashboard{% endblock %} · Dashboard{% endblock %}
+{% block body_class %}dash{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{{ form.media }}{% endblock %}
+{% block scripts %}<script defer src="{% static 'vendor/chart.umd.js' %}"></script>{% endblock %}
+{% block header %}{% endblock %}
+{% block player %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block main %}
+{% get_current_language as LANG %}
+<div class="gutter min-h-dvh flex gap-5 py-4" x-data="{ nav: false }">
+  {# ---------------------------------------------------------- Sidebar #}
+  <div x-cloak x-show="nav" x-transition.opacity class="fixed inset-0 z-40 bg-black/50 lg:hidden" @click="nav = false"></div>
+  <aside class="fixed lg:sticky top-4 bottom-4 left-4 z-50 w-[250px] shrink-0 flex flex-col gap-3 transition -translate-x-[120%] lg:translate-x-0 lg:h-[calc(100dvh-2rem)]" :class="nav && '!translate-x-0'">
+    <a href="{% url 'dashboard:home' %}" class="glass glass--sm flex items-center gap-3 px-3 py-3">
+      {% include "partials/logo_mark.html" with size=38 %}
+      <span class="leading-tight"><span class="block font-display font-semibold tracking-[.16em] uppercase text-sm">{{ site.brand_name }}</span><span class="block text-[10px] text-ink-3 tracking-wider">Build. Learn. Create.</span></span>
+    </a>
+    <nav class="glass glass--sm flex-1 min-h-0 p-2.5 flex flex-col gap-0.5 overflow-y-auto overflow-x-hidden no-scrollbar" aria-label="Dashboard">
+      {% url 'dashboard:home' as u %}<a href="{{ u }}" class="dash-nav {% if request.path == u %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="house"></i></span>Dashboard</a>
+      {% url 'dashboard:users' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="user-round"></i></span>{% trans "Foydalanuvchilar" %}</a>
+      <div class="dash-group">{% trans "Kontent" %}</div>
+      {% url 'dashboard:projects' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="folder"></i></span>{% trans "Loyihalar" %}</a>
+      {% url 'dashboard:articles' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="file-text"></i></span>Blog</a>
+      {% url 'dashboard:courses' as u %}{% url 'dashboard:homework' as u2 %}<a href="{{ u }}" class="dash-nav {% if u in request.path or u2 in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="graduation-cap"></i></span>Education{% if badges.homework %}<span class="ml-auto badge badge-warn">{{ badges.homework }}</span>{% endif %}</a>
+      {% url 'dashboard:access' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="key-round"></i></span>{% trans "Kursga ruxsatlar" %}{% if badges.access %}<span class="ml-auto badge badge-warn">{{ badges.access }}</span>{% endif %}</a>
+      {% url 'dashboard:experience' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="briefcase"></i></span>{% trans "Tajriba va ta'lim" %}</a>
+      {% url 'dashboard:skills' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="zap"></i></span>{% trans "Ko'nikmalar" %}</a>
+      {% url 'dashboard:music' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="music"></i></span>{% trans "Musiqa" %}</a>
+      <a href="{% url 'admin:gallery_photo_changelist' %}" class="dash-nav"><span class="icon-tile"><i data-lucide="image"></i></span>{% trans "Foto va video" %}<i data-lucide="arrow-up-right" class="w-3.5 h-3.5 ml-auto text-ink-3"></i></a>
+      <div class="dash-group">{% trans "Faollik" %}</div>
+      {% url 'dashboard:comments' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="message-square"></i></span>{% trans "Izoh va sharhlar" %}{% if badges.reviews %}<span class="ml-auto badge badge-warn">{{ badges.reviews }}</span>{% endif %}</a>
+      {% url 'dashboard:inbox' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="mail"></i></span>{% trans "Xabarlar" %}{% if badges.messages %}<span class="ml-auto badge badge-danger">{{ badges.messages }}</span>{% endif %}</a>
+      <div class="dash-group">Telegram</div>
+      {% url 'dashboard:bot' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile">{% social_icon "telegram" "w-[18px] h-[18px]" %}</span>{% trans "Bot" %}</a>
+      {% url 'dashboard:channel' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="radio-tower"></i></span>{% trans "Kanal postlari" %}</a>
+      <div class="dash-group">{% trans "Tizim" %}</div>
+      {% url 'dashboard:analytics' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="chart-column"></i></span>{% trans "Analitika" %}</a>
+      {% url 'dashboard:settings' as u %}<a href="{{ u }}" class="dash-nav {% if u in request.path %}is-active{% endif %}"><span class="icon-tile"><i data-lucide="settings"></i></span>{% trans "Sozlamalar" %}</a>
+      <a href="{% url 'admin:index' %}" class="dash-nav"><span class="icon-tile"><i data-lucide="database"></i></span>{% trans "To'liq admin" %}<i data-lucide="arrow-up-right" class="w-3.5 h-3.5 ml-auto text-ink-3"></i></a>
+    </nav>
+    <a href="{% url 'dashboard:bot' %}" class="glass glass--sm p-4 relative overflow-hidden">
+      <span class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-accent-strong/40 blur-2xl" aria-hidden="true"></span>
+      <div class="flex items-center gap-2 text-sm font-semibold">{% social_icon "telegram" "w-5 h-5 text-accent" %}@{{ bot_username }}</div>
+      <div class="flex items-center gap-2 text-xs mt-2">{% if bot_ok %}<span class="dot"></span><span class="text-ok">{% trans "Token ulangan" %}</span>{% else %}<span class="w-2 h-2 rounded-full bg-warn"></span><span class="text-warn">{% trans "Token kiritilmagan" %}</span>{% endif %}</div>
+    </a>
+    <div class="glass glass--sm flex items-center gap-3 p-2.5">
+      {% include "partials/avatar.html" with u=user size="w-10 h-10" %}
+      <div class="text-sm min-w-0 flex-1"><div class="font-semibold truncate">{{ user.display_name }}</div><div class="text-[11px] text-ink-3">{% if user.is_superuser %}Admin{% else %}Staff{% endif %}</div></div>
+      <a href="{% url 'core:home' %}" class="text-ink-3 hover:text-ink" title="Website"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+    </div>
+  </aside>
+
+  {# ---------------------------------------------------------- Asosiy qism #}
+  <div class="flex-1 min-w-0 flex flex-col gap-5">
+    <header class="flex items-center gap-2 sm:gap-3">
+      <button class="btn-icon lg:hidden" @click="nav = true" aria-label="Menu"><i data-lucide="menu"></i></button>
+      <div class="relative flex-1 max-w-xl max-sm:hidden" x-data="{ open: false }" @click.outside="open = false">
+        <label class="field-icon block"><i data-lucide="search"></i>
+          <input type="search" name="q" class="field !rounded-2xl !py-3" placeholder="{% trans 'Loyiha, maqola, foydalanuvchi...' %}" autocomplete="off"
+                 hx-get="{% url 'dashboard:search' %}" hx-trigger="input changed delay:250ms" hx-target="#dash-search" @focus="open = true" @input="open = true">
+        </label>
+        <div id="dash-search" x-show="open" x-cloak class="absolute left-0 right-0 mt-2 z-30"></div>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+          <button class="glass glass--sm flex items-center gap-2 px-3 py-2.5 text-sm" @click="open = !open"><i data-lucide="globe" class="w-4 h-4"></i>{{ LANG|upper }}<i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></button>
+          <div x-show="open" x-cloak x-transition class="absolute right-0 mt-2 w-40 glass glass--strong glass--sm p-1.5 z-30">{% for code, name in LANGUAGES %}<a href="{% lang_url code %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-ink/10 {% if code == LANG %}text-accent{% endif %}">{{ name }}</a>{% endfor %}</div>
+        </div>
+        <button type="button" class="btn-icon w-11 h-11" onclick="wcdTheme.toggle()" aria-label="Theme"><i data-lucide="sun" class="only-dark"></i><i data-lucide="moon" class="only-light"></i></button>
+        <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+          <button class="btn-icon w-11 h-11 relative" @click="open = !open" aria-label="{% trans 'Bildirishnomalar' %}"><i data-lucide="bell"></i>{% if badges.total %}<span class="absolute -top-1 -right-1 grid place-items-center min-w-5 h-5 px-1 rounded-full bg-danger text-[10px] font-bold text-white">{{ badges.total }}</span>{% endif %}</button>
+          <div x-show="open" x-cloak x-transition class="absolute right-0 mt-2 w-72 glass glass--strong glass--sm p-2 z-30 text-sm">
+            <a href="{% url 'dashboard:inbox' %}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-ink/10"><i data-lucide="mail" class="w-4 h-4"></i>{% trans "Yangi xabarlar" %}<span class="ml-auto badge badge-danger">{{ badges.messages }}</span></a>
+            <a href="{% url 'dashboard:comments' %}?tab=reviews" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-ink/10"><i data-lucide="star" class="w-4 h-4"></i>{% trans "Tasdiqlanmagan sharhlar" %}<span class="ml-auto badge badge-warn">{{ badges.reviews }}</span></a>
+            <a href="{% url 'dashboard:homework' %}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-ink/10"><i data-lucide="clipboard-list" class="w-4 h-4"></i>{% trans "Tekshiriladigan vazifalar" %}<span class="ml-auto badge badge-info">{{ badges.homework }}</span></a>
+          </div>
+        </div>
+      </div>
+    </header>
+    {% block dash %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

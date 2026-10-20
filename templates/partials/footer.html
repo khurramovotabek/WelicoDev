@@ -1,0 +1,18 @@
+{% load i18n wcd %}
+<footer class="gutter mt-16" style="padding-bottom:calc(28px + env(safe-area-inset-bottom, 0px))">
+  <div class="mx-auto max-w-site flex flex-col md:flex-row items-center gap-5 md:gap-6 text-sm">
+    <a href="{% url 'core:home' %}" class="flex items-center gap-3">
+      {% include "partials/logo_mark.html" with size=36 %}
+      <span class="leading-tight">
+        <span class="block font-display font-semibold tracking-[.18em] uppercase text-[13px]">{{ site.brand_name }}</span>
+        <span class="block text-xs text-ink-3">{{ site.brand_tagline }}</span>
+      </span>
+    </a>
+    <p class="md:mx-auto text-xs text-ink-3 text-center">© {% now "Y" %} {{ site.brand_name }}. {{ site.footer_text|default:_("Barcha huquqlar himoyalangan.") }}</p>
+    <ul class="flex items-center gap-1">
+      {% for s in footer_socials %}
+        <li><a href="{{ s.url }}" target="_blank" rel="noopener" class="grid place-items-center w-9 h-9 rounded-full text-ink-2 hover:text-ink hover:bg-ink/10 transition" aria-label="{{ s.display_name }}">{% social_icon s.platform %}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</footer>

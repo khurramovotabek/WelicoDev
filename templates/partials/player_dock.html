@@ -1,0 +1,117 @@
+{% load i18n %}{% trans "O'rta" as mid_label %}
+{# Global musiqa pleyeri: sahifalar orasida davom etadi (static/js/player.js) #}
+<div x-data x-show="$store.player.active" x-cloak x-transition.opacity.duration.300ms
+     x-effect="document.body.classList.toggle('has-player', $store.player.active)"
+     class="player-dock" role="region" aria-label="{% trans 'Musiqa pleyeri' %}" @click.outside="$store.player.panel = ''">
+
+  {# ------------------------------------------------------------ Sozlamalar paneli #}
+  <div x-show="$store.player.panel === 'settings'" x-transition.origin.bottom.right x-cloak class="player-pop right-2 sm:right-3 w-[min(340px,calc(100vw-24px))]">
+    <div class="flex items-center justify-between"><h3 class="text-sm font-semibold">{% trans "Ovoz sozlamalari" %}</h3><button type="button" class="text-ink-3 hover:text-ink" @click="$store.player.panel = ''" aria-label="{% trans 'Yopish' %}"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+
+    <div class="flex flex-col gap-2">
+      <div class="text-[11px] uppercase tracking-wider text-ink-3">{% trans "Ekvalayzer" %}</div>
+      <div class="flex flex-wrap gap-1.5">
+        <template x-for="p in $store.player.presets" :key="p">
+          <button type="button" class="chip-btn !py-1 !px-2.5 !text-xs capitalize" :class="$store.player.eqPreset === p && 'is-active'" @click="$store.player.setPreset(p)" x-text="{flat: '{% trans "Oddiy" %}', bass: 'Bass', vocal: '{% trans "Vokal" %}', treble: 'Treble', night: '{% trans "Tun" %}'}[p]"></button>
+        </template>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-1">
+        <template x-for="(band, i) in ['Bass', '{{ mid_label|escapejs }}', 'Treble']" :key="i">
+          <label class="flex flex-col items-center gap-1.5 text-[11px] text-ink-3">
+            <span class="tabular text-ink-2" x-text="($store.player.eq[i] > 0 ? '+' : '') + $store.player.eq[i] + ' dB'"></span>
+            <input type="range" min="-12" max="12" step="1" :value="$store.player.eq[i]" @input="$store.player.setBand(i, $event.target.value)" class="w-full accent-[rgb(var(--accent-strong))]" :aria-label="band">
+            <span x-text="band"></span>
+          </label>
+        </template>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="text-[11px] uppercase tracking-wider text-ink-3">{% trans "Tezlik" %}</div>
+      <div class="flex gap-1.5">
+        <template x-for="r in [0.75, 1, 1.25, 1.5]" :key="r">
+          <button type="button" class="chip-btn !py-1 !px-2.5 !text-xs tabular flex-1 justify-center" :class="$store.player.rate === r && 'is-active'" @click="$store.player.setRate(r)" x-text="r + '×'"></button>
+        </template>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="text-[11px] uppercase tracking-wider text-ink-3 flex justify-between">{% trans "Uyqu taymeri" %}<span class="tabular text-accent normal-case" x-show="$store.player.sleepLeft" x-text="$store.player.sleepLeft"></span></div>
+      <div class="flex gap-1.5">
+        <button type="button" class="chip-btn !py-1 !px-2.5 !text-xs flex-1 justify-center" :class="!$store.player.sleepAt && 'is-active'" @click="$store.player.setSleep(0)">{% trans "O'chiq" %}</button>
+        <template x-for="m in [15, 30, 60]" :key="m">
+          <button type="button" class="chip-btn !py-1 !px-2.5 !text-xs flex-1 justify-center tabular" @click="$store.player.setSleep(m)" x-text="m + ' {% trans "daq" %}'"></button>
+        </template>
+      </div>
+    </div>
+    <p class="text-[10px] text-ink-3 leading-snug">{% trans "Klaviatura: Probel — ijro/pauza, ← → — 10 soniya, Shift+← → — trek, M — ovozsiz" %}</p>
+  </div>
+
+  {# ------------------------------------------------------------ Navbat paneli #}
+  <div x-show="$store.player.panel === 'queue'" x-transition.origin.bottom.right x-cloak class="player-pop right-2 sm:right-3 w-[min(360px,calc(100vw-24px))]">
+    <div class="flex items-center justify-between"><h3 class="text-sm font-semibold">{% trans "Navbat" %} <span class="text-ink-3 tabular" x-text="'· ' + $store.player.queue.length"></span></h3><button type="button" class="text-ink-3 hover:text-ink" @click="$store.player.panel = ''" aria-label="{% trans 'Yopish' %}"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+    <ol class="flex flex-col max-h-[46vh] overflow-y-auto thin-scroll -mx-1">
+      <template x-for="(t, i) in $store.player.queue" :key="t.id + '-' + i">
+        <li><button type="button" class="w-full flex items-center gap-3 rounded-xl px-2 py-1.5 text-left hover:bg-ink/10" :class="i === $store.player.idx && 'bg-accent-strong/15'" @click="$store.player.play(i)">
+          <img :src="t.cover" x-show="t.cover" alt="" class="w-9 h-9 rounded-lg object-cover shrink-0"><span x-show="!t.cover" class="w-9 h-9 rounded-lg bg-ink/10 shrink-0"></span>
+          <span class="min-w-0 flex-1"><span class="block text-sm font-medium truncate" :class="i === $store.player.idx && 'text-accent'" x-text="t.title"></span><span class="block text-[11px] text-ink-3 truncate" x-text="t.artist"></span></span>
+          <span class="text-[11px] text-ink-3 tabular" x-text="t.duration"></span>
+        </button></li>
+      </template>
+    </ol>
+  </div>
+
+  {# ------------------------------------------------------------ Asosiy panel #}
+  <div class="player-bar">
+    <div class="player-progress" @click="$store.player.seekTo($event)" role="slider" aria-label="{% trans 'Ijro joyi' %}" :aria-valuenow="Math.round($store.player.pct)" aria-valuemin="0" aria-valuemax="100">
+      <span class="player-progress__buf" :style="`width:${$store.player.buffered}%`"></span>
+      <span class="player-progress__fill" :style="`width:${$store.player.pct}%`"></span>
+    </div>
+
+    <div class="flex items-center gap-3 min-w-0 px-3 sm:px-4 py-2.5">
+      {# Trek #}
+      <button type="button" class="flex items-center gap-3 min-w-0 flex-1 md:flex-none md:w-[260px] text-left" @click="$store.player.togglePanel('queue')">
+        <span class="relative shrink-0">
+          <img :src="$store.player.track?.cover" x-show="$store.player.track?.cover" alt="" class="w-11 h-11 rounded-xl object-cover">
+          <span x-show="!$store.player.track?.cover" class="grid place-items-center w-11 h-11 rounded-xl bg-accent-strong/30"><i data-lucide="music" class="w-5 h-5"></i></span>
+          <span x-show="$store.player.playing" class="absolute -right-1 -bottom-1 flex items-end gap-[2px] h-3.5 p-[3px] rounded-md bg-accent-strong"><i class="eq-bar"></i><i class="eq-bar [animation-delay:.2s]"></i><i class="eq-bar [animation-delay:.1s]"></i></span>
+        </span>
+        <span class="min-w-0"><span class="block text-sm font-semibold truncate" x-text="$store.player.track?.title"></span><span class="block text-xs text-ink-3 truncate" x-text="$store.player.track?.artist"></span></span>
+      </button>
+
+      {# Boshqaruv #}
+      <div class="flex items-center gap-1 sm:gap-2 md:mx-auto">
+        <button type="button" class="player-btn hidden sm:grid" :class="$store.player.shuffle && 'is-on'" @click="$store.player.toggleShuffle()" aria-label="Shuffle" title="Shuffle"><i data-lucide="shuffle" class="w-4 h-4"></i></button>
+        <button type="button" class="player-btn hidden sm:grid" @click="$store.player.prev()" aria-label="{% trans 'Oldingi' %}"><i data-lucide="skip-back" class="w-[18px] h-[18px] fill-current"></i></button>
+        <button type="button" class="player-play" @click="$store.player.toggle()" :aria-label="$store.player.playing ? '{% trans "Pauza" %}' : '{% trans "Ijro etish" %}'">
+          <span x-show="$store.player.loading && $store.player.playing" x-cloak><i data-lucide="loader-circle" class="w-5 h-5 animate-spin"></i></span>
+          <span x-show="!$store.player.playing"><i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i></span>
+          <span x-show="$store.player.playing && !$store.player.loading" x-cloak><i data-lucide="pause" class="w-5 h-5 fill-current"></i></span>
+        </button>
+        <button type="button" class="player-btn" @click="$store.player.next()" aria-label="{% trans 'Keyingi' %}"><i data-lucide="skip-forward" class="w-[18px] h-[18px] fill-current"></i></button>
+        <button type="button" class="player-btn hidden sm:grid relative" :class="$store.player.repeat !== 'off' && 'is-on'" @click="$store.player.cycleRepeat()" :title="'Repeat: ' + $store.player.repeat" aria-label="Repeat">
+          <span x-show="$store.player.repeat !== 'one'"><i data-lucide="repeat" class="w-4 h-4"></i></span><span x-show="$store.player.repeat === 'one'" x-cloak><i data-lucide="repeat-1" class="w-4 h-4"></i></span>
+        </button>
+      </div>
+
+      {# Vaqt, ovoz va menyular #}
+      <div class="flex items-center gap-1 sm:gap-2 md:w-[300px] md:justify-end">
+        <span class="hidden lg:block text-[11px] text-ink-3 tabular whitespace-nowrap"><span x-text="$store.player.current"></span> / <span x-text="$store.player.total"></span></span>
+        <div class="hidden md:flex items-center gap-1.5 group">
+          <button type="button" class="player-btn" @click="$store.player.toggleMute()" :aria-label="$store.player.muted ? '{% trans "Ovozni yoqish" %}' : '{% trans "Ovozsiz" %}'">
+            <span x-show="$store.player.volumeIcon === 'high'"><i data-lucide="volume-2" class="w-4 h-4"></i></span>
+            <span x-show="$store.player.volumeIcon === 'low'" x-cloak><i data-lucide="volume-1" class="w-4 h-4"></i></span>
+            <span x-show="$store.player.volumeIcon === 'off'" x-cloak><i data-lucide="volume-x" class="w-4 h-4"></i></span>
+          </button>
+          <input type="range" min="0" max="1" step="0.01" :value="$store.player.muted ? 0 : $store.player.volume" @input="$store.player.setVolume($event.target.value)" class="player-volume" aria-label="{% trans 'Ovoz balandligi' %}" :style="`--v:${($store.player.muted ? 0 : $store.player.volume) * 100}%`">
+        </div>
+        <button type="button" class="player-btn relative" :class="$store.player.panel === 'settings' && 'is-on'" @click="$store.player.togglePanel('settings')" aria-label="{% trans 'Ovoz sozlamalari' %}" title="{% trans 'Ovoz sozlamalari' %}">
+          <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+          <span x-show="$store.player.sleepAt || $store.player.eqPreset !== 'flat' || $store.player.rate !== 1" class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-accent"></span>
+        </button>
+        <button type="button" class="player-btn hidden sm:grid" :class="$store.player.panel === 'queue' && 'is-on'" @click="$store.player.togglePanel('queue')" aria-label="{% trans 'Navbat' %}"><i data-lucide="list-music" class="w-4 h-4"></i></button>
+        <button type="button" class="player-btn" @click="$store.player.close()" aria-label="{% trans 'Pleyerni yopish' %}"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+  </div>
+</div>

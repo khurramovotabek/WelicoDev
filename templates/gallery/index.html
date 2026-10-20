@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}Media{% endblock %}
+{% block content %}
+<section class="grid lg:grid-cols-[1fr_auto_auto] gap-4 items-start pt-8 lg:pt-12 pb-6">
+  <div class="flex flex-col gap-3 animate-fade-up max-w-2xl">
+    {% if hero.eyebrow %}<span class="eyebrow w-fit"><span class="dot"></span>{{ hero.eyebrow }}</span>{% endif %}
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-semibold">{% firstof hero.title "Media" %}</h1>
+    {% if hero.subtitle %}<p class="text-xl text-ink">{{ hero.subtitle }}</p>{% endif %}
+    {% if hero.description %}<p class="text-ink-2">{{ hero.description }}</p>{% endif %}
+  </div>
+  {% if hero.quote %}<figure class="quote-card lg:w-[240px]"><div class="mark">“</div><blockquote class="font-display text-lg leading-snug">{{ hero.quote }}</blockquote><div class="rule"></div></figure>{% endif %}
+  <div class="glass glass--sm px-4 py-3 text-xs flex gap-3 items-start lg:self-end"><i data-lucide="map-pin" class="w-4 h-4 mt-0.5"></i><div class="leading-5">{{ site.location }}<br><span class="tabular">{{ now|time:"H:i" }}</span><br>{{ now|date:"M d, Y" }}</div></div>
+</section>
+
+<section class="grid sm:grid-cols-3 gap-4 mb-4">
+  <a href="#photos" class="glass glass--hover flex items-center gap-4 p-4"><span class="grid place-items-center w-12 h-12 rounded-xl bg-accent-strong/80 text-white"><i data-lucide="image" class="w-5 h-5"></i></span><div class="flex-1"><div class="font-semibold">{% trans "Fotolar" %}</div><div class="text-xs text-ink-3">{{ photo_total }} {% trans "fayl" %}</div></div><span class="btn-icon w-9 h-9"><i data-lucide="arrow-right"></i></span></a>
+  <a href="#videos" class="glass glass--hover flex items-center gap-4 p-4"><span class="grid place-items-center w-12 h-12 rounded-xl bg-white/15"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span><div class="flex-1"><div class="font-semibold">{% trans "Videolar" %}</div><div class="text-xs text-ink-3">{{ video_total }} {% trans "fayl" %}</div></div><span class="btn-icon w-9 h-9"><i data-lucide="arrow-right"></i></span></a>
+  <a href="{% url 'gallery:music' %}" class="glass glass--hover flex items-center gap-4 p-4"><span class="grid place-items-center w-12 h-12 rounded-xl bg-violet/80 text-white"><i data-lucide="music" class="w-5 h-5"></i></span><div class="flex-1"><div class="font-semibold">{% trans "Musiqa" %}</div><div class="text-xs text-ink-3">{{ track_total }} {% trans "trek" %}</div></div><span class="btn-icon w-9 h-9"><i data-lucide="arrow-right"></i></span></a>
+</section>
+
+<section id="photos" class="panel scroll-mt-24">
+  <div class="flex flex-wrap items-center gap-3 mb-4">
+    <span class="icon-tile"><i data-lucide="image"></i></span>
+    <div class="mr-auto"><h2 class="text-xl font-semibold">{% trans "Fotolar" %}</h2><p class="text-xs text-ink-3">{% trans "Hayotim, sayohatlarim va ishimning vizual kundaligi." %}</p></div>
+    <div class="flex gap-1.5 overflow-x-auto">
+      <button class="chip-btn !py-1 {% if not photo_cat %}is-active{% endif %}" hx-get="?" hx-vals='{"photo": ""}' hx-target="#photos-grid" hx-select="#photos-grid" hx-swap="outerHTML" onclick="this.parentElement.querySelectorAll('.chip-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">{% trans "Barchasi" %}</button>
+      {% for c in photo_categories %}<button class="chip-btn !py-1 {% if photo_cat == c.slug %}is-active{% endif %}" hx-get="?photo={{ c.slug }}" hx-target="#photos-grid" hx-select="#photos-grid" hx-swap="outerHTML" onclick="this.parentElement.querySelectorAll('.chip-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">{{ c.name }}</button>{% endfor %}
+    </div>
+    <a href="{% url 'gallery:photo_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a>
+  </div>
+  {% include "gallery/partials/photos-grid.html" %}
+</section>
+
+<section id="videos" class="panel mt-4 scroll-mt-24">
+  <div class="flex flex-wrap items-center gap-3 mb-4">
+    <span class="icon-tile"><i data-lucide="play"></i></span>
+    <div class="mr-auto"><h2 class="text-xl font-semibold">{% trans "Videolar" %}</h2><p class="text-xs text-ink-3">{% trans "Sayohat vloglaridan loyiha sharhlarigacha." %}</p></div>
+    <div class="flex gap-1.5 overflow-x-auto">
+      <button class="chip-btn !py-1 {% if not video_cat %}is-active{% endif %}" hx-get="?" hx-target="#videos-grid" hx-select="#videos-grid" hx-swap="outerHTML" onclick="this.parentElement.querySelectorAll('.chip-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">{% trans "Barchasi" %}</button>
+      {% for c in video_categories %}<button class="chip-btn !py-1 {% if video_cat == c.slug %}is-active{% endif %}" hx-get="?video={{ c.slug }}" hx-target="#videos-grid" hx-select="#videos-grid" hx-swap="outerHTML" onclick="this.parentElement.querySelectorAll('.chip-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">{{ c.name }}</button>{% endfor %}
+    </div>
+    <a href="{% url 'gallery:video_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a>
+  </div>
+  {% include "gallery/partials/videos-grid.html" %}
+</section>
+
+<section id="music" class="panel mt-4 scroll-mt-24">
+  <div class="flex flex-wrap items-center gap-3 mb-4">
+    <span class="icon-tile"><i data-lucide="music"></i></span>
+    <div class="mr-auto"><h2 class="text-xl font-semibold">{% trans "Musiqa" %}</h2><p class="text-xs text-ink-3">{% trans "Ilhom beradigan va diqqatni jamlaydigan treklar." %}</p></div>
+    <div class="flex gap-1.5 overflow-x-auto">
+      <a href="?#music" class="chip-btn !py-1 {% if not music_cat %}is-active{% endif %}">{% trans "Barchasi" %}</a>
+      <a href="?music=favorites#music" class="chip-btn !py-1 {% if music_cat == 'favorites' %}is-active{% endif %}">{% trans "Sevimlilar" %}</a>
+      {% for c in music_categories %}<a href="?music={{ c.slug }}#music" class="chip-btn !py-1 {% if music_cat == c.slug %}is-active{% endif %}">{{ c.name }}</a>{% endfor %}
+    </div>
+    <a href="{% url 'gallery:music' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a>
+  </div>
+  {% include "gallery/partials/music-list.html" %}
+</section>
+
+<section class="glass flex flex-col sm:flex-row items-center gap-4 p-5 mt-4">
+  {% include "partials/logo_mark.html" with size=44 %}
+  <div class="flex-1"><h2 class="text-lg font-semibold">{% trans "Sevimli mediangizni ulashing" %}</h2><p class="text-sm text-ink-2">{% trans "Foto, video yoki qo'shiq tavsiyangiz bormi? Ko'rishdan xursand bo'laman!" %}</p></div>
+  <a href="{% url 'core:contact' %}" class="btn btn-light">{% trans "Bog'lanish" %}<i data-lucide="arrow-right"></i></a>
+</section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{% trans "Fotolar" %}{% endblock %}
+{% block content %}
+<section class="pt-8 pb-5"><a href="{% url 'gallery:index' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink"><i data-lucide="arrow-left" class="w-4 h-4"></i>Media</a><h1 class="text-5xl font-semibold mt-3">{% trans "Fotolar" %}</h1></section>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-4"><a href="?" class="chip-btn {% if not active %}is-active{% endif %}">{% trans "Barchasi" %}</a>{% for c in categories %}<a href="?category={{ c.slug }}" class="chip-btn {% if active == c.slug %}is-active{% endif %}">{{ c.name }}</a>{% endfor %}</div>
+<div class="columns-2 md:columns-3 lg:columns-4 gap-3 [&>*]:mb-3">
+  {% for p in photos %}<a href="{{ p.get_absolute_url }}" class="block glass glass--sm p-1.5 break-inside-avoid group"><img src="{% thumb p.image 640 %}" alt="{{ p.title }}" class="w-full rounded-xl" loading="lazy"><span class="flex items-center justify-between px-1.5 pt-2 pb-1 text-xs"><span class="font-medium">{{ p.title }}</span><span class="text-ink-3">{{ p.location }}</span></span></a>{% empty %}<p class="text-ink-3">{% trans "Hali foto yo'q" %}</p>{% endfor %}
+</div>
+{% endblock %}

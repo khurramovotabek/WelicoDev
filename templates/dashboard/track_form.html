@@ -1,0 +1,34 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Trek" %}{% endblock %}
+{% block dash %}
+{% trans "Musiqa" as parent %}{% url 'dashboard:music' as parent_url %}{% if obj %}{% trans "Trekni tahrirlash" as t %}{% else %}{% trans "Yangi trek" as t %}{% endif %}
+{% include "dashboard/partials/page_head.html" with title=t parent=parent parent_url=parent_url %}
+{% if form.non_field_errors %}<div class="glass glass--sm p-3 text-sm text-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_340px] gap-4">{% csrf_token %}
+  <section class="panel flex flex-col gap-4">
+    <div class="grid md:grid-cols-2 gap-4">{% include "dashboard/partials/field.html" with field=form.title %}{% include "dashboard/partials/field.html" with field=form.artist %}</div>
+    <div class="grid md:grid-cols-3 gap-4">{% include "dashboard/partials/field.html" with field=form.album %}{% include "dashboard/partials/field.html" with field=form.year %}{% include "dashboard/partials/field.html" with field=form.duration %}</div>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div><span class="field-label">{% trans "Audio fayl" %}</span><label class="dropzone min-h-[110px]"><input type="file" name="audio" accept="audio/*" class="sr-only" onchange="this.nextElementSibling.querySelector('b').textContent = this.files[0]?.name || ''"><span><i data-lucide="upload" class="w-6 h-6 mx-auto mb-1"></i><b class="block text-sm">{% if obj.audio %}{{ obj.audio.name|cut:"gallery/music/" }}{% else %}{% trans "MP3, M4A, OGG · 30 MB gacha" %}{% endif %}</b></span></label>{% for e in form.audio.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+      <div class="flex flex-col gap-4">{% include "dashboard/partials/field.html" with field=form.external_url %}{% include "dashboard/partials/field.html" with field=form.category %}</div>
+    </div>
+    {% trans "Nega yoqadi (ixtiyoriy)" as l %}{% include "dashboard/partials/tr_field.html" with name="note" label=l %}
+    {% if obj.audio %}<audio controls src="{{ obj.audio.url }}" class="w-full"></audio>{% endif %}
+  </section>
+  <aside class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-3">
+      <span class="field-label">{% trans "Muqova" %}</span>
+      {% if obj.cover %}<img src="{{ obj.cover.url }}" alt="" class="w-full aspect-square rounded-2xl object-cover">{% endif %}
+      <input type="file" name="cover" accept="image/*" class="field">
+    </section>
+    <section class="panel flex flex-col gap-1">
+      {% trans "Sevimli" as l %}{% include "dashboard/partials/toggle.html" with field=form.is_favorite label=l %}
+      {% trans "Saytda ko'rinadi" as l %}{% include "dashboard/partials/toggle.html" with field=form.is_published label=l %}
+      {% include "dashboard/partials/field.html" with field=form.order %}
+    </section>
+    <div class="grid grid-cols-2 gap-2"><button name="close" value="1" class="btn btn-glass">{% trans "Saqlash va yopish" %}</button><button class="btn btn-primary"><i data-lucide="save"></i>{% trans "Saqlash" %}</button></div>
+        {% if obj %}{% trans "O'chirilsinmi?" as dq %}<button type="button" class="btn btn-danger btn-sm" hx-post="{% url 'dashboard:track_action' obj.pk 'delete' %}" hx-confirm="{{ dq }}" hx-on::after-request="location.href='{% url 'dashboard:music' %}'"><i data-lucide="trash-2"></i>{% trans "O'chirish" %}</button>{% endif %}
+  </aside>
+</form>
+{% endblock %}

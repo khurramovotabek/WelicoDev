@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block robots %}{% if lesson.is_preview %}index, follow, max-video-preview:-1{% else %}noindex, nofollow{% endif %}{% endblock %}
+{% block jsonld %}{% if jsonld %}{% ld jsonld %}{% endif %}{% endblock %}
+{% block title %}{{ lesson.order }}. {{ lesson.title }} · {{ course.title }}{% endblock %}
+{% block meta_description %}{{ lesson.summary|default:course.subtitle }}{% endblock %}
+{% block content %}
+<nav class="flex items-center gap-2 text-sm text-ink-2 pt-6 overflow-x-auto whitespace-nowrap">
+  <a href="{% url 'education:course_list' %}" class="hover:text-ink">{% trans "Kurslar" %}</a><i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0"></i>
+  <a href="{{ course.get_absolute_url }}" class="hover:text-ink">{{ course.title }}</a><i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0"></i>
+  <span class="text-ink">{{ lesson.order }}-{% trans "dars" %}</span>
+</nav>
+
+<section class="grid lg:grid-cols-[1fr_360px] gap-4 mt-4">
+  <div class="flex flex-col gap-4 min-w-0">
+    {# ------------------------------------------------------------ Video #}
+    {% if lesson.has_video %}
+    <div class="glass p-2.5"
+         x-data="lessonPlayer({ heartbeat: '{% url 'education:lesson_heartbeat' course.slug lesson.slug %}', start: {{ progress.last_position|default:0 }}, done: {{ progress.video_completed|yesno:'true,false' }}, auth: {{ user.is_authenticated|yesno:'true,false' }} })">
+      {% if lesson.video %}
+        <video x-ref="video" src="{% url 'education:lesson_video' course.slug lesson.slug %}" controls controlslist="nodownload" preload="metadata" playsinline
+               {% if lesson.thumbnail %}poster="{{ lesson.thumbnail.url }}"{% endif %}
+               class="w-full rounded-2xl aspect-video bg-black" @contextmenu.prevent></video>
+      {% elif youtube_id %}
+        <div class="relative rounded-2xl overflow-hidden aspect-video bg-black">
+          <iframe class="absolute inset-0 w-full h-full" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" title="{{ lesson.title }}" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>
+        </div>
+      {% else %}
+        <a href="{{ lesson.video_url }}" target="_blank" rel="noopener" class="grid place-items-center aspect-video rounded-2xl bg-black/40"><span class="btn btn-light"><i data-lucide="play"></i>{% trans "Videoni ochish" %}</span></a>
+      {% endif %}
+      <div class="flex flex-wrap items-center gap-3 px-2 pt-3 pb-1 text-sm">
+        {% if user.is_authenticated %}
+          {% if lesson.video %}
+            <span class="flex items-center gap-2 text-ink-2" x-show="!done"><i data-lucide="eye" class="w-4 h-4"></i>{% trans "Ko'rilgan" %}: <b class="tabular" x-text="watchedPct + '%'">0%</b></span>
+          {% elif not progress.video_completed %}
+            <button class="btn btn-glass btn-sm" hx-post="{% url 'education:lesson_mark_watched' course.slug lesson.slug %}"><i data-lucide="check"></i>{% trans "Videoni ko'rdim" %}</button>
+          {% endif %}
+          <span class="flex items-center gap-1.5 text-ok" x-show="done" {% if not progress.video_completed %}x-cloak{% endif %}><i data-lucide="circle-check" class="w-4 h-4"></i>{% trans "Video ko'rildi" %}</span>
+        {% else %}
+          <span class="text-ink-3 text-xs">{% trans "Progress saqlanishi uchun tizimga kiring" %}</span>
+        {% endif %}
+        <span class="ml-auto text-xs text-ink-3 tabular">{{ lesson.duration_label }}</span>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if not lesson.has_video %}
+    <div class="glass relative overflow-hidden aspect-video max-h-[320px] grid place-items-center text-center p-6">
+      <span class="absolute inset-0 bg-gradient-to-br from-accent-strong/25 via-transparent to-violet/20" aria-hidden="true"></span>
+      <div class="relative flex flex-col items-center gap-2">
+        <span class="grid place-items-center w-14 h-14 rounded-full bg-white/10 border border-white/20"><i data-lucide="clapperboard" class="w-6 h-6"></i></span>
+        <div class="font-semibold">{% trans "Video tez orada" %}</div>
+        <p class="text-sm text-ink-2 max-w-sm">{% trans "Hozircha konspekt, kodlar va uyga vazifa bilan o'rganing. Video chiqqanda Telegram kanalda e'lon qilinadi." %}</p>
+      </div>
+    </div>
+    {% endif %}
+    {# ------------------------------------------------------------ Sarlavha va konspekt #}
+    <article class="panel">
+      <div class="flex flex-wrap items-start gap-3">
+        <div class="mr-auto">
+          <span class="chip !text-[10px] uppercase tracking-wider">{{ lesson.order }}-{% trans "dars" %}{% if lesson.module %} · {{ lesson.module.title }}{% endif %}</span>
+          <h1 class="text-2xl sm:text-3xl font-semibold mt-2">{{ lesson.title }}</h1>
+          {% if lesson.summary %}<p class="text-ink-2 mt-1">{{ lesson.summary }}</p>{% endif %}
+        </div>
+        {% if progress.is_completed %}<span class="badge badge-ok"><i data-lucide="check" class="w-3 h-3"></i>{% trans "Tugatilgan" %}</span>{% endif %}
+      </div>
+      {% if lesson.content %}<div class="richtext mt-5">{{ lesson.content|safe }}</div>{% endif %}
+    </article>
+
+    {# ------------------------------------------------------------ Resurslar #}
+    {% with resources=lesson.resources.all %}{% if resources %}
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="link"></i></span><h2 class="text-xl font-semibold">{% trans "Havolalar va materiallar" %}</h2></div>
+      <div class="grid sm:grid-cols-2 gap-2">
+        {% for r in resources %}
+          <a href="{% if r.file %}{% url 'education:resource_download' r.pk %}{% else %}{{ r.url }}{% endif %}" {% if not r.file %}target="_blank" rel="noopener"{% endif %} class="glass glass--sm glass--hover flex items-center gap-3 p-3 text-sm">
+            <span class="icon-tile w-9 h-9">{% if r.kind == "github" %}{% social_icon "github" "w-4 h-4" %}{% elif r.kind == "file" %}<i data-lucide="file-down"></i>{% elif r.kind == "docs" %}<i data-lucide="book-open"></i>{% else %}<i data-lucide="external-link"></i>{% endif %}</span>
+            <span class="flex-1 min-w-0"><span class="block font-medium truncate">{{ r.title }}</span><span class="block text-[11px] text-ink-3 truncate">{% if r.file %}{% trans "Yuklab olish" %}{% else %}{{ r.url }}{% endif %}</span></span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}{% endwith %}
+
+    {# ------------------------------------------------------------ Uyga vazifa #}
+    {% if lesson.homework_mode != "none" %}
+    <div id="homework" class="panel scroll-mt-28">
+      <div class="flex flex-wrap items-center gap-3 mb-3">
+        <span class="icon-tile"><i data-lucide="clipboard-list"></i></span>
+        <h2 class="text-xl font-semibold mr-auto">{% trans "Uyga vazifa" %}</h2>
+        {% if lesson.homework_mode == "approval" %}<span class="badge badge-warn">{% trans "Admin qabul qilishi kerak" %}</span>
+        {% elif lesson.homework_mode == "submit" %}<span class="badge badge-info">{% trans "Topshirish majburiy" %}</span>
+        {% else %}<span class="badge badge-violet">{% trans "Ixtiyoriy" %}</span>{% endif %}
+      </div>
+      {% if lesson.homework %}<div class="richtext">{{ lesson.homework|safe }}</div>{% endif %}
+
+      {% if submissions %}
+        <div class="flex flex-col gap-2 mt-5">
+          {% for s in submissions %}
+            <div class="glass glass--sm p-3 text-sm">
+              <div class="flex items-center gap-2">
+                {% if s.status == "approved" %}<span class="badge badge-ok">{{ s.get_status_display }}</span>{% elif s.status == "rejected" %}<span class="badge badge-danger">{{ s.get_status_display }}</span>{% else %}<span class="badge badge-warn">{{ s.get_status_display }}</span>{% endif %}
+                <span class="text-xs text-ink-3">{{ s.created_at|date:"d.m.Y H:i" }}</span>
+              </div>
+              {% if s.link %}<a href="{{ s.link }}" target="_blank" rel="noopener" class="block text-accent hover:underline mt-1 break-all">{{ s.link }}</a>{% endif %}
+              {% if s.text %}<p class="text-ink-2 mt-1 whitespace-pre-line line-clamp-4">{{ s.text }}</p>{% endif %}
+              {% if s.feedback %}<p class="mt-2 text-xs glass glass--sm p-2"><b>{% trans "Izoh" %}:</b> {{ s.feedback }}</p>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        {% if not homework_ok or lesson.homework_mode == "optional" or submissions.0.status == "rejected" %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'education:homework_submit' course.slug lesson.slug %}" class="flex flex-col gap-3 mt-5">{% csrf_token %}
+          <div><label class="field-label" for="hw-link">{% trans "Havola (GitHub)" %}</label><input id="hw-link" type="url" name="link" class="field" placeholder="https://github.com/username/repo"></div>
+          <div><label class="field-label" for="hw-text">{% trans "Javob" %}</label><textarea id="hw-text" name="text" rows="4" class="field" placeholder="{% trans 'Javobingiz, izohlar yoki kod...' %}"></textarea></div>
+          <div><label class="field-label" for="hw-file">{% trans "Fayl (ixtiyoriy, 20 MB gacha)" %}</label><input id="hw-file" type="file" name="file" class="field"></div>
+          <button class="btn btn-primary w-fit"><i data-lucide="send"></i>{% trans "Topshirish" %}</button>
+        </form>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-light mt-4">{% social_icon "telegram" "w-4 h-4" %}{% trans "Topshirish uchun kiring" %}</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# ------------------------------------------------------------ Navigatsiya #}
+    <div class="grid sm:grid-cols-2 gap-3">
+      {% if prev_lesson %}<a href="{{ prev_lesson.get_absolute_url }}" class="glass glass--sm glass--hover p-4 flex items-center gap-3"><i data-lucide="arrow-left" class="w-5 h-5"></i><div class="text-sm min-w-0"><div class="text-xs text-ink-3">{% trans "Oldingi dars" %}</div><div class="font-medium truncate">{{ prev_lesson.title }}</div></div></a>{% else %}<span></span>{% endif %}
+      {% if next_lesson %}
+        {% if next_unlocked %}
+          <a href="{{ next_lesson.get_absolute_url }}" class="glass glass--sm glass--hover p-4 flex items-center gap-3 sm:flex-row-reverse sm:text-right glow-accent"><i data-lucide="arrow-right" class="w-5 h-5"></i><div class="text-sm min-w-0"><div class="text-xs text-ink-3">{% trans "Keyingi dars" %}</div><div class="font-medium truncate">{{ next_lesson.title }}</div></div></a>
+        {% else %}
+          <div class="glass glass--sm p-4 flex items-center gap-3 sm:flex-row-reverse sm:text-right opacity-70"><i data-lucide="lock" class="w-5 h-5"></i><div class="text-sm min-w-0"><div class="text-xs text-ink-3">{% trans "Keyingi dars yopiq" %}</div><div class="font-medium truncate">{% if lesson.homework_mode == "approval" and submissions %}{% trans "Vazifa tekshirilishini kuting" %}{% elif lesson.homework_mode != "none" and lesson.homework_mode != "optional" and not homework_ok %}{% trans "Uyga vazifani topshiring" %}{% else %}{% trans "Videoni oxirigacha ko'ring" %}{% endif %}</div></div></div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <section id="comments" class="panel" hx-get="{% url 'interactions:comments' 'course' course.pk %}" hx-trigger="revealed" hx-swap="innerHTML"><div class="h-16"></div></section>
+  </div>
+
+  {# ------------------------------------------------------------ Yon panel #}
+  <aside class="flex flex-col gap-4">
+    <div class="panel lg:sticky" style="top:calc(90px + env(safe-area-inset-top, 0px))">
+      <a href="{{ course.get_absolute_url }}" class="flex items-center gap-3 mb-3"><img src="{% thumb course.cover 160 %}" alt="" class="w-14 h-10 rounded-lg object-cover"><div class="min-w-0"><div class="font-semibold text-sm truncate">{{ course.title }}</div><div class="text-[11px] text-ink-3">{{ states|length }} {% trans "dars" %}</div></div></a>
+      {% if user.is_authenticated %}
+        <div class="flex items-center justify-between text-xs text-ink-2"><span>{% trans "Kurs progressi" %}</span><b class="tabular" id="course-progress">{{ course_progress }}%</b></div>
+        <div class="h-1.5 rounded-full bg-ink/15 mt-1.5 mb-3 overflow-hidden"><div id="course-progress-bar" class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent transition-all" style="width:{{ course_progress }}%"></div></div>
+      {% endif %}
+      <div class="flex flex-col gap-0.5 max-h-[60vh] overflow-y-auto thin-scroll -mx-1 px-1">
+        {% for l, state in states %}{% include "education/partials/lesson_row.html" with lesson=l current=lesson %}{% endfor %}
+      </div>
+    </div>
+  </aside>
+</section>
+{% endblock %}
+
+{% block body_end %}
+{% trans "Video ko'rildi!" as watched_msg %}
+<script>
+  // Dars pleyeri: faqat haqiqatda ko'rilgan soniyalarni yuboradi (oldinga sakrash hisoblanmaydi)
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("lessonPlayer", (cfg) => ({
+      done: cfg.done, watched: 0, watchedPct: 0, pending: 0, last: null,
+      init() {
+        const v = this.$refs.video;
+        if (!v || !cfg.auth) return;
+        v.addEventListener("loadedmetadata", () => {
+          if (cfg.start > 5 && cfg.start < v.duration - 5) v.currentTime = cfg.start;
+        }, { once: true });
+        v.addEventListener("timeupdate", () => {
+          const t = v.currentTime;
+          if (this.last !== null && !v.seeking) {
+            const d = t - this.last;
+            if (d > 0 && d < 1.5) { this.pending += d; this.watched += d; }
+          }
+          this.last = t;
+          if (v.duration) this.watchedPct = Math.min(100, Math.round((this.watched / v.duration) * 100));
+        });
+        v.addEventListener("seeking", () => (this.last = null));
+        v.addEventListener("pause", () => this.flush());
+        v.addEventListener("ended", () => this.flush());
+        setInterval(() => this.flush(), 10000);
+        window.addEventListener("pagehide", () => this.flush(true));
+      },
+      flush(beacon) {
+        if (this.pending < 1) return;
+        const v = this.$refs.video;
+        const body = JSON.stringify({ position: v.currentTime, delta: this.pending });
+        this.pending = 0;
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        fetch(cfg.heartbeat, { method: "POST", body, keepalive: !!beacon, headers: { "Content-Type": "application/json", "X-CSRFToken": token } })
+          .then((r) => r.ok ? r.json() : null)
+          .then((data) => {
+            if (!data) return;
+            const bar = document.getElementById("course-progress-bar");
+            if (bar) { bar.style.width = data.course_progress + "%"; document.getElementById("course-progress").textContent = data.course_progress + "%"; }
+            if (data.video_completed && !this.done) {
+              this.done = true;
+              window.wcdToast("{{ watched_msg|escapejs }}");
+              // Keyingi dars ochilgan bo'lishi mumkin: navigatsiyani yangilash
+              if (data.completed) setTimeout(() => location.reload(), 1200);
+            }
+          })
+          .catch(() => {});
+      },
+    }));
+  });
+</script>
+{% endblock %}

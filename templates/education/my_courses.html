@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{% trans "Kurslarim" %}{% endblock %}
+{% block content %}
+<section class="pt-8 pb-5"><h1 class="text-5xl font-semibold">{% trans "Kurslarim" %}</h1><p class="text-ink-2 mt-2">{% trans "Yozilgan kurslaringiz va progressingiz." %}</p></section>
+<div class="grid md:grid-cols-2 gap-4">
+  {% for e, pct in items %}
+    <article class="glass p-4 flex gap-4">
+      <img src="{% thumb e.course.cover 320 %}" alt="" class="w-32 h-24 rounded-xl object-cover shrink-0">
+      <div class="flex-1 min-w-0 flex flex-col">
+        <h2 class="font-semibold text-lg truncate">{{ e.course.title }}</h2>
+        <div class="flex justify-between text-xs text-ink-3 mt-1"><span>{% if e.completed_at %}{% trans "Tugatilgan" %}{% else %}{% trans "Jarayonda" %}{% endif %}</span><span class="tabular">{{ pct }}%</span></div>
+        <div class="h-1.5 rounded-full bg-ink/15 mt-1.5"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent" style="width:{{ pct }}%"></div></div>
+        <div class="flex gap-2 mt-auto pt-3">
+          <a href="{% if e.last_lesson %}{{ e.last_lesson.get_absolute_url }}{% else %}{{ e.course.get_absolute_url }}{% endif %}" class="btn btn-primary btn-sm">{% trans "Davom ettirish" %}<i data-lucide="arrow-right"></i></a>
+          {% if e.completed_at and e.certificate %}<a href="{% url 'education:certificate' e.certificate.code %}" class="btn btn-glass btn-sm"><i data-lucide="award"></i>{% trans "Sertifikat" %}</a>{% endif %}
+        </div>
+      </div>
+    </article>
+  {% empty %}
+    <div class="panel md:col-span-2 text-center py-14"><i data-lucide="graduation-cap" class="w-10 h-10 mx-auto mb-3 text-ink-3"></i><p class="text-ink-2">{% trans "Hali kursga yozilmagansiz." %}</p><a href="{% url 'education:course_list' %}" class="btn btn-light mt-4">{% trans "Kurslarni ko'rish" %}</a></div>
+  {% endfor %}
+</div>
+{% endblock %}

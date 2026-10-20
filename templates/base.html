@@ -1,0 +1,103 @@
+{% load static i18n wcd %}<!doctype html>
+{% get_current_language as LANG %}
+<html lang="{{ LANG }}" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}{{ site.owner_name }} · {{ site.owner_role }}{% endblock %} | {{ site.brand_name }}</title>
+  <meta name="description" content="{% block meta_description %}{{ site.meta_description|default:site.owner_bio|truncatechars:160 }}{% endblock %}">
+  <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large{% endblock %}">
+  <meta name="author" content="{{ site.owner_name }}">
+  <link rel="canonical" href="{{ SITE_URL }}{{ request.path }}">
+  {% for code, name in LANGUAGES %}<link rel="alternate" hreflang="{{ code }}" href="{{ SITE_URL }}{% lang_path code %}">
+  {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ SITE_URL }}{% lang_path 'uz' %}">
+  <link rel="alternate" type="application/atom+xml" title="{{ site.brand_name }} Blog" href="{% url 'blog:feed' %}">
+  <meta property="og:site_name" content="{{ site.brand_name }}">
+  <meta property="og:locale" content="{% if LANG == 'ru' %}ru_RU{% elif LANG == 'en' %}en_US{% else %}uz_UZ{% endif %}">
+  <meta property="og:title" content="{% block og_title %}{{ site.owner_name }} · {{ site.owner_role }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ site.meta_description }}{% endblock %}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:url" content="{{ SITE_URL }}{{ request.path }}">
+  {% block og_image %}<meta property="og:image" content="{{ SITE_URL }}{% if site.og_image %}{{ site.og_image.url }}{% else %}{% static 'img/og-default.jpg' %}{% endif %}">{% if not site.og_image %}<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">{% endif %}{% endblock %}
+  <meta name="twitter:card" content="summary_large_image">
+  {% for s in socials %}{% if s.platform == "x" and s.username %}<meta name="twitter:site" content="@{{ s.username }}">{% endif %}{% endfor %}
+  {% if site.google_verification %}<meta name="google-site-verification" content="{{ site.google_verification }}">{% endif %}
+  {% if site.yandex_verification %}<meta name="yandex-verification" content="{{ site.yandex_verification }}">{% endif %}
+  {% if site.bing_verification %}<meta name="msvalidate.01" content="{{ site.bing_verification }}">{% endif %}
+  {% if site.umami_script_url and site.umami_website_id and not user.is_staff %}<script defer src="{{ site.umami_script_url }}" data-website-id="{{ site.umami_website_id }}" data-do-not-track="true"></script>{% endif %}
+  {% include "partials/jsonld_site.html" %}
+  {% block jsonld %}{% endblock %}
+  <link rel="icon" type="image/svg+xml" href="{% if site.favicon %}{{ site.favicon.url }}{% else %}{% static 'img/logo-mark.svg' %}{% endif %}">
+  <meta name="theme-color" content="#0b1530">
+  <script>
+    // Mavzuni sahifa chizilishidan oldin qo'llash (miltillashsiz)
+    (function () {
+      try {
+        var t = localStorage.getItem("wcd-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{% static 'dist/app.css' %}?v={{ ASSET_V }}">
+  {% block scene_preload %}{% if site.background_url and not hero.background %}<link rel="preload" as="image" href="{{ site.background_url_sm }}" media="(max-width: 900px)" fetchpriority="high"><link rel="preload" as="image" href="{{ site.background_url }}" media="(min-width: 901px)" fetchpriority="high">{% endif %}{% endblock %}
+  {% block head %}{% endblock %}
+  <script defer src="{% static 'vendor/lucide-subset.js' %}?v={{ ASSET_V }}"></script>
+  <script defer src="{% static 'vendor/htmx.min.js' %}"></script>
+  <script defer src="{% static 'js/app.js' %}?v={{ ASSET_V }}"></script>
+  <script defer src="{% static 'js/player.js' %}?v={{ ASSET_V }}"></script>
+  {% block scripts %}{% endblock %}
+  <script defer src="{% static 'vendor/alpine-collapse.min.js' %}"></script>
+  <script defer src="{% static 'vendor/alpine.min.js' %}"></script>
+</head>
+<body data-hljs="{% static 'vendor/highlight.min.js' %}" data-hljs-css="{% static 'vendor/hljs-tokyo-night.min.css' %}" class="{% block body_class %}{% endblock %}" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <svg width="0" height="0" class="absolute" aria-hidden="true">
+    <filter id="liquid-glass" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="7" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2" result="soft"/>
+      <feDisplacementMap in="SourceGraphic" in2="soft" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <div class="scene" aria-hidden="true">
+    {% block scene %}
+      {% if hero and hero.background %}
+        <div class="scene__photo{% if site.background_motion %} is-moving{% endif %}" style="--bg-lg:url('{{ hero.background.url }}');--bg-blur:{{ site.background_blur }}px"></div>
+        <div class="scene__shade" style="--bg-dim:{{ site.background_dim|bg_dim }}"></div>
+      {% elif site.background_url %}
+        <div class="scene__photo{% if site.background_motion %} is-moving{% endif %}" style="--bg-lg:url('{{ site.background_url }}');--bg-sm:url('{{ site.background_url_sm }}');--bg-blur:{{ site.background_blur }}px"></div>
+        <div class="scene__shade" style="--bg-dim:{{ site.background_dim|bg_dim }}"></div>
+      {% else %}
+        <canvas id="scene-canvas"></canvas>
+        <script defer src="{% static 'js/scene.js' %}?v={{ ASSET_V }}"></script>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+  {% block header %}{% include "partials/header.html" %}{% endblock %}
+
+  {% block main %}
+  <main id="main" class="gutter">
+    <div class="mx-auto max-w-site">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  {% endblock %}
+
+  {% block footer %}{% include "partials/footer.html" %}{% endblock %}
+
+  {% block player %}{% include "partials/player_dock.html" %}{% endblock %}
+  <div id="toasts" class="fixed z-50 flex flex-col gap-2" style="right:max(16px, env(safe-area-inset-right, 0px)); bottom:calc(16px + env(safe-area-inset-bottom, 0px))"></div>
+  {% if messages %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        {% for m in messages %}window.wcdToast("{{ m.message|escapejs }}", "{% if m.level_tag == 'error' %}error{% endif %}");{% endfor %}
+      });
+    </script>
+  {% endif %}
+  {% block body_end %}{% endblock %}
+</body>
+</html>

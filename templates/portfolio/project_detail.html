@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{{ project.meta_title|default:project.title }}{% endblock %}
+{% block meta_description %}{{ project.meta_description|default:project.short_description }}{% endblock %}
+{% block og_title %}{{ project.title }} — {{ project.subtitle }}{% endblock %}
+{% block og_description %}{{ project.short_description }}{% endblock %}
+{% block og_image %}<meta property="og:image" content="{{ SITE_URL }}{{ project.cover.url }}">{% endblock %}
+{% block jsonld %}{% trans "Loyihalar" as lp %}{% url 'portfolio:project_list' as lu %}{% ld jsonld %}{% crumbs lp lu project.title project.get_absolute_url %}{% endblock %}
+{% block content %}
+{% with images=project.images.all %}
+<div class="flex flex-wrap items-center justify-between gap-3 pt-6">
+  <a href="{% url 'portfolio:project_list' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Loyihalarga qaytish" %}</a>
+  <div class="flex flex-wrap gap-2">
+    {% if project.live_url %}<a href="{{ project.live_url }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm"><i data-lucide="external-link"></i>{% trans "Saytga o'tish" %}</a>{% endif %}
+    {% if project.source_url %}<a href="{{ project.source_url }}" target="_blank" rel="noopener" class="btn btn-glass btn-sm">{% social_icon "github" "w-4 h-4" %}GitHub</a>{% endif %}
+    <a href="{% url 'core:share' 'project' project.slug %}" class="btn btn-glass btn-sm"><i data-lucide="share-2"></i>{% trans "Ulashish" %}</a>
+    {% if "bookmark" in reactions %}{% include "interactions/partials/reaction_button.html" with obj=project kind="project" reaction="bookmark" active=True %}{% else %}{% include "interactions/partials/reaction_button.html" with obj=project kind="project" reaction="bookmark" active=False %}{% endif %}
+  </div>
+</div>
+
+<section class="grid lg:grid-cols-[1fr_1.2fr] gap-6 items-center pt-6">
+  <div class="flex flex-col gap-4">
+    {% if project.is_featured %}<span class="chip w-fit"><i data-lucide="star" class="w-3.5 h-3.5 text-warn fill-current"></i>{% trans "Tanlangan loyiha" %}</span>{% endif %}
+    <h1 class="text-5xl sm:text-6xl font-semibold">{{ project.title }}</h1>
+    <p class="text-xl text-ink">{{ project.subtitle }}</p>
+    <p class="text-ink-2 text-lg">{{ project.short_description }}</p>
+    <div class="flex flex-wrap gap-2">{% for s in project.tech_stack.all|slice:":6" %}<span class="chip chip-lg text-ink">{{ s.name }}</span>{% endfor %}</div>
+    <div class="glass glass--sm grid grid-cols-3 divide-x divide-ink/10 w-fit">
+      <div class="flex items-center gap-2 px-4 py-3"><i data-lucide="star" class="w-5 h-5 text-warn fill-current"></i><div><div class="font-semibold tabular text-sm">{% if rating.count %}{{ rating.avg }}/5{% else %}—{% endif %}</div><div class="text-[11px] text-ink-3">{{ rating.count }} {% trans "sharh" %}</div></div></div>
+      <div class="flex items-center gap-2 px-4 py-3"><i data-lucide="eye" class="w-5 h-5"></i><div><div class="font-semibold tabular text-sm">{{ project.views_count|compact }}</div><div class="text-[11px] text-ink-3">{% trans "ko'rish" %}</div></div></div>
+      <div class="flex items-center gap-2 px-4 py-3"><i data-lucide="calendar" class="w-5 h-5"></i><div><div class="font-semibold tabular text-sm">{{ project.completed_year|default:"—" }}</div><div class="text-[11px] text-ink-3">{% trans "yakunlangan" %}</div></div></div>
+    </div>
+  </div>
+  <div class="glass p-2.5 rounded-[26px]"><img src="{% thumb project.cover 1200 %}" fetchpriority="high" alt="{{ project.title }}" class="w-full rounded-[20px] object-cover aspect-[16/10]"></div>
+</section>
+
+{% if images %}
+<section id="gallery" class="glass p-3 mt-6 scroll-mt-28" x-data="{ open: null }">
+  <div class="scroll-x">
+    {% for img in images %}
+      <button type="button" @click="open = {{ forloop.counter0 }}" class="w-44 sm:w-52 text-left group">
+        <span class="block rounded-xl overflow-hidden border border-ink/10 group-hover:border-accent/60 transition"><img src="{% thumb img.image 400 %}" alt="{{ img.caption }}" class="w-full aspect-[16/10] object-cover" loading="lazy"></span>
+        <span class="block text-xs text-ink-2 mt-1.5 text-center">{{ forloop.counter|stringformat:"02d" }}. {{ img.caption }}</span>
+      </button>
+    {% endfor %}
+  </div>
+  <div x-cloak x-show="open !== null" x-transition.opacity class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md grid place-items-center p-4" @click.self="open = null" @keydown.escape.window="open = null" @keydown.arrow-right.window="open !== null && (open = (open + 1) % {{ images|length }})" @keydown.arrow-left.window="open !== null && (open = (open + {{ images|length }} - 1) % {{ images|length }})">
+    {% for img in images %}<img x-show="open === {{ forloop.counter0 }}" loading="lazy" src="{{ img.image.url }}" alt="{{ img.caption }}" class="max-h-[85vh] max-w-full rounded-2xl">{% endfor %}
+    <button class="btn-icon absolute top-4 right-4" @click="open = null" aria-label="{% trans 'Yopish' %}"><i data-lucide="x"></i></button>
+  </div>
+</section>
+{% endif %}
+
+<nav class="glass glass--pill p-1.5 flex gap-1 overflow-x-auto no-scrollbar mt-6 sticky z-30 w-fit max-w-full mx-auto" style="top:calc(84px + env(safe-area-inset-top, 0px))">
+  <a href="#overview" class="nav-link is-active">{% trans "Umumiy" %}</a>
+  {% if images %}<a href="#gallery" class="nav-link">{% trans "Galereya" %}</a>{% endif %}
+  {% if project.features.all %}<a href="#features" class="nav-link">{% trans "Imkoniyatlar" %}</a>{% endif %}
+  <a href="#stack" class="nav-link">{% trans "Texnologiyalar" %}</a>
+  {% if project.challenges.all %}<a href="#challenges" class="nav-link">{% trans "Qiyinchiliklar" %}</a>{% endif %}
+  {% if project.results.all %}<a href="#results" class="nav-link">{% trans "Natijalar" %}</a>{% endif %}
+  <a href="#reviews" class="nav-link">{% trans "Sharhlar" %}</a>
+</nav>
+
+<section class="grid lg:grid-cols-[1.5fr_1fr] gap-4 mt-6">
+  <div class="flex flex-col gap-4 min-w-0">
+    <div id="overview" class="panel scroll-mt-40">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="file-text"></i></span><h2 class="text-xl font-semibold">{% trans "Loyiha haqida" %}</h2></div>
+      <div class="richtext">{{ project.description|safe }}</div>
+    </div>
+    {% if project.features.all %}
+    <div id="features" class="panel scroll-mt-40">
+      <div class="flex items-center gap-3 mb-4"><span class="icon-tile"><i data-lucide="sparkles"></i></span><h2 class="text-xl font-semibold">{% trans "Asosiy imkoniyatlar" %}</h2></div>
+      <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+        {% for f in project.features.all %}<div class="glass glass--sm p-4 flex gap-3"><span class="icon-tile w-9 h-9"><i data-lucide="{{ f.icon|default:'check' }}"></i></span><div><div class="font-semibold text-sm">{{ f.title }}</div><div class="text-xs text-ink-3 mt-0.5">{{ f.description }}</div></div></div>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <aside class="flex flex-col gap-4">
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="info"></i></span><h2 class="text-lg font-semibold">{% trans "Ma'lumot" %}</h2></div>
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-sm">
+        {% if project.category %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4"></i>{% trans "Turkum" %}</dt><dd>{{ project.category }}</dd>{% endif %}
+        {% if project.project_type %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i>{% trans "Turi" %}</dt><dd>{{ project.project_type }}</dd>{% endif %}
+        {% if project.role %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="user-round" class="w-4 h-4"></i>{% trans "Rolim" %}</dt><dd>{{ project.role }}</dd>{% endif %}
+        {% if project.duration %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4"></i>{% trans "Davomiyligi" %}</dt><dd>{{ project.duration }}</dd>{% endif %}
+        {% if project.team_size %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i>{% trans "Jamoa" %}</dt><dd>{{ project.team_size }}</dd>{% endif %}
+        {% if project.live_url %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="globe" class="w-4 h-4"></i>URL</dt><dd><a href="{{ project.live_url }}" target="_blank" rel="noopener" class="text-accent hover:underline break-all">{{ project.live_url }}</a></dd>{% endif %}
+      </dl>
+    </div>
+    <div id="stack" class="panel scroll-mt-40">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="layers"></i></span><h2 class="text-lg font-semibold">{% trans "Texnologiyalar" %}</h2></div>
+      <div class="grid grid-cols-2 gap-2">
+        {% for s in project.tech_stack.all %}<div class="flex items-center gap-2 text-sm py-1">{% if s.icon_url %}<img src="{{ s.icon_url }}" alt="" class="w-5 h-5">{% endif %}{{ s.name }}</div>{% endfor %}
+      </div>
+    </div>
+  </aside>
+</section>
+
+<section class="grid lg:grid-cols-3 gap-4 mt-4">
+  {% if project.video or project.video_url %}
+  <div class="panel">
+    <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="clapperboard"></i></span><h2 class="text-lg font-semibold">{% trans "Loyiha videosi" %}</h2></div>
+    {% if project.video %}<video src="{{ project.video.url }}" controls preload="metadata" poster="{{ project.cover.url }}" class="w-full rounded-xl aspect-video bg-black"></video>
+    {% else %}<a href="{{ project.video_url }}" target="_blank" rel="noopener" class="relative block rounded-xl overflow-hidden aspect-video"><img src="{% thumb project.cover 480 %}" alt="" class="w-full h-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="btn-icon w-14 h-14"><i data-lucide="play" class="fill-current"></i></span></span>{% if project.video_duration %}<span class="absolute right-2 bottom-2 chip !bg-black/50">{{ project.video_duration }}</span>{% endif %}</a>{% endif %}
+  </div>
+  {% endif %}
+  {% if project.challenges.all %}
+  <div id="challenges" class="panel scroll-mt-40">
+    <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="mountain"></i></span><h2 class="text-lg font-semibold">{% trans "Qiyinchiliklar" %}</h2></div>
+    <ul class="flex flex-col gap-2.5 text-sm text-ink-2">{% for c in project.challenges.all %}<li class="flex gap-2"><i data-lucide="circle-check" class="w-4 h-4 mt-0.5 shrink-0 text-ok"></i>{{ c.text }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+  {% if project.results.all %}
+  <div id="results" class="panel scroll-mt-40">
+    <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="chart-column"></i></span><h2 class="text-lg font-semibold">{% trans "Natijalar" %}</h2></div>
+    <div class="grid grid-cols-2 gap-2">{% for r in project.results.all %}<div class="glass glass--sm p-3 flex items-center gap-2"><i data-lucide="{{ r.icon|default:'trending-up' }}" class="w-5 h-5 text-accent"></i><div><div class="font-semibold tabular">{{ r.value }}</div><div class="text-[11px] text-ink-3">{{ r.label }}</div></div></div>{% endfor %}</div>
+  </div>
+  {% endif %}
+</section>
+
+<section class="grid lg:grid-cols-[1.5fr_1fr] gap-4 mt-4">
+  <div id="reviews" class="panel scroll-mt-40" hx-get="{% url 'interactions:reviews' 'project' project.pk %}" hx-trigger="load" hx-swap="innerHTML">
+    <div class="h-40 grid place-items-center text-ink-3 text-sm">{% trans "Yuklanmoqda..." %}</div>
+  </div>
+  {% if related %}
+  <div class="panel">
+    <div class="panel-title"><h2 class="!text-lg">{% trans "O'xshash loyihalar" %}</h2><a href="{% url 'portfolio:project_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+    <div class="grid grid-cols-2 gap-3">
+      {% for r in related %}<a href="{{ r.get_absolute_url }}" class="glass glass--sm glass--hover overflow-hidden"><img src="{% thumb r.cover 480 %}" alt="" class="w-full aspect-[16/10] object-cover" loading="lazy"><div class="p-3"><div class="font-semibold text-sm">{{ r.title }}</div><div class="text-[11px] text-ink-3">{{ r.subtitle }}</div></div></a>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+<section id="comments" class="panel mt-4 scroll-mt-28" hx-get="{% url 'interactions:comments' 'project' project.pk %}" hx-trigger="revealed" hx-swap="innerHTML">
+  <div class="h-24 grid place-items-center text-ink-3 text-sm">{% trans "Izohlar yuklanmoqda..." %}</div>
+</section>
+
+<section class="glass flex flex-col sm:flex-row items-center gap-5 p-4 mt-4">
+  <img src="{% thumb project.cover 480 %}" alt="" class="w-full sm:w-48 h-24 object-cover rounded-xl">
+  <div class="flex-1"><h2 class="text-xl font-semibold">{% trans "Shunga o'xshash loyihangiz bormi?" %}</h2><p class="text-ink-2 text-sm">{% trans "Keling, birga ajoyib narsa quramiz." %}</p></div>
+  <a href="{% url 'core:contact' %}" class="btn btn-light">{% trans "Bog'lanish" %}<i data-lucide="arrow-right"></i></a>
+</section>
+{% endwith %}
+{% endblock %}

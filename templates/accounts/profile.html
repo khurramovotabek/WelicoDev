@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% load i18n wcd humanize %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block title %}{% trans "Profilim" %}{% endblock %}
+{% block content %}
+<section class="glass mt-6 sm:mt-8 relative overflow-hidden !p-0">
+  {# Muqova #}
+  <div class="relative h-32 sm:h-44 overflow-hidden">
+    {% if site.background_url %}<img src="{{ site.background_url_sm }}" alt="" class="absolute inset-0 w-full h-full object-cover scale-110 opacity-80">{% endif %}
+    <span class="absolute inset-0 bg-gradient-to-br from-accent-strong/50 via-violet/30 to-transparent mix-blend-overlay"></span>
+    <span class="absolute inset-0 bg-gradient-to-t from-[rgb(var(--sky-950)/.85)] via-transparent to-transparent"></span>
+    <div class="absolute right-3 top-3 sm:right-4 sm:top-4 flex gap-2">
+      <a href="?tab=settings" class="btn btn-glass btn-sm !text-white"><i data-lucide="settings-2"></i><span class="hidden sm:inline">{% trans "Sozlamalar" %}</span></a>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn btn-danger btn-sm" aria-label="{% trans 'Chiqish' %}" title="{% trans 'Chiqish' %}"><i data-lucide="log-out"></i></button></form>
+    </div>
+  </div>
+  <div class="relative px-5 sm:px-8 pb-6 -mt-12 sm:-mt-14 flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-6">
+    <a href="?tab=settings" class="relative w-fit group" title="{% trans 'Rasmni almashtirish' %}">
+      {% include "partials/avatar.html" with u=user size="w-24 h-24 sm:w-28 sm:h-28 text-2xl ring-4 ring-[rgb(var(--sky-950))] shadow-2xl" %}
+      <span class="absolute inset-0 rounded-full bg-black/45 grid place-items-center opacity-0 group-hover:opacity-100 transition"><i data-lucide="camera" class="w-6 h-6 text-white"></i></span>
+      <span class="absolute -right-1 -bottom-1 grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-accent-strong to-violet text-white text-xs font-display font-semibold ring-4 ring-[rgb(var(--sky-950))]" title="{% trans 'Daraja' %}">{{ level.n }}</span>
+    </a>
+    <div class="flex-1 min-w-0">
+      <div class="flex flex-wrap items-center gap-2">
+        <h1 class="text-2xl sm:text-4xl font-semibold">{{ user.display_name }}</h1>
+        {% if user.telegram_id %}<span class="badge badge-info" title="{% trans 'Telegram orqali tasdiqlangan' %}"><i data-lucide="badge-check" class="w-3.5 h-3.5"></i>{% trans "Tasdiqlangan" %}</span>{% endif %}
+        {% if user.is_staff %}<span class="badge badge-violet">Admin</span>{% endif %}
+        {% if paid_enrollments %}<span class="badge badge-warn"><i data-lucide="gem" class="w-3 h-3"></i>Premium</span>{% endif %}
+      </div>
+      <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-2 mt-1">
+        {% if user.telegram_username %}<a href="https://t.me/{{ user.telegram_username }}" target="_blank" rel="noopener" class="flex items-center gap-1 text-accent">{% social_icon "telegram" "w-4 h-4" %}@{{ user.telegram_username }}</a>{% endif %}
+        <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i>{% trans "A'zo bo'lgan" %}: {{ user.date_joined|date:"d.m.Y" }}</span>
+      </div>
+      {% if user.bio %}<p class="text-ink-2 mt-2 max-w-[70ch]">{{ user.bio }}</p>{% endif %}
+    </div>
+    <div class="sm:w-64 glass glass--sm p-3">
+      <div class="flex items-center justify-between text-xs"><span class="text-ink-2">{% blocktrans with n=level.n %}{{ n }}-daraja{% endblocktrans %}</span><span class="tabular text-ink-3">{{ level.xp }} / {{ level.next }} XP</span></div>
+      <div class="h-2 rounded-full bg-ink/15 mt-2 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong via-violet to-accent" style="width:{{ level.pct }}%"></div></div>
+      <p class="text-[10px] text-ink-3 mt-1.5">{% trans "Dars, sertifikat va izohlar uchun XP to'planadi" %}</p>
+    </div>
+  </div>
+  <div class="relative grid grid-cols-3 sm:grid-cols-6 gap-2 px-5 sm:px-8 pb-6">
+    <a href="?tab=courses" class="glass glass--sm glass--hover p-3 text-center"><i data-lucide="graduation-cap" class="w-4 h-4 mx-auto text-accent"></i><div class="font-display text-2xl font-semibold tabular mt-1">{{ stats.courses }}</div><div class="text-[11px] text-ink-3">{% trans "Kurslar" %}</div></a>
+    <a href="?tab=courses" class="glass glass--sm glass--hover p-3 text-center"><i data-lucide="circle-check-big" class="w-4 h-4 mx-auto text-ok"></i><div class="font-display text-2xl font-semibold tabular mt-1">{{ stats.lessons }}</div><div class="text-[11px] text-ink-3">{% trans "Darslar" %}</div></a>
+    <a href="?tab=certificates" class="glass glass--sm glass--hover p-3 text-center"><i data-lucide="award" class="w-4 h-4 mx-auto text-warn"></i><div class="font-display text-2xl font-semibold tabular mt-1">{{ stats.certificates }}</div><div class="text-[11px] text-ink-3">{% trans "Sertifikatlar" %}</div></a>
+    <a href="?tab=saved" class="glass glass--sm glass--hover p-3 text-center"><i data-lucide="bookmark" class="w-4 h-4 mx-auto text-violet"></i><div class="font-display text-2xl font-semibold tabular mt-1">{{ stats.saved }}</div><div class="text-[11px] text-ink-3">{% trans "Saqlangan" %}</div></a>
+    <a href="?tab=activity" class="glass glass--sm glass--hover p-3 text-center"><i data-lucide="message-circle" class="w-4 h-4 mx-auto"></i><div class="font-display text-2xl font-semibold tabular mt-1">{{ stats.comments }}</div><div class="text-[11px] text-ink-3">{% trans "Izohlar" %}</div></a>
+    <div class="glass glass--sm p-3 text-center"><i data-lucide="heart" class="w-4 h-4 mx-auto text-danger"></i><div class="font-display text-2xl font-semibold tabular mt-1">{{ stats.likes }}</div><div class="text-[11px] text-ink-3">Like</div></div>
+  </div>
+</section>
+
+<nav class="glass glass--pill p-1.5 flex gap-1 overflow-x-auto no-scrollbar mt-4 w-fit max-w-full" aria-label="Profile">
+  <a href="?tab=overview" class="nav-link whitespace-nowrap {% if tab == 'overview' %}is-active{% endif %}">{% trans "Umumiy" %}</a>
+  <a href="?tab=courses" class="nav-link whitespace-nowrap {% if tab == 'courses' %}is-active{% endif %}">{% trans "Kurslarim" %}</a>
+  <a href="?tab=purchases" class="nav-link whitespace-nowrap {% if tab == 'purchases' %}is-active{% endif %}">{% trans "Xaridlar" %}{% for r in access_requests %}{% if r.status == "pending" and forloop.first %}<span class="ml-1 w-2 h-2 rounded-full bg-warn inline-block"></span>{% endif %}{% endfor %}</a>
+  <a href="?tab=saved" class="nav-link whitespace-nowrap {% if tab == 'saved' %}is-active{% endif %}">{% trans "Saqlanganlar" %}</a>
+  <a href="?tab=certificates" class="nav-link whitespace-nowrap {% if tab == 'certificates' %}is-active{% endif %}">{% trans "Sertifikatlar" %}</a>
+  <a href="?tab=activity" class="nav-link whitespace-nowrap {% if tab == 'activity' %}is-active{% endif %}">{% trans "Faolligim" %}</a>
+  <a href="?tab=settings" class="nav-link whitespace-nowrap {% if tab == 'settings' %}is-active{% endif %}">{% trans "Sozlamalar" %}</a>
+</nav>
+
+<section class="mt-4">
+{% if tab == "overview" %}
+  <div class="grid lg:grid-cols-[1.4fr_1fr] gap-4">
+    <div class="panel">
+      <div class="panel-title"><h2>{% trans "O'qishni davom ettiring" %}</h2><a href="{% url 'education:course_list' %}" class="btn btn-glass btn-sm">Education</a></div>
+      <div class="flex flex-col gap-3">
+        {% for e, pct in courses|slice:":3" %}{% include "accounts/partials/course_row.html" %}{% empty %}
+          <div class="text-center py-8"><i data-lucide="graduation-cap" class="w-10 h-10 mx-auto text-ink-3 mb-2"></i><p class="text-ink-2">{% trans "Hali kursga yozilmagansiz." %}</p><a href="{% url 'education:course_list' %}" class="btn btn-light mt-3">{% trans "Kurslarni ko'rish" %}</a></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-3">{% trans "So'nggi tugatilgan darslar" %}</h2>
+      <ol class="relative flex flex-col gap-3 pl-5 before:absolute before:left-[5px] before:top-1 before:bottom-1 before:w-px before:bg-ok/40">
+        {% for p in recent_lessons %}<li class="relative text-sm"><span class="absolute -left-5 top-1 w-[11px] h-[11px] rounded-full bg-ok shadow-[0_0_10px_rgb(var(--ok))]"></span><a href="{{ p.lesson.get_absolute_url }}" class="font-medium hover:underline">{{ p.lesson.order }}. {{ p.lesson.title }}</a><div class="text-[11px] text-ink-3">{{ p.lesson.course.title }} · {{ p.completed_at|naturaltime }}</div></li>
+        {% empty %}<li class="text-sm text-ink-3">{% trans "Hali tugatilgan dars yo'q" %}</li>{% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="grid lg:grid-cols-[1fr_1.4fr] gap-4 mt-4">
+    <div class="panel">
+      <div class="panel-title"><h2>{% trans "Yutuqlar" %}</h2><span class="chip tabular">{{ achievements_done }}/{{ achievements|length }}</span></div>
+      <div class="grid grid-cols-4 sm:grid-cols-7 lg:grid-cols-4 gap-2">
+        {% for a in achievements %}
+          <div class="flex flex-col items-center gap-1.5 text-center group relative" title="{{ a.hint }}">
+            <span class="grid place-items-center w-12 h-12 rounded-2xl transition {% if a.done %}bg-gradient-to-br from-warn/30 to-violet/30 text-warn shadow-[0_0_20px_-4px_rgb(var(--warn)/.6)]{% else %}bg-ink/5 text-ink-3 opacity-60{% endif %}"><i data-lucide="{{ a.icon }}" class="w-5 h-5"></i></span>
+            <span class="text-[10px] leading-tight {% if a.done %}text-ink{% else %}text-ink-3{% endif %}">{{ a.title }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if recommended %}
+    <div class="panel">
+      <div class="panel-title"><h2>{% trans "Siz uchun kurslar" %}</h2><a href="{% url 'education:course_list' %}" class="btn btn-glass btn-sm">{% trans "Barchasi" %}</a></div>
+      <div class="grid sm:grid-cols-3 gap-3">
+        {% for c in recommended %}
+          <a href="{{ c.get_absolute_url }}" class="glass glass--sm glass--hover overflow-hidden flex flex-col">
+            <img src="{% thumb c.cover 400 %}" alt="" class="aspect-[16/10] w-full object-cover" loading="lazy">
+            <span class="p-3 flex flex-col gap-1.5"><span class="text-sm font-semibold line-clamp-2 leading-snug">{{ c.title }}</span>{% if c.is_free %}<span class="badge badge-ok w-fit !text-[10px]">{% trans "Bepul" %}</span>{% else %}<span class="badge badge-warn w-fit !text-[10px] tabular">{{ c.price|money }} {% trans "so'm" %}</span>{% endif %}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+{% elif tab == "purchases" %}
+  <div class="grid lg:grid-cols-[1.2fr_1fr] gap-4">
+    <div class="panel">
+      <div class="panel-title"><h2>{% trans "Premium kurslarim" %}</h2></div>
+      <div class="flex flex-col gap-3">
+        {% for e, pct in paid_enrollments %}
+          <a href="{{ e.course.get_absolute_url }}" class="glass glass--sm glass--hover p-3 flex gap-3 items-center">
+            <img src="{% thumb e.course.cover 240 %}" alt="" class="w-20 h-14 rounded-xl object-cover shrink-0">
+            <div class="min-w-0 flex-1">
+              <div class="font-semibold truncate">{{ e.course.title }}</div>
+              <div class="text-[11px] text-ink-3">{% if e.expires_at %}{% trans "Amal qiladi" %}: {{ e.expires_at|date:"d.m.Y" }}{% else %}{% trans "Umrbod kirish" %}{% endif %}</div>
+              <div class="h-1.5 rounded-full bg-ink/15 mt-1.5"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent" style="width:{{ pct }}%"></div></div>
+            </div>
+            <span class="text-xs tabular text-ink-2">{{ pct }}%</span>
+          </a>
+        {% empty %}
+          <div class="text-center py-8"><i data-lucide="gem" class="w-10 h-10 mx-auto text-ink-3 mb-2"></i><p class="text-ink-2">{% trans "Hali premium kurs yo'q" %}</p><a href="{% url 'education:course_list' %}" class="btn btn-light mt-3">{% trans "Kurslarni ko'rish" %}</a></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><h2>{% trans "So'rovlarim" %}</h2></div>
+      <ul class="flex flex-col gap-2">
+        {% for r in access_requests %}
+          <li class="glass glass--sm p-3 flex items-center gap-3">
+            <span class="grid place-items-center w-10 h-10 rounded-xl shrink-0 {% if r.status == 'approved' %}bg-ok/15 text-ok{% elif r.status == 'rejected' %}bg-danger/15 text-danger{% else %}bg-warn/15 text-warn{% endif %}"><i data-lucide="{% if r.status == 'approved' %}badge-check{% elif r.status == 'rejected' %}circle-x{% else %}hourglass{% endif %}" class="w-5 h-5"></i></span>
+            <div class="min-w-0 flex-1"><div class="text-sm font-medium truncate">{{ r.course.title }}</div><div class="text-[11px] text-ink-3 tabular">{{ r.reference }} · {{ r.created_at|date:"d.m.Y" }} · {{ r.get_status_display }}</div>{% if r.admin_note %}<div class="text-[11px] text-ink-2 mt-0.5">{{ r.admin_note }}</div>{% endif %}</div>
+            {% if r.status == "pending" %}<a href="{% url 'education:buy' r.course.slug %}" class="btn btn-glass btn-sm">{% trans "Ochish" %}</a>{% endif %}
+          </li>
+        {% empty %}<li class="text-sm text-ink-3 py-6 text-center">{% trans "So'rov yo'q" %}</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+{% elif tab == "courses" %}
+  <div class="grid md:grid-cols-2 gap-3">{% for e, pct in courses %}{% include "accounts/partials/course_row.html" %}{% empty %}<p class="panel text-ink-3">{% trans "Hali kursga yozilmagansiz." %}</p>{% endfor %}</div>
+{% elif tab == "saved" %}
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for s in saved %}
+      <a href="{{ s.obj.get_absolute_url }}" class="media-card">
+        <span class="media-card__img block m-2 mb-0 rounded-xl">{% if s.image %}<img src="{% thumb s.image 480 %}" alt="" loading="lazy">{% endif %}<span class="absolute left-2 top-2 chip !bg-black/50 text-ink"><i data-lucide="{{ s.icon }}" class="w-3 h-3"></i>{{ s.label }}</span></span>
+        <span class="p-3 block"><span class="font-semibold block truncate">{{ s.obj.title }}</span><span class="text-[11px] text-ink-3">{% trans "Saqlangan" %}: {{ s.at|naturaltime }}</span></span>
+      </a>
+    {% empty %}<div class="panel col-span-full text-center py-10"><i data-lucide="bookmark" class="w-10 h-10 mx-auto text-ink-3 mb-2"></i><p class="text-ink-2">{% trans "Loyiha va maqolalardagi «Saqlash» tugmasi bilan sevimlilaringizni shu yerga yig'ing." %}</p></div>{% endfor %}
+  </div>
+{% elif tab == "certificates" %}
+  <div class="grid md:grid-cols-2 gap-4">
+    {% for c in certificates %}
+      <a href="{% url 'education:certificate' c.code %}" class="glass glass--hover p-5 flex items-center gap-4"><span class="grid place-items-center w-14 h-14 rounded-2xl bg-warn/15 text-warn"><i data-lucide="award" class="w-7 h-7"></i></span><div class="min-w-0"><div class="font-semibold truncate">{{ c.enrollment.course.title }}</div><div class="text-xs text-ink-3 font-mono">{{ c.code }} · {{ c.issued_at|date:"d.m.Y" }}</div></div><i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-ink-3"></i></a>
+    {% empty %}<div class="panel col-span-full text-center py-10"><i data-lucide="award" class="w-10 h-10 mx-auto text-ink-3 mb-2"></i><p class="text-ink-2">{% trans "Kursni to'liq tugatsangiz, sertifikat shu yerda paydo bo'ladi." %}</p></div>{% endfor %}
+  </div>
+{% elif tab == "activity" %}
+  <div class="panel">
+    <h2 class="text-lg font-semibold mb-3">{% trans "Izohlarim" %}</h2>
+    <ul class="flex flex-col divide-y divide-ink/10 text-sm">
+      {% for c in comments %}<li class="py-3"><a href="{{ c.target.get_absolute_url }}#comments" class="text-xs text-accent hover:underline">{{ c.content_type.name|capfirst }}: {{ c.target|truncatechars:60 }}</a><p class="text-ink-2 mt-1">{{ c.body|truncatechars:240 }}</p><div class="text-[11px] text-ink-3 mt-1">{{ c.created_at|naturaltime }} · ♥ {{ c.likes_count }}{% if not c.is_approved %} · <span class="text-warn">{% trans "yashirilgan" %}</span>{% endif %}</div></li>
+      {% empty %}<li class="py-6 text-center text-ink-3">{% trans "Hali izoh yozmagansiz" %}</li>{% endfor %}
+    </ul>
+  </div>
+{% elif tab == "settings" %}
+  <form method="post" enctype="multipart/form-data" class="grid lg:grid-cols-[1.4fr_1fr] gap-4">{% csrf_token %}
+    <div class="panel flex flex-col gap-4">
+      <h2 class="text-lg font-semibold">{% trans "Shaxsiy ma'lumotlar" %}</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label" for="{{ form.first_name.id_for_label }}">{% trans "Ism" %}</label>{{ form.first_name }}</div>
+        <div><label class="field-label" for="{{ form.last_name.id_for_label }}">{% trans "Familiya" %}</label>{{ form.last_name }}</div>
+      </div>
+      <div><label class="field-label" for="{{ form.bio.id_for_label }}">{% trans "Bio" %}</label>{{ form.bio }}</div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label" for="{{ form.language.id_for_label }}">{% trans "Til" %}</label>{{ form.language }}</div>
+        <div><label class="field-label" for="{{ form.avatar.id_for_label }}">{% trans "Avatar" %}</label>{{ form.avatar }}{% for e in form.avatar.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-4">
+      <div class="panel flex flex-col gap-1">
+        <h2 class="text-lg font-semibold mb-2 flex items-center gap-2">{% social_icon "telegram" "w-5 h-5 text-accent" %}{% trans "Bot bildirishnomalari" %}</h2>
+        {% trans "Yangi kurs va maqolalar" as l %}{% trans "@welicodevbot orqali yangiliklar" as h %}{% include "dashboard/partials/toggle.html" with field=form.notify_news label=l hint=h %}
+        {% trans "Izohimga javob yozilsa" as l %}{% include "dashboard/partials/toggle.html" with field=form.notify_comments label=l %}
+      </div>
+      <div class="panel text-sm text-ink-2 flex flex-col gap-2">
+        <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-ok"></i>{% trans "Telefon raqamingiz Telegram orqali tasdiqlangan va saytda ko'rsatilmaydi." %}</div>
+        <div class="flex items-center gap-2"><i data-lucide="key-round" class="w-4 h-4 text-accent"></i>{% trans "Parol yo'q: kirish faqat Telegram orqali." %}</div>
+      </div>
+      <button class="btn btn-primary py-3"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+    </div>
+  </form>
+{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,9 @@
+<div class="overflow-x-auto">
+  <svg viewBox="0 0 {{ chart.width }} {{ chart.height }}" class="w-full min-w-[480px] h-auto" role="img" aria-label="Learning journey">
+    <defs><linearGradient id="lj" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb(var(--accent-strong))" stop-opacity=".5"/><stop offset="1" stop-color="rgb(var(--accent-strong))" stop-opacity="0"/></linearGradient></defs>
+    {% for g in chart.grid %}<line x1="{{ chart.x0 }}" x2="{{ chart.x1 }}" y1="{{ g.y }}" y2="{{ g.y }}" stroke="rgb(var(--ink) / .08)"/><text x="{{ chart.x0|add:-8 }}" y="{{ g.y }}" dy="3" text-anchor="end" font-size="10" fill="rgb(var(--ink-3))">{{ g.label }}</text>{% endfor %}
+    <path d="{{ chart.area }}" fill="url(#lj)"/>
+    <path d="{{ chart.line }}" fill="none" stroke="rgb(var(--accent))" stroke-width="2.5" stroke-linejoin="round"/>
+    {% for d in chart.dots %}<circle cx="{{ d.x }}" cy="{{ d.y }}" r="{% if forloop.last %}5{% else %}3.5{% endif %}" fill="rgb(var(--ink))"{% if forloop.last %} stroke="rgb(var(--accent))" stroke-width="3"{% endif %}><title>{{ d.label }}: {{ d.value }}</title></circle><text x="{{ d.x }}" y="{{ chart.label_y }}" text-anchor="middle" font-size="11" fill="rgb(var(--ink-3))">{{ d.label }}</text>{% endfor %}
+  </svg>
+</div>

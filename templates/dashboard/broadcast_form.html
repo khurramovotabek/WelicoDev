@@ -1,0 +1,76 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Ommaviy xabar" %}{% endblock %}
+{% block dash %}
+{% trans "Ommaviy xabar" as t %}Telegram bot{% url 'dashboard:bot' as parent_url %}{% trans "Bot foydalanuvchilariga xabar yuborish. Avval o'zingizga test qilib ko'ring." as st %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st parent="Telegram bot" parent_url=parent_url %}
+{% if form.non_field_errors %}<div class="glass glass--sm p-3 text-sm text-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_400px] gap-4" x-data="broadcast({ text: '{{ form.text.value|default:''|escapejs }}', btn: '{{ form.button_text.value|default:''|escapejs }}', img: '{% if obj.image %}{{ obj.image.url }}{% endif %}', aud: '{{ form.audience.value|default:'all' }}' })">
+  {% csrf_token %}
+  <div class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-4">
+      {% include "dashboard/partials/field.html" with field=form.title %}
+      <div>
+        <label class="field-label" for="{{ form.text.id_for_label }}">{% trans "Xabar matni" %} <span class="text-danger">*</span></label>
+        <div class="flex gap-1 mb-1.5">
+          <button type="button" class="btn-icon w-8 h-8 rounded-lg" @click="$refs.t.setRangeText('<b>' + $refs.t.value.substring($refs.t.selectionStart, $refs.t.selectionEnd) + '</b>'); text = $refs.t.value" aria-label="Bold"><i data-lucide="bold" class="!w-3.5 !h-3.5"></i></button>
+          <button type="button" class="btn-icon w-8 h-8 rounded-lg" @click="$refs.t.setRangeText('<i>' + $refs.t.value.substring($refs.t.selectionStart, $refs.t.selectionEnd) + '</i>'); text = $refs.t.value" aria-label="Italic"><i data-lucide="italic" class="!w-3.5 !h-3.5"></i></button>
+          <button type="button" class="btn-icon w-8 h-8 rounded-lg" @click="$refs.t.setRangeText('<code>' + $refs.t.value.substring($refs.t.selectionStart, $refs.t.selectionEnd) + '</code>'); text = $refs.t.value" aria-label="Code"><i data-lucide="code" class="!w-3.5 !h-3.5"></i></button>
+          <button type="button" class="btn-icon w-8 h-8 rounded-lg" @click="$refs.t.setRangeText('<a href=&quot;https://&quot;>' + ($refs.t.value.substring($refs.t.selectionStart, $refs.t.selectionEnd) || 'havola') + '</a>'); text = $refs.t.value" aria-label="Link"><i data-lucide="link" class="!w-3.5 !h-3.5"></i></button>
+          <span class="ml-auto text-[11px] text-ink-3 self-center tabular" x-text="text.length + ' / ' + (img ? 1024 : 4096)"></span>
+        </div>
+        <textarea name="text" id="{{ form.text.id_for_label }}" x-ref="t" x-model="text" rows="8" maxlength="4096" class="field font-mono text-[13px]" required></textarea>
+        {% for e in form.text.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}
+        <p class="text-[11px] text-ink-3 mt-1">{% trans "Telegram HTML: <b>, <i>, <u>, <code>, <a href>" as hint %}{{ hint }}</p>
+      </div>
+      <div><span class="field-label">{% trans "Rasm (ixtiyoriy)" %}</span><input type="file" name="image" accept="image/*" class="field" @change="const f = $event.target.files[0]; if (f) img = URL.createObjectURL(f)"></div>
+      <div class="grid md:grid-cols-2 gap-4"><div><label class="field-label">{% trans "Tugma matni" %}</label><input name="button_text" x-model="btn" maxlength="40" class="field" value="{{ form.button_text.value|default:'' }}"></div>{% include "dashboard/partials/field.html" with field=form.button_url %}</div>
+    </section>
+    <section class="panel flex flex-col gap-4">
+      <h2 class="text-lg font-semibold">{% trans "Kimga yuboriladi" %}</h2>
+      <div class="grid sm:grid-cols-2 gap-2">
+        {% for v, l in form.fields.audience.choices %}
+          <label class="glass glass--sm p-3 flex items-center gap-3 cursor-pointer" :class="aud === '{{ v }}' && 'glow-accent'"><input type="radio" name="audience" value="{{ v }}" x-model="aud" class="accent-[rgb(var(--accent-strong))]"><span class="text-sm flex-1">{{ l }}</span>{% if v == "all" %}<span class="chip tabular">{{ audience_counts.all }}</span>{% elif v == "registered" %}<span class="chip tabular">{{ audience_counts.registered }}</span>{% elif v == "students" %}<span class="chip tabular">{{ audience_counts.students }}</span>{% elif v == "staff" %}<span class="chip tabular">{{ audience_counts.staff }}</span>{% endif %}</label>
+        {% endfor %}
+      </div>
+      <div x-show="aud === 'course'" x-cloak>{% include "dashboard/partials/field.html" with field=form.course %}</div>
+      {% include "dashboard/partials/field.html" with field=form.scheduled_at %}
+    </section>
+  </div>
+  <aside class="flex flex-col gap-4">
+    <section class="panel xl:sticky xl:top-4">
+      <h2 class="text-lg font-semibold mb-3">{% trans "Telegram'da ko'rinishi" %}</h2>
+      <div class="rounded-2xl p-4 min-h-[300px]" style="background:linear-gradient(160deg,#0e1a2b,#17263b)">
+        <div class="max-w-[90%] rounded-2xl rounded-bl-md overflow-hidden bg-[#182533] text-[#e9eef5] shadow-lg">
+          <img :src="img" x-show="img" alt="" class="w-full max-h-56 object-cover">
+          <div class="px-3 py-2 text-[14px] leading-snug whitespace-pre-line [&_a]:text-[#6ab3f3] [&_code]:bg-black/30 [&_code]:px-1 [&_code]:rounded" x-html="tg(text) || '…'"></div>
+          <div class="text-[11px] text-right px-3 pb-1.5 text-[#7d8b99]">{% now "H:i" %}</div>
+        </div>
+        <div x-show="btn" class="max-w-[90%] mt-1 rounded-xl bg-[#2b5278]/70 text-center text-sm py-2 text-white" x-text="btn"></div>
+      </div>
+      <div class="flex flex-col gap-2 mt-4">
+        <button name="action" value="save" class="btn btn-glass"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+        <button name="action" value="test" class="btn btn-glass"><i data-lucide="flask-conical"></i>{% trans "Faqat adminlarga test" %}</button>
+        <button name="action" value="send" class="btn btn-primary py-3"><i data-lucide="send"></i>{% trans "Hozir yuborish" %}</button>
+      </div>
+    </section>
+  </aside>
+</form>
+{% endblock %}
+{% block body_end %}
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("broadcast", (init) => ({
+      ...init,
+      // Telegram HTML ko'rinishi: hammasini escape qilib, faqat ruxsat etilgan teglarni qaytaramiz
+      tg(v) {
+        const e = v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        return e
+          .replace(/&lt;(\/?)(b|i|u|s|code)&gt;/g, "<$1$2>")
+          .replace(/&lt;a href=&quot;(https?:\/\/[^&\s]+)&quot;&gt;/g, '<a href="$1" target="_blank" rel="noopener">')
+          .replace(/&lt;\/a&gt;/g, "</a>");
+      },
+    }));
+  });
+</script>
+{% endblock %}

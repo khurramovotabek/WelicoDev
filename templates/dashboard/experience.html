@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Tajriba va ta'lim" %}{% endblock %}
+{% block dash %}
+{% trans "Tajriba va ta'lim" as t %}{% trans "Ish joylari, frilans, loyihalar va o'qish joylaringiz yilma-yil." as st %}
+<div class="flex flex-wrap items-end gap-3">
+  <div class="flex-1">{% include "dashboard/partials/page_head.html" with title=t subtitle=st %}</div>
+  <a href="{% url 'dashboard:experience_add' %}?kind=education" class="btn btn-glass"><i data-lucide="graduation-cap"></i>{% trans "O'qish joyi qo'shish" %}</a>
+  <a href="{% url 'dashboard:experience_add' %}?kind=work" class="btn btn-primary"><i data-lucide="plus"></i>{% trans "Ish tajribasi" %}</a>
+</div>
+<section class="grid xl:grid-cols-2 gap-4">
+  <div class="panel">
+    <h2 class="text-lg font-semibold mb-3 flex items-center gap-2"><i data-lucide="briefcase" class="w-5 h-5"></i>{% trans "Ish tajribasi" %}</h2>
+    <ol class="flex flex-col gap-2">{% for e in work %}{% include "dashboard/partials/experience_row.html" %}{% empty %}<li class="text-sm text-ink-3">{% trans "Hali yo'q" %}</li>{% endfor %}</ol>
+  </div>
+  <div class="panel">
+    <h2 class="text-lg font-semibold mb-3 flex items-center gap-2"><i data-lucide="graduation-cap" class="w-5 h-5"></i>{% trans "Ta'lim" %}</h2>
+    <ol class="flex flex-col gap-2">{% for e in study %}{% include "dashboard/partials/experience_row.html" %}{% empty %}<li class="text-sm text-ink-3">{% trans "Hali yo'q" %}</li>{% endfor %}</ol>
+  </div>
+</section>
+{% endblock %}

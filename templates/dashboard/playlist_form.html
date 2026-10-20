@@ -1,0 +1,17 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd %}
+{% block dash_title %}{% trans "Pleylist" %}{% endblock %}
+{% block dash %}
+{% trans "Musiqa" as parent %}{% url 'dashboard:music' as parent_url %}{% if obj %}{% trans "Pleylistni tahrirlash" as t %}{% else %}{% trans "Yangi pleylist" as t %}{% endif %}
+{% include "dashboard/partials/page_head.html" with title=t parent=parent parent_url=parent_url %}
+<form method="post" enctype="multipart/form-data" class="grid xl:grid-cols-[1fr_320px] gap-4">{% csrf_token %}
+  <section class="panel flex flex-col gap-4">
+    {% trans "Nomi" as l %}{% include "dashboard/partials/tr_field.html" with name="title" label=l required=True %}
+    <div><span class="field-label">{% trans "Treklar" %}</span><div class="flex flex-wrap gap-2">{% for cb in form.tracks %}<label class="cursor-pointer">{{ cb.tag }}<span class="chip chip-lg select-none">{{ cb.choice_label }}</span></label>{% endfor %}</div></div>
+  </section>
+  <aside class="flex flex-col gap-4">
+    <section class="panel flex flex-col gap-3">{% if obj.cover %}<img src="{{ obj.cover.url }}" alt="" class="w-full aspect-[4/3] rounded-2xl object-cover">{% endif %}<span class="field-label">{% trans "Muqova" %}</span><input type="file" name="cover" accept="image/*" class="field">{% include "dashboard/partials/field.html" with field=form.order %}{% trans "Saytda ko'rinadi" as l %}{% include "dashboard/partials/toggle.html" with field=form.is_published label=l %}</section>
+    <button class="btn btn-primary"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
+  </aside>
+</form>
+{% endblock %}

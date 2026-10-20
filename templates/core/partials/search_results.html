@@ -1,0 +1,15 @@
+{% load i18n wcd %}
+{% if q|length >= 2 %}
+  {% if has_results %}
+    <div class="flex flex-col gap-4">
+      {% if results.projects %}<div class="panel"><h2 class="text-sm uppercase tracking-wider text-ink-3 mb-3">{% trans "Loyihalar" %}</h2><div class="flex flex-col gap-1">{% for p in results.projects %}<a href="{{ p.get_absolute_url }}" class="flex items-center gap-3 rounded-xl p-2 hover:bg-ink/10"><img src="{% thumb p.cover 160 %}" alt="" class="w-14 h-10 rounded-lg object-cover"><div class="text-sm"><div class="font-medium">{{ p.title }}</div><div class="text-xs text-ink-3">{{ p.subtitle }}</div></div></a>{% endfor %}</div></div>{% endif %}
+      {% if results.articles %}<div class="panel"><h2 class="text-sm uppercase tracking-wider text-ink-3 mb-3">Blog</h2><div class="flex flex-col gap-1">{% for a in results.articles %}<a href="{{ a.get_absolute_url }}" class="flex items-center gap-3 rounded-xl p-2 hover:bg-ink/10"><img src="{% thumb a.cover 160 %}" alt="" class="w-14 h-10 rounded-lg object-cover"><div class="text-sm"><div class="font-medium">{{ a.title }}</div><div class="text-xs text-ink-3">{{ a.published_at|date:"M d, Y" }}</div></div></a>{% endfor %}</div></div>{% endif %}
+      {% if results.courses %}<div class="panel"><h2 class="text-sm uppercase tracking-wider text-ink-3 mb-3">{% trans "Kurslar" %}</h2><div class="flex flex-col gap-1">{% for c in results.courses %}<a href="{{ c.get_absolute_url }}" class="flex items-center gap-3 rounded-xl p-2 hover:bg-ink/10"><img src="{% thumb c.cover 160 %}" alt="" class="w-14 h-10 rounded-lg object-cover"><div class="text-sm"><div class="font-medium">{{ c.title }}</div><div class="text-xs text-ink-3">{{ c.subtitle|truncatechars:80 }}</div></div></a>{% endfor %}</div></div>{% endif %}
+      {% if results.skills %}<div class="panel"><h2 class="text-sm uppercase tracking-wider text-ink-3 mb-3">{% trans "Ko'nikmalar" %}</h2><div class="flex flex-wrap gap-2">{% for s in results.skills %}<a href="{% url 'portfolio:skills' %}?q={{ s.name|urlencode }}" class="chip chip-lg">{% if s.icon_url %}<img src="{{ s.icon_url }}" alt="" class="w-4 h-4">{% endif %}{{ s.name }}</a>{% endfor %}</div></div>{% endif %}
+    </div>
+  {% else %}
+    <p class="text-center text-ink-3 py-10">{% blocktrans %}“{{ q }}” bo'yicha hech narsa topilmadi{% endblocktrans %}</p>
+  {% endif %}
+{% else %}
+  <p class="text-center text-ink-3 py-6 text-sm">{% trans "Kamida 2 ta belgi kiriting" %}</p>
+{% endif %}

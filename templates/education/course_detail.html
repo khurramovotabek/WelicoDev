@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{{ course.meta_title|default:course.title }}{% endblock %}
+{% block meta_description %}{{ course.meta_description|default:course.subtitle }}{% endblock %}
+{% block og_image %}<meta property="og:image" content="{{ SITE_URL }}{{ course.cover.url }}">{% endblock %}
+{% block jsonld %}{% trans "Kurslar" as lp %}{% url 'education:course_list' as lu %}{% ld jsonld %}{% crumbs lp lu course.title course.get_absolute_url %}{% endblock %}
+{% block content %}
+<a href="{% url 'education:course_list' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Kurslarga qaytish" %}</a>
+<section class="grid lg:grid-cols-[1.2fr_1fr] gap-6 items-center mt-4">
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-wrap gap-2"><span class="badge badge-info">{{ course.get_level_display }}</span>{% if course.is_free %}<span class="badge badge-ok">{% trans "Bepul" %}</span>{% else %}<span class="badge badge-warn"><i data-lucide="gem" class="w-3 h-3"></i>{% trans "Premium" %}</span>{% endif %}{% if course.is_private %}<span class="badge badge-violet"><i data-lucide="lock" class="w-3 h-3"></i>{% trans "Yopiq kurs" %}</span>{% endif %}{% if course.sequential %}<span class="badge badge-violet"><i data-lucide="list-ordered" class="w-3 h-3"></i>{% trans "Ketma-ket ochiladi" %}</span>{% endif %}</div>
+    <h1 class="text-4xl sm:text-5xl font-semibold">{{ course.title }}</h1>
+    <p class="text-lg text-ink-2">{{ course.subtitle }}</p>
+    <div class="flex flex-wrap gap-4 text-sm text-ink-2">
+      <span class="flex items-center gap-1.5"><i data-lucide="play-circle" class="w-4 h-4"></i>{{ lessons_total }} {% trans "dars" %}</span>
+      <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4"></i>{{ course.total_seconds|seconds_hms }}</span>
+      <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-4 h-4"></i>{{ students }} {% trans "o'quvchi" %}</span>
+      {% if rating.count %}<span class="flex items-center gap-1.5"><i data-lucide="star" class="w-4 h-4 text-warn fill-current"></i>{{ rating.avg }} ({{ rating.count }})</span>{% endif %}
+    </div>
+    {% if enrollment %}
+      <div class="glass glass--sm p-4">
+        <div class="flex items-center justify-between text-sm"><span>{% trans "Progress" %}: <b class="tabular">{{ completed }}/{{ lessons_total }}</b></span><span class="font-display font-semibold tabular">{{ progress }}%</span></div>
+        <div class="h-2 rounded-full bg-ink/15 mt-2 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent" style="width:{{ progress }}%"></div></div>
+        <div class="flex flex-wrap gap-2 mt-3">
+          {% if resume %}<a href="{{ resume.get_absolute_url }}" class="btn btn-primary">{% if completed %}{% trans "Davom ettirish" %}{% else %}{% trans "Boshlash" %}{% endif %}<i data-lucide="arrow-right"></i></a>{% endif %}
+          {% if certificate %}<a href="{% url 'education:certificate' certificate.code %}" class="btn btn-light"><i data-lucide="award"></i>{% trans "Sertifikat" %}</a>{% endif %}
+        </div>
+      </div>
+    {% elif not course.is_free %}
+      <div class="glass glass--sm p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div class="flex items-end gap-2 flex-wrap">
+          <span class="font-display text-3xl font-semibold tabular">{{ course.price|money }}</span><span class="text-ink-2 mb-0.5">{% trans "so'm" %}</span>
+          {% if course.discount_percent %}<span class="text-ink-3 line-through mb-0.5 text-sm tabular">{{ course.old_price|money }}</span><span class="badge badge-danger mb-1">−{{ course.discount_percent }}%</span>{% endif %}
+        </div>
+        <div class="flex flex-wrap gap-2 sm:ml-auto">
+          {% if access_request.status == "pending" %}
+            <a href="{% url 'education:buy' course.slug %}" class="btn btn-glass"><span class="w-2 h-2 rounded-full bg-warn"></span>{% trans "So'rov ko'rib chiqilmoqda" %}</a>
+          {% else %}
+            <a href="{% url 'education:buy' course.slug %}" class="btn btn-primary px-6">{% if user.is_authenticated %}<i data-lucide="shopping-bag"></i>{% trans "Sotib olish" %}{% else %}{% social_icon "telegram" "w-4 h-4" %}{% trans "Kirish va sotib olish" %}{% endif %}</a>
+          {% endif %}
+          {% if first_lesson and first_lesson.is_preview %}<a href="{{ first_lesson.get_absolute_url }}" class="btn btn-glass">{% trans "Bepul darsni ko'rish" %}</a>{% endif %}
+        </div>
+      </div>
+    {% else %}
+      <form method="post" action="{% url 'education:enroll' course.slug %}" class="flex flex-wrap items-center gap-3">{% csrf_token %}
+        <button class="btn btn-primary px-6 py-3">{% if user.is_authenticated %}{% trans "Kursga yozilish" %}{% else %}{% social_icon "telegram" "w-4 h-4" %}{% trans "Kirish va yozilish" %}{% endif %}<i data-lucide="arrow-right"></i></button>
+        {% if first_lesson and first_lesson.is_preview %}<a href="{{ first_lesson.get_absolute_url }}" class="btn btn-glass">{% trans "Bepul darsni ko'rish" %}</a>{% endif %}
+      </form>
+    {% endif %}
+  </div>
+  <div class="glass p-2.5 rounded-[26px]"><img src="{% thumb course.cover 1100 %}" alt="" class="w-full rounded-[20px] aspect-[16/10] object-cover"></div>
+</section>
+
+<section class="grid lg:grid-cols-[1fr_380px] gap-4 mt-6">
+  <div class="flex flex-col gap-4 min-w-0">
+    {% if course.what_you_learn %}<div class="panel"><div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="target"></i></span><h2 class="text-xl font-semibold">{% trans "Nimalarni o'rganasiz" %}</h2></div><div class="richtext">{{ course.what_you_learn|safe }}</div></div>{% endif %}
+    {% if course.description %}<div class="panel"><div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="file-text"></i></span><h2 class="text-xl font-semibold">{% trans "Kurs haqida" %}</h2></div><div class="richtext">{{ course.description|safe }}</div></div>{% endif %}
+    {% if course.requirements %}<div class="panel"><div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="list-checks"></i></span><h2 class="text-xl font-semibold">{% trans "Talablar" %}</h2></div><div class="richtext">{{ course.requirements|safe }}</div></div>{% endif %}
+    {% include "partials/channel_cta.html" %}
+    <div id="reviews" class="panel" hx-get="{% url 'interactions:reviews' 'course' course.pk %}" hx-trigger="revealed" hx-swap="innerHTML"><div class="h-24"></div></div>
+  </div>
+  <aside class="panel h-fit lg:sticky" style="top:calc(90px + env(safe-area-inset-top, 0px))">
+    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-semibold">{% trans "Darslar" %}</h2><span class="chip tabular">{{ lessons_total }}</span></div>
+    <div class="flex flex-col gap-3 max-h-[70vh] overflow-y-auto thin-scroll -mx-1 px-1">
+      {% for g in groups %}
+        <div>
+          {% if g.module %}<div class="text-[11px] uppercase tracking-wider text-ink-3 font-semibold px-3 mb-1">{{ g.module.title }}</div>{% endif %}
+          {% for lesson, state in g.items %}{% include "education/partials/lesson_row.html" %}{% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+    {% if course.sequential and not user.is_staff %}<p class="text-xs text-ink-3 mt-3 flex gap-2"><i data-lucide="info" class="w-4 h-4 shrink-0"></i>{% trans "Keyingi dars oldingi dars videosi ko'rilib, uyga vazifa topshirilgandan keyin ochiladi." %}</p>{% endif %}
+  </aside>
+</section>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% load i18n %}
+<li class="glass glass--sm flex items-center gap-3 p-2.5 {% if not t.is_published %}opacity-60{% endif %}" id="track-{{ t.pk }}">
+  {% if t.audio %}<button type="button" class="relative shrink-0 group" @click="audio.src.endsWith('{{ t.audio.url }}') ? toggle() : load('{{ t.audio.url }}')" aria-label="Play">{% if t.cover %}<img src="{{ t.cover.url }}" alt="" class="w-12 h-12 rounded-lg object-cover">{% else %}<span class="icon-tile w-12 h-12"><i data-lucide="music"></i></span>{% endif %}<span class="absolute inset-0 grid place-items-center rounded-lg bg-black/40 opacity-0 group-hover:opacity-100 transition"><i data-lucide="play" class="w-4 h-4 fill-current"></i></span></button>
+  {% else %}{% if t.cover %}<img src="{{ t.cover.url }}" alt="" class="w-12 h-12 rounded-lg object-cover shrink-0">{% else %}<span class="icon-tile w-12 h-12"><i data-lucide="music"></i></span>{% endif %}{% endif %}
+  <div class="min-w-0 flex-1">
+    <a href="{% url 'dashboard:track_edit' t.pk %}" class="font-semibold text-sm hover:underline truncate block">{{ t.title }}</a>
+    <div class="text-xs text-ink-3 truncate">{{ t.artist }}{% if t.album %} · {{ t.album }}{% endif %}{% if t.year %} · {{ t.year }}{% endif %}</div>
+  </div>
+  {% if t.platform %}<a href="{{ t.external_url }}" target="_blank" rel="noopener" class="chip !text-[10px] hidden sm:inline-flex">{{ t.platform }}</a>{% endif %}
+  {% if t.category %}<span class="chip !text-[10px] hidden md:inline-flex">{{ t.category.name }}</span>{% endif %}
+  <span class="text-xs text-ink-3 tabular hidden sm:block">{{ t.duration }}</span>
+  <button class="btn-icon w-8 h-8 rounded-lg {% if t.is_favorite %}!text-danger{% endif %}" hx-post="{% url 'dashboard:track_action' t.pk 'favorite' %}" hx-target="#track-{{ t.pk }}" hx-swap="outerHTML" aria-label="Favorite"><i data-lucide="heart" class="!w-3.5 !h-3.5 {% if t.is_favorite %}fill-current{% endif %}"></i></button>
+  <button class="btn-icon w-8 h-8 rounded-lg" hx-post="{% url 'dashboard:track_action' t.pk 'toggle' %}" hx-target="#track-{{ t.pk }}" hx-swap="outerHTML" aria-label="Visibility"><i data-lucide="{% if t.is_published %}eye{% else %}eye-off{% endif %}" class="!w-3.5 !h-3.5"></i></button>
+</li>

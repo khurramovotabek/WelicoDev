@@ -1,0 +1,63 @@
+{% extends "dashboard/base.html" %}
+{% load i18n wcd humanize %}
+{% block dash_title %}{% trans "Kanal postlari" %}{% endblock %}
+{% block dash %}
+{% trans "Kanal postlari" as t %}{% trans "Rich text bilan post yozing, rejalashtiring yoki sayt kontentidan bir bosishda post qiling." as st %}{% trans "Yangi post" as al %}{% url 'dashboard:channel_add' as au %}
+{% include "dashboard/partials/page_head.html" with title=t subtitle=st action_url=au action_label=al %}
+
+{% if not bot_settings.channel_id %}
+<div class="glass p-5 flex flex-col md:flex-row gap-4 md:items-center">
+  <span class="kpi-icon bg-warn/15 text-warn"><i data-lucide="radio-tower"></i></span>
+  <div class="flex-1 text-sm"><div class="font-semibold text-base">{% trans "Kanal ulanmagan" %}</div><p class="text-ink-2 mt-1">{% trans "Kanalingiz @username'ini kiriting va botni kanalga admin qilib qo'shing (xabar yuborish va tahrirlash huquqi bilan)." %}</p></div>
+  <a href="{% url 'dashboard:bot_settings' %}" class="btn btn-primary"><i data-lucide="settings-2"></i>{% trans "Kanalni ulash" %}</a>
+</div>
+{% endif %}
+
+<section class="grid grid-cols-3 gap-3 sm:gap-4">
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Joylangan" %}</div><div class="stat-num text-ok">{{ stats.sent }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Rejalashtirilgan" %}</div><div class="stat-num text-accent">{{ stats.scheduled }}</div></div>
+  <div class="glass p-4 sm:p-5"><div class="text-sm text-ink-2">{% trans "Xato" %}</div><div class="stat-num text-danger">{{ stats.failed }}</div></div>
+</section>
+
+<section class="grid xl:grid-cols-[1fr_360px] gap-4">
+  <div class="glass p-4 min-w-0">
+    <div class="flex gap-2 overflow-x-auto no-scrollbar mb-3"><a href="?" class="chip-btn {% if not status %}is-active{% endif %}">{% trans "Barchasi" %}</a>{% for v, l in statuses %}<a href="?status={{ v }}" class="chip-btn {% if status == v %}is-active{% endif %}">{{ l }}</a>{% endfor %}</div>
+    <ul class="flex flex-col gap-2">
+      {% for p in posts %}
+        <li class="glass glass--sm p-3 flex gap-3 items-start">
+          {% if p.image %}<img src="{{ p.image.url }}" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0">{% else %}<span class="icon-tile w-16 h-16 shrink-0"><i data-lucide="text"></i></span>{% endif %}
+          <div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-2"><a href="{% url 'dashboard:channel_edit' p.pk %}" class="font-semibold hover:underline truncate">{{ p.title }}</a>
+              {% if p.status == "sent" %}<span class="badge badge-ok">{{ p.get_status_display }}</span>{% elif p.status == "scheduled" %}<span class="badge badge-info"><i data-lucide="clock" class="w-3 h-3"></i>{{ p.scheduled_at|date:"d.m H:i" }}</span>{% elif p.status == "failed" %}<span class="badge badge-danger">{{ p.get_status_display }}</span>{% else %}<span class="badge badge-warn">{{ p.get_status_display }}</span>{% endif %}
+              {% if p.kind != "manual" %}<span class="chip !text-[10px] !py-0.5">{{ p.get_kind_display }}</span>{% endif %}{% if p.pin %}<i data-lucide="pin" class="w-3.5 h-3.5 text-warn"></i>{% endif %}</div>
+            <p class="text-xs text-ink-3 line-clamp-2 mt-1">{{ p.body|striptags|truncatechars:160 }}</p>
+            {% if p.error %}<p class="text-xs text-danger mt-1">{{ p.error }}</p>{% endif %}
+            <div class="text-[11px] text-ink-3 mt-1">{% if p.sent_at %}{{ p.sent_at|naturaltime }}{% else %}{{ p.created_at|naturaltime }}{% endif %}{% if p.created_by %} · {{ p.created_by.first_name|default:p.created_by.username }}{% endif %}</div>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <a href="{% url 'dashboard:channel_edit' p.pk %}" class="btn-icon w-8 h-8 rounded-lg" aria-label="Edit"><i data-lucide="pencil" class="!w-3.5 !h-3.5"></i></a>
+            {% if p.status == "failed" %}<form method="post" action="{% url 'dashboard:channel_action' p.pk 'retry' %}">{% csrf_token %}<button class="btn-icon w-8 h-8 rounded-lg" aria-label="Retry"><i data-lucide="rotate-cw" class="!w-3.5 !h-3.5"></i></button></form>{% endif %}
+          </div>
+        </li>
+      {% empty %}<li class="text-center text-ink-3 py-12 text-sm"><i data-lucide="radio-tower" class="w-8 h-8 mx-auto mb-2"></i>{% trans "Hali post yo'q" %}</li>{% endfor %}
+    </ul>
+  </div>
+  <aside class="flex flex-col gap-4">
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-1">{% trans "Kanalga chiqmagan kontent" %}</h2>
+      <p class="text-xs text-ink-3 mb-3">{% trans "Bir bosishda post qiling yoki avval tahrirlang." %}</p>
+      <ul class="flex flex-col gap-2 text-sm">
+        {% for a in suggest_articles %}{% include "dashboard/partials/channel_suggest.html" with kind="article" obj=a icon="file-text" %}{% endfor %}
+        {% for c in suggest_courses %}{% include "dashboard/partials/channel_suggest.html" with kind="course" obj=c icon="graduation-cap" %}{% endfor %}
+        {% for p in suggest_projects %}{% include "dashboard/partials/channel_suggest.html" with kind="project" obj=p icon="folder" %}{% endfor %}
+      </ul>
+    </div>
+    <div class="panel text-sm flex flex-col gap-2">
+      <h2 class="text-lg font-semibold">{% trans "Avtomatik joylash" %}</h2>
+      <div class="flex justify-between"><span>{% trans "Yangi maqolalar" %}</span>{% if bot_settings.auto_post_articles %}<span class="badge badge-ok">{% trans "Yoqilgan" %}</span>{% else %}<span class="badge badge-warn">{% trans "O'chiq" %}</span>{% endif %}</div>
+      <div class="flex justify-between"><span>{% trans "Yangi darslar" %}</span>{% if bot_settings.auto_post_lessons %}<span class="badge badge-ok">{% trans "Yoqilgan" %}</span>{% else %}<span class="badge badge-warn">{% trans "O'chiq" %}</span>{% endif %}</div>
+      <a href="{% url 'dashboard:bot_settings' %}" class="btn btn-glass btn-sm mt-1">{% trans "Sozlash" %}</a>
+    </div>
+  </aside>
+</section>
+{% endblock %}

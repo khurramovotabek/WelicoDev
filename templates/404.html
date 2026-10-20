@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}404{% endblock %}
+{% block content %}
+<section class="flex flex-col items-center text-center pt-10 pb-6">
+  <div class="relative select-none" aria-hidden="true">
+    <div class="font-display font-bold leading-none text-[140px] sm:text-[220px] tracking-tight text-transparent bg-clip-text" style="background-image:linear-gradient(180deg, rgba(255,255,255,.95), rgba(143,180,255,.35)); -webkit-text-stroke:1px rgba(200,220,255,.5); filter:drop-shadow(0 0 40px rgba(91,140,255,.55))">404</div>
+  </div>
+  <h1 class="text-4xl sm:text-5xl font-semibold mt-2">{{ hero.title|default:_("Sahifa topilmadi") }}</h1>
+  <p class="text-ink-2 mt-3 max-w-md">{{ hero.description|default:_("Siz qidirayotgan sahifa mavjud emas yoki boshqa joyga ko'chirilgan.") }}</p>
+</section>
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+  {% url 'core:home' as u1 %}{% url 'core:search' as u2 %}{% url 'portfolio:project_list' as u3 %}{% url 'core:contact' as u4 %}
+  <a href="{{ u1 }}" class="panel glass--hover flex flex-col gap-3"><span class="icon-tile"><i data-lucide="house"></i></span><span class="font-semibold">{% trans "Bosh sahifa" %}</span><span class="text-xs text-ink-3">{% trans "Asosiy sahifaga qaytish" %}</span><i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+  <a href="{{ u2 }}" class="panel glass--hover flex flex-col gap-3"><span class="icon-tile"><i data-lucide="search"></i></span><span class="font-semibold">{% trans "Qidiruv" %}</span><span class="text-xs text-ink-3">{% trans "Kerakli narsani toping" %}</span><i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+  <a href="{{ u3 }}" class="panel glass--hover flex flex-col gap-3"><span class="icon-tile"><i data-lucide="folder-open"></i></span><span class="font-semibold">{% trans "Loyihalar" %}</span><span class="text-xs text-ink-3">{% trans "Ishlarimni ko'ring" %}</span><i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+  <a href="{{ u4 }}" class="panel glass--hover flex flex-col gap-3"><span class="icon-tile"><i data-lucide="mail"></i></span><span class="font-semibold">{% trans "Aloqa" %}</span><span class="text-xs text-ink-3">{% trans "Bog'lanish" %}</span><i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+</section>
+{% trans "Biror narsa qidirib ko'ring..." as search_ph %}
+<form action="{% url 'core:search' %}" class="glass glass--pill flex items-center gap-2 p-2 pl-5 mt-6 max-w-xl mx-auto">
+  <i data-lucide="search" class="w-5 h-5 text-ink-3"></i>
+  <input name="q" class="flex-1 bg-transparent outline-none text-sm py-2 placeholder:text-ink-3" placeholder="{{ search_ph }}">
+  <button class="btn btn-primary !p-0 w-10 h-10" aria-label="{% trans 'Qidirish' %}"><i data-lucide="arrow-right"></i></button>
+</form>
+{% endblock %}

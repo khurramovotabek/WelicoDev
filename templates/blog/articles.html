@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}Blog{% endblock %}
+{% block content %}
+{% include "partials/page_hero.html" %}
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mt-2 mb-5">
+  <a href="?" class="chip-btn {% if not active_category %}is-active{% endif %}">{% trans "Barchasi" %}</a>
+  {% for c in categories %}<a href="?category={{ c.slug }}" class="chip-btn {% if active_category == c.slug %}is-active{% endif %}">{{ c.name }}</a>{% endfor %}
+</div>
+
+<section class="grid lg:grid-cols-[1fr_300px] gap-4">
+  <div class="flex flex-col gap-4 min-w-0">
+    {% if featured %}
+    <article class="glass grid md:grid-cols-[1fr_1.15fr] gap-5 p-5">
+      <div class="flex flex-col gap-3">
+        <span class="chip w-fit"><i data-lucide="star" class="w-3.5 h-3.5 text-warn fill-current"></i>{% trans "Tanlangan" %}</span>
+        <h2 class="text-3xl font-semibold"><a href="{{ featured.get_absolute_url }}" class="hover:underline underline-offset-4">{{ featured.title }}</a></h2>
+        <p class="text-ink-2">{{ featured.excerpt }}</p>
+        <div class="flex flex-wrap items-center gap-4 text-xs text-ink-3 mt-auto">
+          <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5"></i>{{ featured.published_at|date:"M d, Y" }}</span>
+          <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3.5 h-3.5"></i>{{ featured.views_count|compact }}</span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i>{{ featured.reading_minutes }} {% trans "daq" %}</span>
+          <a href="{{ featured.get_absolute_url }}" class="btn btn-light btn-sm ml-auto">{% trans "Maqolani o'qish" %}<i data-lucide="arrow-right"></i></a>
+        </div>
+      </div>
+      <a href="{{ featured.get_absolute_url }}" class="relative rounded-2xl overflow-hidden min-h-[220px]"><img src="{% thumb featured.cover 640 %}" alt="" class="absolute inset-0 w-full h-full object-cover">{% if featured.category %}<span class="absolute top-3 right-3 chip !bg-black/40 text-ink">#{{ featured.category.name }}</span>{% endif %}</a>
+    </article>
+    {% endif %}
+
+    <div class="panel">
+      <div class="panel-title"><h2>{% trans "So'nggi maqolalar" %}</h2>{% if q %}<span class="chip">“{{ q }}”</span>{% endif %}</div>
+      <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
+        {% for a in articles %}
+          <article class="media-card">
+            <a href="{{ a.get_absolute_url }}" class="media-card__img block m-2 mb-0 rounded-xl">{% if a.cover %}<img src="{% thumb a.cover 640 %}" alt="" loading="lazy">{% endif %}{% if a.category %}<span class="absolute left-2 bottom-2 chip !bg-black/45 text-ink !text-[10px]">#{{ a.category.name }}</span>{% endif %}</a>
+            <div class="p-3.5 flex flex-col gap-1.5 flex-1">
+              <h3 class="font-semibold leading-snug"><a href="{{ a.get_absolute_url }}" class="hover:underline underline-offset-4">{{ a.title }}</a></h3>
+              <p class="text-xs text-ink-3 line-clamp-3">{{ a.excerpt }}</p>
+              <div class="flex items-center gap-3 text-[11px] text-ink-3 mt-auto pt-2">
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i>{{ a.published_at|date:"M d" }}</span>
+                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>{{ a.views_count|compact }}</span>
+                <span class="flex items-center gap-1"><i data-lucide="message-circle" class="w-3 h-3"></i>{{ a.comments_n }}</span>
+              </div>
+            </div>
+          </article>
+        {% empty %}<p class="col-span-full text-center text-ink-3 py-10">{% trans "Maqola topilmadi" %}</p>{% endfor %}
+      </div>
+    </div>
+
+    <div class="glass flex flex-col sm:flex-row items-center gap-4 p-5">
+      <span class="icon-tile w-12 h-12"><i data-lucide="file-text"></i></span>
+      <div class="flex-1"><h2 class="text-lg font-semibold">{% trans "Hikoyangiz bormi?" %}</h2><p class="text-sm text-ink-2">{% trans "Yangi g'oyalar, hamkorlik va muhokamalarga doimo ochiqman." %}</p></div>
+      <a href="{% url 'core:contact' %}" class="btn btn-light">{% trans "Bog'lanish" %}<i data-lucide="arrow-right"></i></a>
+    </div>
+  </div>
+
+  <aside class="flex flex-col gap-4">
+    {% if topics %}
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-3">{% trans "Mashhur mavzular" %}</h2>
+      <ul class="flex flex-col gap-0.5">{% for t in topics %}<li><a href="?category={{ t.slug }}" class="flex items-center gap-3 rounded-xl px-2 py-2 text-sm hover:bg-ink/10"><span class="icon-tile w-8 h-8"><i data-lucide="{{ t.icon|default:'hash' }}"></i></span>{{ t.name }}<span class="ml-auto text-ink-3 tabular">{{ t.n }}</span></a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    <div class="panel">
+      <h2 class="text-lg font-semibold">{% trans "Yangi postlarni o'tkazib yubormang" %}</h2>
+      <p class="text-sm text-ink-2 mt-1">{% trans "Yangi maqolalar emailingizga keladi." %}</p>
+      <form method="post" action="{% url 'blog:subscribe' %}" class="relative mt-3">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <input type="email" name="email" required class="field !rounded-full pr-12" placeholder="{% trans 'Email manzilingiz' %}">
+        <button class="btn btn-light !p-0 w-9 h-9 absolute right-1 top-1/2 -translate-y-1/2" aria-label="{% trans 'Obuna' %}"><i data-lucide="arrow-right"></i></button>
+      </form>
+      <div class="grid grid-cols-3 text-center mt-4 pt-4 border-t border-ink/10">
+        <div><div class="font-display text-xl font-semibold tabular">{{ stats.articles }}</div><div class="text-[11px] text-ink-3">{% trans "Maqola" %}</div></div>
+        <div><div class="font-display text-xl font-semibold tabular">{{ stats.reads|compact }}</div><div class="text-[11px] text-ink-3">{% trans "O'qishlar" %}</div></div>
+        <div><div class="font-display text-xl font-semibold tabular">{{ stats.comments|compact }}</div><div class="text-[11px] text-ink-3">{% trans "Izohlar" %}</div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-semibold">{% trans "Yozish yo'lim" %}</h2><span class="chip tabular">{{ year }}</span></div>
+      <div class="flex items-end gap-1.5 h-24" role="img" aria-label="Articles per month">
+        {% for m, n, pct in writing %}<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end" title="{{ n }}"><div class="w-full rounded-t-md {% if n %}bg-accent/70{% else %}bg-ink/10{% endif %}" style="height:{% if n %}{{ pct }}{% else %}6{% endif %}%"></div><span class="text-[9px] text-ink-3">{{ m }}</span></div>{% endfor %}
+      </div>
+    </div>
+    {% include "partials/channel_cta.html" %}
+    {% if hero.quote %}<figure class="quote-card"><div class="mark">“</div><blockquote class="font-display text-lg leading-snug">{{ hero.quote }}</blockquote><div class="rule"></div></figure>{% endif %}
+  </aside>
+</section>
+{% endblock %}

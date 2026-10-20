@@ -1,0 +1,10 @@
+{% load i18n wcd %}
+<a href="{% if e.last_lesson %}{{ e.last_lesson.get_absolute_url }}{% else %}{{ e.course.get_absolute_url }}{% endif %}" class="glass glass--sm glass--hover p-3 flex items-center gap-4">
+  <img src="{% thumb e.course.cover 240 %}" alt="" class="w-24 h-16 rounded-xl object-cover shrink-0" loading="lazy">
+  <div class="flex-1 min-w-0">
+    <div class="font-semibold truncate">{{ e.course.title }}</div>
+    <div class="text-[11px] text-ink-3 truncate">{% if e.completed_at %}<span class="text-ok">{% trans "Tugatilgan" %}</span>{% elif e.last_lesson %}{{ e.last_lesson.order }}. {{ e.last_lesson.title }}{% else %}{% trans "Boshlanmagan" %}{% endif %}</div>
+    <div class="h-1.5 rounded-full bg-ink/15 mt-2"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent" style="width:{{ pct }}%"></div></div>
+  </div>
+  <span class="text-sm font-semibold tabular">{{ pct }}%</span>
+</a>

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load i18n wcd static %}
+{% block title %}{% trans "Ulashish" %} · {{ obj }}{% endblock %}
+{% block scripts %}<script defer src="{% static 'vendor/qrcode.js' %}"></script>{% endblock %}
+{% block content %}
+<a href="{{ obj.get_absolute_url }}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Orqaga" %}</a>
+{% include "partials/page_hero.html" %}
+
+<section class="grid lg:grid-cols-[1.6fr_1fr] gap-4" x-data="share('{{ url|escapejs }}', '{{ obj|escapejs }}', '{% url 'interactions:track_share' kind obj.pk %}')">
+  <div class="flex flex-col gap-4 min-w-0">
+    <div class="glass p-4 grid sm:grid-cols-[220px_1fr] gap-5">
+      {% if image %}<img src="{{ image.url }}" alt="" class="w-full aspect-[4/3] rounded-2xl object-cover">{% endif %}
+      <div class="flex flex-col gap-2">
+        <span class="chip w-fit capitalize"><i data-lucide="{% if kind == 'project' %}folder{% elif kind == 'article' %}file-text{% elif kind == 'course' %}graduation-cap{% else %}image{% endif %}" class="w-3.5 h-3.5"></i>{{ kind }}</span>
+        <h2 class="text-3xl font-semibold">{{ obj }}</h2>
+        {% if obj.subtitle %}<p class="text-ink">{{ obj.subtitle }}</p>{% endif %}
+        <p class="text-sm text-ink-2 line-clamp-3">{{ description|striptags }}</p>
+        {% if obj.tags %}<div class="flex flex-wrap gap-1.5 mt-1">{% for t in obj.tags.all|slice:":4" %}<span class="chip">{{ t.name }}</span>{% endfor %}</div>{% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="link"></i></span><div><h3 class="text-lg font-semibold">{% trans "Ulashish havolasi" %}</h3><p class="text-xs text-ink-3">{% trans "Havolani nusxalab, istalgan joyga yuboring." %}</p></div></div>
+      <div class="glass glass--pill flex items-center gap-2 p-1.5 pl-4"><input readonly value="{{ url }}" class="flex-1 min-w-0 bg-transparent outline-none text-sm" @focus="$el.select()"><button class="btn btn-light btn-sm" @click="copy()"><i data-lucide="copy"></i><span x-text="copied ? '{% trans "Nusxalandi" %}' : 'Copy'"></span></button></div>
+    </div>
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-4"><span class="icon-tile"><i data-lucide="share-2"></i></span><div><h3 class="text-lg font-semibold">{% trans "Ijtimoiy tarmoqlarda ulashish" %}</h3><p class="text-xs text-ink-3">{% trans "Platformani tanlang." %}</p></div></div>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        <a :href="links.telegram" target="_blank" rel="noopener" @click="track('telegram')" class="glass glass--sm glass--hover flex flex-col items-center gap-2 p-3 text-xs"><span class="grid place-items-center w-11 h-11 rounded-full bg-[#2AABEE] text-white">{% social_icon "telegram" "w-5 h-5" %}</span>Telegram</a>
+        <a :href="links.whatsapp" target="_blank" rel="noopener" @click="track('whatsapp')" class="glass glass--sm glass--hover flex flex-col items-center gap-2 p-3 text-xs"><span class="grid place-items-center w-11 h-11 rounded-full bg-[#25D366] text-white">{% social_icon "whatsapp" "w-5 h-5" %}</span>WhatsApp</a>
+        <a :href="links.linkedin" target="_blank" rel="noopener" @click="track('linkedin')" class="glass glass--sm glass--hover flex flex-col items-center gap-2 p-3 text-xs"><span class="grid place-items-center w-11 h-11 rounded-full bg-[#0A66C2] text-white">{% social_icon "linkedin" "w-5 h-5" %}</span>LinkedIn</a>
+        <a :href="links.x" target="_blank" rel="noopener" @click="track('x')" class="glass glass--sm glass--hover flex flex-col items-center gap-2 p-3 text-xs"><span class="grid place-items-center w-11 h-11 rounded-full bg-black text-white border border-white/20">{% social_icon "x" "w-4 h-4" %}</span>X</a>
+        <a :href="links.facebook" target="_blank" rel="noopener" @click="track('facebook')" class="glass glass--sm glass--hover flex flex-col items-center gap-2 p-3 text-xs"><span class="grid place-items-center w-11 h-11 rounded-full bg-[#1877F2] text-white">{% social_icon "facebook" "w-5 h-5" %}</span>Facebook</a>
+        <a :href="links.reddit" target="_blank" rel="noopener" @click="track('reddit')" class="glass glass--sm glass--hover flex flex-col items-center gap-2 p-3 text-xs"><span class="grid place-items-center w-11 h-11 rounded-full bg-[#FF4500] text-white"><i data-lucide="message-circle" class="w-5 h-5"></i></span>Reddit</a>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="eye"></i></span><div><h3 class="text-lg font-semibold">{% trans "Ko'rinishi" %}</h3><p class="text-xs text-ink-3">{% trans "Ulashilganda shunday ko'rinadi." %}</p></div></div>
+      <div class="glass glass--sm flex gap-4 p-3">{% if image %}<img src="{{ image.url }}" alt="" class="w-36 h-24 rounded-xl object-cover shrink-0">{% endif %}<div class="min-w-0"><div class="text-xs text-ink-3">{{ request.get_host }}</div><div class="font-semibold">{{ obj }}{% if obj.subtitle %} – {{ obj.subtitle }}{% endif %}</div><p class="text-sm text-ink-2 line-clamp-2">{{ description|striptags }}</p></div></div>
+    </div>
+  </div>
+  <aside class="flex flex-col gap-4">
+    <div class="panel">
+      <h3 class="text-lg font-semibold mb-3">{% trans "Ulashish statistikasi" %}</h3>
+      <div class="grid grid-cols-2 gap-3"><div class="glass glass--sm p-3"><div class="font-display text-2xl font-semibold tabular">{{ total|compact }}</div><div class="text-xs text-ink-3">{% trans "Jami" %}</div></div><div class="glass glass--sm p-3"><div class="font-display text-2xl font-semibold tabular">{{ this_month|compact }}</div><div class="text-xs text-ink-3">{% trans "Shu oy" %}</div></div></div>
+      {% if top_platform %}<p class="text-xs text-ink-3 mt-4">{% trans "Eng mashhur platforma" %}</p><div class="flex items-center gap-2 mt-1 text-sm"><span class="flex-1">{{ top_platform.0 }}</span><span class="tabular">{{ top_platform.1 }}%</span></div><div class="h-1.5 rounded-full bg-ink/15 mt-1"><div class="h-full rounded-full bg-accent" style="width:{{ top_platform.1 }}%"></div></div>{% endif %}
+    </div>
+    <div class="panel flex flex-col items-center text-center">
+      <h3 class="text-lg font-semibold self-start mb-3 flex items-center gap-2"><i data-lucide="qr-code" class="w-5 h-5"></i>QR</h3>
+      <div x-ref="qr" class="w-44 h-44 rounded-2xl bg-white p-2 [&_svg]:w-full [&_svg]:h-full"></div>
+      <p class="font-semibold mt-3">{% trans "Skanerlang va ulashing" %}</p>
+      <p class="text-xs text-ink-3">{% trans "Telefonda oching yoki QR orqali yuboring." %}</p>
+      <button class="btn btn-glass w-full mt-4" @click="downloadQr()"><i data-lucide="download"></i>{% trans "QR yuklab olish" %}</button>
+    </div>
+    <div class="panel">
+      <div class="flex items-center gap-3 mb-3"><span class="icon-tile"><i data-lucide="code"></i></span><div><h3 class="text-lg font-semibold">Embed</h3><p class="text-xs text-ink-3">{% trans "Saytingiz yoki blogingizga joylang." %}</p></div></div>
+      <pre class="glass glass--sm p-3 text-xs font-mono whitespace-pre-wrap break-all text-ink-2" x-text="embed"></pre>
+      <button class="btn btn-glass w-full mt-3" @click="wcdCopy(embed)"><i data-lucide="copy"></i>{% trans "Kodni nusxalash" %}</button>
+    </div>
+    {% if recent %}
+    <div class="panel">
+      <h3 class="text-lg font-semibold mb-3">{% trans "So'nggi ulashishlar" %}</h3>
+      <ul class="flex flex-col gap-2 text-sm">{% for e in recent %}<li class="flex items-center gap-3">{% if e.user %}{% include "partials/avatar.html" with u=e.user size="w-8 h-8" %}{% else %}<span class="w-8 h-8 rounded-full bg-ink/10 grid place-items-center"><i data-lucide="user" class="w-4 h-4"></i></span>{% endif %}<div class="flex-1 min-w-0"><div class="truncate">{% if e.user %}{{ e.user.display_name }}{% else %}{% trans "Mehmon" %}{% endif %}</div><div class="text-[11px] text-ink-3">{{ e.get_platform_display }}</div></div><span class="text-xs text-ink-3">{{ e.created_at|timesince }}</span></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+  </aside>
+</section>
+{% endblock %}
+{% block body_end %}
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("share", (url, title, trackUrl) => ({
+      copied: false,
+      get links() {
+        const u = encodeURIComponent(url), t = encodeURIComponent(title);
+        return {
+          telegram: `https://t.me/share/url?url=${u}&text=${t}`,
+          whatsapp: `https://wa.me/?text=${t}%20${u}`,
+          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`,
+          x: `https://twitter.com/intent/tweet?url=${u}&text=${t}`,
+          facebook: `https://www.facebook.com/sharer/sharer.php?u=${u}`,
+          reddit: `https://www.reddit.com/submit?url=${u}&title=${t}`,
+        };
+      },
+      get embed() { return `<iframe src="${url}" width="100%" height="450" frameborder="0" loading="lazy"></iframe>`; },
+      init() {
+        this.$nextTick(() => {
+          if (!window.qrcode) return;
+          const qr = qrcode(0, "M"); qr.addData(url); qr.make();
+          this.$refs.qr.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+        });
+      },
+      track(platform) {
+        const fd = new FormData(); fd.append("platform", platform);
+        fetch(trackUrl, { method: "POST", body: fd, headers: { "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content } }).catch(() => {});
+      },
+      async copy() {
+        await window.wcdCopy(url);
+        this.copied = true; this.track("link");
+        setTimeout(() => (this.copied = false), 1800);
+      },
+      downloadQr() {
+        const svg = this.$refs.qr.querySelector("svg");
+        if (!svg) return;
+        const blob = new Blob([svg.outerHTML], { type: "image/svg+xml" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob); a.download = "qr.svg"; a.click();
+        this.track("qr");
+      },
+    }));
+  });
+</script>
+{% endblock %}

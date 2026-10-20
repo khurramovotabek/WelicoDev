@@ -1,0 +1,17 @@
+{% load i18n %}
+<form method="post" enctype="multipart/form-data" hx-post="{% url 'core:contact' %}" hx-encoding="multipart/form-data" hx-target="this" hx-swap="outerHTML" class="flex flex-col gap-4" x-data="{ file: '' }">
+  {% csrf_token %}{{ form.website }}
+  {% if form.non_field_errors %}<p class="text-sm text-danger">{{ form.non_field_errors|join:" " }}</p>{% endif %}
+  <div class="grid sm:grid-cols-2 gap-4">
+    <div class="glass glass--sm p-3"><label class="field-label" for="{{ form.name.id_for_label }}">{% trans "Ismingiz" %}</label><div class="field-icon"><i data-lucide="user-round"></i>{{ form.name }}</div>{% for e in form.name.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+    <div class="glass glass--sm p-3"><label class="field-label" for="{{ form.email.id_for_label }}">Email</label><div class="field-icon"><i data-lucide="mail"></i>{{ form.email }}</div>{% for e in form.email.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+  </div>
+  <div class="glass glass--sm p-3"><label class="field-label" for="{{ form.subject.id_for_label }}">{% trans "Mavzu" %}</label><div class="field-icon"><i data-lucide="file-text"></i>{{ form.subject }}</div></div>
+  <div class="glass glass--sm p-3"><label class="field-label" for="{{ form.message.id_for_label }}">{% trans "Xabar" %}</label>{{ form.message }}{% for e in form.message.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+  <div class="flex flex-wrap items-center gap-3">
+    <label class="btn btn-glass btn-sm cursor-pointer"><i data-lucide="paperclip"></i><span x-text="file || '{% trans "Fayl biriktirish (ixtiyoriy)" %}'"></span><input type="file" name="attachment" class="sr-only" @change="file = $event.target.files[0]?.name || ''"></label>
+    <button class="btn btn-light ml-auto"><i data-lucide="send"></i>{% trans "Yuborish" %}<i data-lucide="arrow-right"></i></button>
+  </div>
+  {% for e in form.attachment.errors %}<p class="text-xs text-danger">{{ e }}</p>{% endfor %}
+  <p class="text-xs text-ink-3">{% trans "Rasm, hujjat yoki boshqa fayllarni biriktirishingiz mumkin (10 MB gacha)." %}</p>
+</form>

@@ -1,0 +1,49 @@
+{% load i18n wcd %}
+<div class="flex items-center justify-between gap-3 mb-4">
+  <h2 class="text-xl font-semibold">{% trans "Izohlar" %} <span class="text-ink-3 tabular">({{ total }})</span></h2>
+  <select class="field !w-auto !py-1.5 !rounded-full text-xs" name="order" hx-get="{% url 'interactions:comments' kind obj.pk %}" hx-target="closest section" hx-include="this">
+    <option value="newest" {% if order == "newest" %}selected{% endif %}>{% trans "Yangilari" %}</option>
+    <option value="oldest" {% if order == "oldest" %}selected{% endif %}>{% trans "Eskilari" %}</option>
+  </select>
+</div>
+
+{% if allow %}
+  {% if user.is_authenticated %}
+    <form class="flex items-start gap-3 mb-5" hx-post="{% url 'interactions:comment_create' kind obj.pk %}" hx-target="closest section" x-data="{ body: '' }">
+      {% include "partials/avatar.html" with u=user size="w-10 h-10" %}
+      <div class="flex-1 relative">
+        <textarea name="body" x-model="body" rows="1" maxlength="2000" required class="field !rounded-2xl pr-12 min-h-[44px]" placeholder="{% trans 'Izoh yozing...' %}" @input="$el.style.height='auto';$el.style.height=$el.scrollHeight+'px'"></textarea>
+        <button class="btn btn-primary !p-0 w-9 h-9 absolute right-1.5 bottom-1.5" :disabled="body.trim().length < 2" aria-label="{% trans 'Yuborish' %}"><i data-lucide="send-horizontal"></i></button>
+      </div>
+    </form>
+  {% else %}
+    <a href="{% url 'accounts:login' %}?next={{ obj.get_absolute_url }}%23comments" class="glass glass--sm flex items-center gap-3 p-3 mb-5 text-sm hover:bg-ink/5">
+      {% social_icon "telegram" "w-5 h-5 text-accent" %}<span>{% trans "Izoh yozish uchun Telegram orqali kiring" %}</span><i data-lucide="arrow-right" class="w-4 h-4 ml-auto"></i>
+    </a>
+  {% endif %}
+{% else %}
+  <p class="text-sm text-ink-3 mb-4">{% trans "Bu yerda izohlar yopilgan." %}</p>
+{% endif %}
+
+<ul class="flex flex-col divide-y divide-ink/10">
+  {% for c in comments %}
+    <li class="py-4 first:pt-0" id="comment-{{ c.pk }}" x-data="{ reply: false }">
+      {% include "interactions/partials/comment_item.html" with c=c %}
+      <div class="ml-12 mt-2 flex flex-col gap-3">
+        {% for r in c.replies.all %}{% include "interactions/partials/comment_item.html" with c=r small=True %}{% endfor %}
+        {% if allow and user.is_authenticated %}
+          <form x-cloak x-show="reply" class="flex gap-2" hx-post="{% url 'interactions:comment_create' kind obj.pk %}" hx-target="closest section">
+            <input type="hidden" name="parent" value="{{ c.pk }}">
+            <input name="body" required maxlength="2000" class="field !py-2 !rounded-full" placeholder="{% trans 'Javob yozing...' %}">
+            <button class="btn btn-primary btn-sm">{% trans "Yuborish" %}</button>
+          </form>
+        {% endif %}
+      </div>
+    </li>
+  {% empty %}
+    <li class="py-8 text-center text-sm text-ink-3"><i data-lucide="messages-square" class="w-8 h-8 mx-auto mb-2"></i>{% trans "Hali izoh yo'q. Birinchi bo'ling!" %}</li>
+  {% endfor %}
+</ul>
+{% if total > limit %}
+  <button class="btn btn-glass w-full mt-3" hx-get="{% url 'interactions:comments' kind obj.pk %}?limit={{ next_limit }}&order={{ order }}" hx-target="closest section">{% trans "Ko'proq izohlar" %}<i data-lucide="arrow-down"></i></button>
+{% endif %}

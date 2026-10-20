@@ -1,0 +1,12 @@
+{% load wcd %}{% comment %}Tarjima maydoni: name, label, langs, form, required{% endcomment %}
+<div x-data="{ l: 'uz' }">
+  <div class="flex items-center justify-between gap-2 mb-1.5">
+    <span class="field-label !mb-0">{{ label }}{% if required %} <span class="text-danger">*</span>{% endif %}</span>
+    <div class="tabs !p-0.5">{% for code, lname in langs %}<button type="button" class="tab !py-1 !px-2 text-[10px]" :class="l === '{{ code }}' && 'is-active'" @click="l = '{{ code }}'">{{ code }}</button>{% endfor %}</div>
+  </div>
+  {% for code, lname in langs %}
+    {% with fname=name|add:"_"|add:code %}{% with f=form|bf:fname %}
+      <div x-show="l === '{{ code }}'" {% if not forloop.first %}x-cloak{% endif %}>{{ f }}{% for e in f.errors %}<p class="text-xs text-danger mt-1">{{ e }}</p>{% endfor %}</div>
+    {% endwith %}{% endwith %}
+  {% endfor %}
+</div>

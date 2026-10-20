@@ -1,0 +1,16 @@
+{% comment %}Sahifa sarlavhasi (PageHero). Bo'sh maydonlar ko'rsatilmaydi.{% endcomment %}
+<section class="grid lg:grid-cols-[1fr_auto] gap-6 items-start pt-8 lg:pt-12 pb-6">
+  <div class="flex flex-col gap-3 animate-fade-up max-w-2xl">
+    {% if hero.eyebrow %}<span class="eyebrow w-fit"><span class="dot"></span>{{ hero.eyebrow }}</span>{% endif %}
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.02]">{% firstof hero.title fallback_title %}</h1>
+    {% if hero.subtitle %}<p class="text-xl sm:text-2xl text-ink leading-snug max-w-[30ch]">{{ hero.subtitle }}</p>{% endif %}
+    {% if hero.description %}<p class="text-ink-2 max-w-[56ch]">{{ hero.description }}</p>{% endif %}
+  </div>
+  {% if hero.quote %}
+    <figure class="quote-card w-full lg:w-[260px] animate-fade-up" style="animation-delay:.1s">
+      <div class="mark">“</div>
+      <blockquote class="font-display text-lg leading-snug mt-1">{{ hero.quote }}</blockquote>
+      <div class="rule"></div>
+    </figure>
+  {% endif %}
+</section>

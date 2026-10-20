@@ -1,0 +1,7 @@
+{% load i18n %}
+<section class="glass p-8 flex flex-col items-center text-center gap-3 mt-6">
+  <span class="grid place-items-center w-16 h-16 rounded-full bg-ink/10"><i data-lucide="lock" class="w-7 h-7"></i></span>
+  <h2 class="text-xl font-semibold">{% trans "Bu dars hali yopiq" %}</h2>
+  <p class="text-sm text-ink-2">{% trans "Oldingi darsni tugating: videoni oxirigacha ko'ring va uyga vazifani topshiring." %}</p>
+  <a href="#" data-go="{% url 'miniapp:course' course.slug %}" class="btn btn-primary">{% trans "Kursga qaytish" %}</a>
+</section>

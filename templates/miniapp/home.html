@@ -1,0 +1,74 @@
+{% load i18n wcd %}
+<section class="glass p-5 relative overflow-hidden animate-fade-up">
+  <span class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-accent-strong/40 blur-3xl" aria-hidden="true"></span>
+  <p class="text-sm text-ink-2">{% trans "Salom," %} {{ user.first_name }} 👋</p>
+  <h2 class="text-2xl font-semibold mt-1 leading-tight">{% trans "Bugun nimani o'rganamiz?" %}</h2>
+  <div class="flex gap-2 mt-4">
+    <a href="#" data-tab-link data-go="{% url 'miniapp:courses' %}" class="btn btn-light btn-sm"><i data-lucide="play"></i>{% trans "Kurslar" %}</a>
+    <a href="#" data-external="{{ SITE_URL }}" class="btn btn-glass btn-sm"><i data-lucide="globe"></i>{% trans "Sayt" %}</a>
+  </div>
+</section>
+
+{% if roles %}
+<section class="glass glass--sm p-4 flex flex-col gap-3">
+  <div class="flex items-center gap-3">
+    {% if site.portrait %}<img src="{% thumb site.portrait 160 %}" alt="" class="w-12 h-12 rounded-2xl object-cover">{% elif site.avatar %}<img src="{% thumb site.avatar 160 %}" alt="" class="w-12 h-12 rounded-2xl object-cover">{% else %}{% include "partials/logo_mark.html" with size=48 %}{% endif %}
+    <div class="min-w-0"><div class="font-semibold">{{ site.owner_name }}</div><div class="text-xs text-ink-3 truncate">{{ site.owner_role }}</div></div>
+  </div>
+  <div class="tma-rail !gap-2">
+    {# Tailwind: role-card--blue role-card--violet role-card--green role-card--orange #}
+    {% for r in roles %}<div class="role-card role-card--{{ r.color }} glass glass--sm p-3 w-[46%] shrink-0 flex flex-col gap-1.5"><span class="role-card__icon !w-9 !h-9 !rounded-xl"><i data-lucide="{{ r.icon }}" class="w-4 h-4"></i></span><div class="text-sm font-semibold leading-tight">{{ r.title }}</div><div class="text-[11px] text-ink-3 line-clamp-2">{{ r.subtitle }}</div></div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if learning %}
+<section class="flex flex-col gap-2">
+  <h3 class="tma-section-title">{% trans "Davom ettirish" %}</h3>
+  {% for e, pct in learning %}
+    <a href="#" data-go="{% if e.last_lesson %}{% url 'miniapp:lesson' e.course.slug e.last_lesson.slug %}{% else %}{% url 'miniapp:course' e.course.slug %}{% endif %}" class="tma-card flex items-center gap-3">
+      <img src="{% thumb e.course.cover 560 %}" alt="" class="w-16 h-16 rounded-xl object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="font-semibold truncate">{{ e.course.title }}</div>
+        <div class="text-xs text-ink-3 truncate">{% if e.last_lesson %}{{ e.last_lesson.order }}. {{ e.last_lesson.title }}{% else %}{% trans "Birinchi dars" %}{% endif %}</div>
+        <div class="h-1.5 rounded-full bg-ink/15 mt-2"><div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent" style="width:{{ pct }}%"></div></div>
+      </div>
+      <span class="grid place-items-center w-11 h-11 rounded-full bg-accent-strong text-white shrink-0"><i data-lucide="play" class="w-4 h-4 fill-current"></i></span>
+    </a>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if courses %}
+<section class="flex flex-col gap-2">
+  <div class="tma-section-title"><h3>{% trans "Kurslar" %}</h3><a href="#" data-go="{% url 'miniapp:courses' %}" class="text-xs text-accent">{% trans "Barchasi" %}</a></div>
+  <div class="tma-rail">
+    {% for c in courses %}
+      <a href="#" data-go="{% url 'miniapp:course' c.slug %}" class="w-[72%] glass glass--sm overflow-hidden">
+        <img src="{% thumb c.cover 560 %}" alt="" class="w-full aspect-[16/9] object-cover" loading="lazy">
+        <div class="p-3"><div class="font-semibold leading-snug line-clamp-2">{{ c.title }}</div><div class="text-[11px] text-ink-3 mt-1 flex gap-3"><span>{{ c.n }} {% trans "dars" %}</span><span>{{ c.get_level_display }}</span>{% if c.is_free %}<span class="text-ok">{% trans "Bepul" %}</span>{% else %}<span class="text-warn tabular">{{ c.price|money }}</span>{% endif %}</div></div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if articles %}
+<section class="flex flex-col gap-2">
+  <div class="tma-section-title"><h3>Blog</h3><a href="#" data-go="{% url 'miniapp:journal' %}" class="text-xs text-accent">{% trans "Barchasi" %}</a></div>
+  <div class="glass glass--sm p-1.5">
+    {% for a in articles %}
+      <a href="#" data-go="{% url 'miniapp:article' a.slug %}" class="tma-list-item"><img src="{% thumb a.cover 560 %}" alt="" class="w-14 h-14 rounded-xl object-cover" loading="lazy"><div class="min-w-0 flex-1"><div class="font-medium text-sm leading-snug line-clamp-2">{{ a.title }}</div><div class="text-[11px] text-ink-3 mt-0.5">{{ a.published_at|date:"d.m.Y" }} · {{ a.reading_minutes }} {% trans "daq" %}</div></div><i data-lucide="chevron-right" class="w-4 h-4 text-ink-3"></i></a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if projects %}
+<section class="flex flex-col gap-2">
+  <div class="tma-section-title"><h3>{% trans "Loyihalar" %}</h3><a href="#" data-go="{% url 'miniapp:projects' %}" class="text-xs text-accent">{% trans "Barchasi" %}</a></div>
+  <div class="grid grid-cols-2 gap-3">
+    {% for p in projects %}<a href="#" data-go="{% url 'miniapp:project' p.slug %}" class="glass glass--sm overflow-hidden"><img src="{% thumb p.cover 560 %}" alt="" class="w-full aspect-[4/3] object-cover" loading="lazy"><div class="p-2.5"><div class="text-sm font-semibold truncate">{{ p.title }}</div><div class="text-[11px] text-ink-3 truncate">{{ p.subtitle }}</div></div></a>{% endfor %}
+  </div>
+</section>
+{% endif %}

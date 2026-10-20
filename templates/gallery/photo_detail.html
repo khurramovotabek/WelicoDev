@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n wcd %}
+{% block title %}{{ photo.title }}{% endblock %}
+{% block og_image %}<meta property="og:image" content="{{ SITE_URL }}{{ photo.image.url }}">{% endblock %}
+{% block content %}
+<a href="{% url 'gallery:index' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>{% trans "Mediaga qaytish" %}</a>
+<section class="flex flex-wrap items-center gap-3 mt-3">
+  <div class="mr-auto">
+    <div class="flex items-center gap-3"><h1 class="text-3xl sm:text-4xl font-semibold">{{ photo.title }}</h1><span class="chip"><i data-lucide="image" class="w-3.5 h-3.5"></i>{% trans "Foto" %}</span></div>
+    {% if photo.description %}<p class="text-sm text-ink-2 mt-1 max-w-xl line-clamp-1">{{ photo.description }}</p>{% endif %}
+  </div>
+  <div class="glass glass--sm flex items-center gap-2 px-3 py-2 text-xs"><i data-lucide="map-pin" class="w-4 h-4"></i><div>{{ photo.location }}<br><span class="text-ink-3">{{ photo.taken_at|date:"M d, Y · H:i" }}</span></div></div>
+  {% if "like" in reactions %}{% include "interactions/partials/reaction_button.html" with obj=photo kind="photo" reaction="like" active=True count=likes %}{% else %}{% include "interactions/partials/reaction_button.html" with obj=photo kind="photo" reaction="like" active=False count=likes %}{% endif %}
+  {% if photo.allow_download %}<a href="{% url 'gallery:photo_download' photo.slug %}" class="btn btn-glass btn-sm"><i data-lucide="download"></i>{% trans "Yuklab olish" %}<span class="text-ink-3 tabular">{{ photo.downloads_count|compact }}</span></a>{% endif %}
+  <a href="{% url 'core:share' 'photo' photo.slug %}" class="btn btn-glass btn-sm"><i data-lucide="share"></i>{% trans "Ulashish" %}</a>
+</section>
+
+<section class="grid lg:grid-cols-[1fr_300px] gap-4 mt-4">
+  <div class="glass p-3 min-w-0">
+    <div class="relative rounded-2xl overflow-hidden bg-black/30" x-data @keydown.arrow-right.window="{% if next %}location='{{ next.get_absolute_url }}'{% endif %}" @keydown.arrow-left.window="{% if prev %}location='{{ prev.get_absolute_url }}'{% endif %}">
+      <img src="{% thumb photo.image 1600 85 %}" alt="{{ photo.title }}" fetchpriority="high" class="w-full max-h-[70vh] object-contain mx-auto">
+      {% if prev %}<a href="{{ prev.get_absolute_url }}" class="btn-icon absolute left-3 top-1/2 -translate-y-1/2" aria-label="{% trans 'Oldingi' %}"><i data-lucide="arrow-left"></i></a>{% endif %}
+      {% if next %}<a href="{{ next.get_absolute_url }}" class="btn-icon absolute right-3 top-1/2 -translate-y-1/2" aria-label="{% trans 'Keyingi' %}"><i data-lucide="arrow-right"></i></a>{% endif %}
+      <span class="absolute left-3 bottom-3 chip !bg-black/50 tabular">{{ index }} / {{ siblings|length }}</span>
+      <a href="{{ photo.image.url }}" target="_blank" class="btn-icon absolute right-3 top-3 w-9 h-9" aria-label="Fullscreen"><i data-lucide="maximize"></i></a>
+    </div>
+    <div class="scroll-x mt-3">{% for s in siblings %}<a href="{{ s.get_absolute_url }}" class="w-24 rounded-lg overflow-hidden border-2 {% if s.pk == photo.pk %}border-accent{% else %}border-transparent opacity-70 hover:opacity-100{% endif %}"><img src="{% thumb s.image 240 %}" alt="" class="w-full aspect-[4/3] object-cover" loading="lazy"></a>{% endfor %}</div>
+  </div>
+  <aside class="flex flex-col gap-4">
+    <div class="panel">
+      <h2 class="text-lg font-semibold mb-2">{% trans "Foto haqida" %}</h2>
+      <p class="text-sm text-ink-2">{{ photo.description }}</p>
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm mt-4">
+        {% if photo.camera %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="camera" class="w-4 h-4"></i>{% trans "Kamera" %}</dt><dd>{{ photo.camera }}</dd>{% endif %}
+        {% if photo.lens %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="aperture" class="w-4 h-4"></i>{% trans "Obyektiv" %}</dt><dd>{{ photo.lens }}</dd>{% endif %}
+        {% if photo.exposure %}<dt class="text-ink-3 flex items-center gap-2"><i data-lucide="settings-2" class="w-4 h-4"></i>{% trans "Sozlama" %}</dt><dd>{{ photo.exposure }}</dd>{% endif %}
+        <dt class="text-ink-3 flex items-center gap-2"><i data-lucide="maximize-2" class="w-4 h-4"></i>{% trans "O'lcham" %}</dt><dd class="tabular">{{ photo.image.width }} × {{ photo.image.height }}</dd>
+        <dt class="text-ink-3 flex items-center gap-2"><i data-lucide="file" class="w-4 h-4"></i>{% trans "Hajmi" %}</dt><dd class="tabular">{{ photo.image.size|filesizeformat }}</dd>
+      </dl>
+      {% if photo.map_url %}<a href="{{ photo.map_url }}" target="_blank" rel="noopener" class="btn btn-glass btn-sm mt-4"><i data-lucide="map"></i>{% trans "Xaritada ochish" %}</a>{% endif %}
+    </div>
+    {% if photo.tags.all %}<div class="panel"><h2 class="text-lg font-semibold mb-3">{% trans "Teglar" %}</h2><div class="flex flex-wrap gap-2">{% for t in photo.tags.all %}<span class="chip">#{{ t.name }}</span>{% endfor %}</div></div>{% endif %}
+  </aside>
+</section>
+
+<section class="grid lg:grid-cols-[1fr_300px] gap-4 mt-4">
+  <section id="comments" class="panel scroll-mt-24" hx-get="{% url 'interactions:comments' 'photo' photo.pk %}" hx-trigger="revealed" hx-swap="innerHTML"><div class="h-24 grid place-items-center text-ink-3 text-sm">…</div></section>
+  <aside class="panel">
+    <h2 class="text-lg font-semibold mb-3">{% trans "O'xshash media" %}</h2>
+    <div class="grid grid-cols-2 gap-2">
+      {% for r in related_photos %}<a href="{{ r.get_absolute_url }}" class="block rounded-xl overflow-hidden"><img src="{% thumb r.image 240 %}" alt="" class="w-full aspect-[4/3] object-cover" loading="lazy"><span class="block text-xs mt-1 truncate">{{ r.title }}</span></a>{% endfor %}
+      {% for v in related_videos %}<a href="{{ v.get_absolute_url }}" class="block rounded-xl overflow-hidden relative"><img src="{% thumb v.thumbnail 240 %}" alt="" class="w-full aspect-[4/3] object-cover" loading="lazy"><span class="absolute top-1/3 left-1/2 -translate-x-1/2 btn-icon w-8 h-8"><i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i></span><span class="block text-xs mt-1 truncate">{{ v.title }}</span></a>{% endfor %}
+    </div>
+  </aside>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load i18n wcd %}
+<div class="tma-rail">
+  <button class="chip-btn !py-1.5 {% if not active %}is-active{% endif %}" hx-get="{% url 'miniapp:projects' %}" hx-target="#view">{% trans "Barchasi" %}</button>
+  {% for c in categories %}<button class="chip-btn !py-1.5 {% if active == c.slug %}is-active{% endif %}" hx-get="{% url 'miniapp:projects' %}?category={{ c.slug }}" hx-target="#view">{{ c.name }}</button>{% endfor %}
+</div>
+<div class="grid grid-cols-2 gap-3">
+  {% for p in items %}
+    <a href="#" data-go="{% url 'miniapp:project' p.slug %}" class="glass glass--sm overflow-hidden flex flex-col active:scale-[.98] transition">
+      <img src="{% thumb p.cover 400 %}" alt="" class="w-full aspect-[4/3] object-cover" loading="lazy">
+      <div class="p-3 flex flex-col gap-1"><div class="font-semibold text-sm leading-snug">{{ p.title }}</div><div class="text-[11px] text-ink-3 line-clamp-2">{{ p.subtitle|default:p.short_description }}</div>{% if p.category %}<span class="chip !text-[10px] !px-2 !py-0.5 w-fit mt-1">{{ p.category.name }}</span>{% endif %}</div>
+    </a>
+  {% empty %}<div class="glass p-10 text-center text-ink-3 col-span-2">{% trans "Hech qanday loyiha topilmadi" %}</div>{% endfor %}
+</div>

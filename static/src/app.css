@@ -1,0 +1,429 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   WeliCoDev — Liquid Glass design system
+   Tungi tog' osmoni ustida shaffof oynali panellar. Ranglar RGB kanallarda
+   saqlanadi, Tailwind'da `bg-ink/10` kabi shaffoflik bilan ishlatish uchun.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --sky-950: 6 12 32;
+    --sky-900: 11 21 48;
+    --sky-800: 22 38 82;
+    --ink: 240 245 255;
+    --ink-2: 196 207 232;
+    --ink-3: 165 178 212;
+    --accent: 143 180 255;
+    --accent-strong: 47 109 255;
+    --ok: 74 222 128;
+    --warn: 251 176 76;
+    --danger: 248 113 113;
+    --violet: 167 139 250;
+
+    --glass-fill: rgba(22, 36, 78, 0.34);
+    --glass-fill-strong: rgba(30, 46, 96, 0.55);
+    --glass-fill-hover: rgba(40, 58, 112, 0.45);
+    --glass-edge: rgba(255, 255, 255, 0.16);
+    --glass-edge-hi: rgba(255, 255, 255, 0.42);
+    --glass-shadow: 0 24px 60px -28px rgba(2, 6, 23, 0.75);
+    --glass-blur: 28px;
+    --field-fill: rgba(8, 16, 40, 0.35);
+    --btn-light: rgba(232, 240, 255, 0.92);
+    --btn-light-ink: 14 27 61;
+    --page-bg: #0b1530;
+    color-scheme: dark;
+  }
+
+  [data-theme="light"] {
+    --sky-950: 214 226 248;
+    --sky-900: 226 235 252;
+    --sky-800: 199 215 245;
+    --ink: 13 24 54;
+    --ink-2: 46 62 102;
+    --ink-3: 92 108 148;
+    --accent: 38 92 220;
+    --accent-strong: 29 78 216;
+    --ok: 16 150 90;
+    --warn: 190 110 10;
+    --danger: 210 50 50;
+    --violet: 118 82 220;
+
+    --glass-fill: rgba(255, 255, 255, 0.5);
+    --glass-fill-strong: rgba(255, 255, 255, 0.68);
+    --glass-fill-hover: rgba(255, 255, 255, 0.62);
+    --glass-edge: rgba(255, 255, 255, 0.7);
+    --glass-edge-hi: rgba(255, 255, 255, 0.95);
+    --glass-shadow: 0 24px 50px -30px rgba(30, 50, 110, 0.45);
+    --field-fill: rgba(255, 255, 255, 0.55);
+    --btn-light: rgba(14, 27, 61, 0.92);
+    --btn-light-ink: 240 245 255;
+    --page-bg: #dfe8fb;
+    color-scheme: light;
+  }
+
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    @apply font-sans text-ink antialiased;
+    background: var(--page-bg);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+  h1, h2, h3, h4 { @apply font-display text-ink; text-wrap: balance; letter-spacing: -0.02em; }
+  ::selection { background: rgb(var(--accent) / 0.35); }
+  input[type="checkbox"], input[type="radio"] { accent-color: rgb(var(--accent-strong)); }
+  :focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 3px; border-radius: 10px; }
+  [x-cloak], [hidden] { display: none !important; }
+  img { max-width: 100%; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+/* --------------------------------------------------------------- Scene ---- */
+@layer components {
+  /* Butun sahifa orqasidagi tungi osmon manzarasi */
+  .scene { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: var(--page-bg); }
+  .scene__photo {
+    position: absolute; inset: -2%; background-image: var(--bg-lg); background-size: cover; background-position: center 40%;
+    filter: blur(var(--bg-blur, 0px)) saturate(1.08); transform: scale(1.04);
+  }
+  @media (max-width: 900px) { .scene__photo { background-image: var(--bg-sm, var(--bg-lg)); } }
+  .scene__photo.is-moving { animation: scene-drift 60s ease-in-out infinite alternate; }
+  @keyframes scene-drift { from { transform: scale(1.04) translate3d(0, 0, 0); } to { transform: scale(1.12) translate3d(-1.5%, -1%, 0); } }
+  /* Matn o'qilishi uchun qoraytirish: --bg-dim (0..0.8) dashboarddan boshqariladi */
+  .scene__shade { position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 80% at 50% 0%, transparent 40%, rgba(6,12,32, calc(var(--bg-dim, .35) * .8)) 100%),
+      linear-gradient(180deg, rgba(6,12,32, calc(var(--bg-dim, .35) * .55)), rgba(6,12,32, calc(var(--bg-dim, .35) + .2)) 70%, rgba(6,12,32, calc(var(--bg-dim, .35) + .35))); }
+  [data-theme="light"] .scene__shade {
+    background: linear-gradient(180deg, rgba(232,240,255, calc(var(--bg-dim, .35) * .25)), rgba(232,240,255, calc(var(--bg-dim, .35) * .6 + .1)) 60%, rgba(232,240,255, calc(var(--bg-dim, .35) * .8 + .3))); }
+  .scene__photo::after { content: none; }
+  .scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* ----------------------------------------------------------- Glass ---- */
+  .glass {
+    position: relative;
+    background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 55%), var(--glass-fill);
+    border: 1px solid var(--glass-edge);
+    border-radius: 22px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), var(--glass-shadow);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    isolation: isolate;
+  }
+  /* Yorug'lik sinishi: yuqori-chap burchakdan tushadigan nozik chegara yaltirashi */
+  .glass::before {
+    content: "";
+    position: absolute; inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(140deg, var(--glass-edge-hi), transparent 32%, transparent 68%, rgba(255,255,255,.18));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .glass--strong { background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.02) 55%), var(--glass-fill-strong); }
+  .glass--sm { border-radius: 16px; }
+  .glass--pill { border-radius: 999px; }
+  .glass--hover { transition: background .25s, transform .25s, box-shadow .25s; }
+  .glass--hover:hover { background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03) 55%), var(--glass-fill-hover); transform: translateY(-2px); }
+  /* Chromium'da haqiqiy "liquid" sinish (SVG displacement); boshqa brauzerlarda oddiy blur qoladi */
+  @supports (backdrop-filter: url(#x)) {
+    .glass--liquid { backdrop-filter: blur(14px) saturate(160%) url(#liquid-glass); }
+  }
+
+  .panel { @apply glass p-5 sm:p-6; min-width: 0; }
+  /* Grid/flex ichidagi kartochkalar kontent kengligiga cho'zilib ketmasin (mobil overflow) */
+  .grid > *, main section > * { min-width: 0; }
+  .panel-title { @apply flex items-center justify-between gap-3 mb-4; }
+  .panel-title h2, .panel-title h3 { @apply text-lg sm:text-xl font-semibold; }
+
+  /* ---------------------------------------------------------- Buttons ---- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold whitespace-nowrap;
+    transition: transform .2s, background .2s, box-shadow .2s, color .2s;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-light { background: var(--btn-light); color: rgb(var(--btn-light-ink)); box-shadow: 0 10px 30px -10px rgba(143,180,255,.6), inset 0 1px 0 rgba(255,255,255,.8); }
+  .btn-light:hover { box-shadow: 0 14px 36px -10px rgba(143,180,255,.85), inset 0 1px 0 rgba(255,255,255,.8); transform: translateY(-1px); }
+  .btn-glass { @apply glass glass--pill text-ink; box-shadow: none; }
+  .btn-glass:hover { background: var(--glass-fill-hover); }
+  .btn-primary { background: linear-gradient(180deg, rgb(var(--accent-strong)), rgb(var(--accent-strong) / .85)); color: #fff; box-shadow: 0 10px 30px -8px rgb(var(--accent-strong) / .7), inset 0 1px 0 rgba(255,255,255,.3); }
+  .btn-primary:hover { box-shadow: 0 14px 40px -8px rgb(var(--accent-strong) / .9), inset 0 1px 0 rgba(255,255,255,.3); }
+  .btn-danger { background: rgb(var(--danger) / .14); color: rgb(var(--danger)); border: 1px solid rgb(var(--danger) / .4); }
+  .btn-sm { @apply px-3.5 py-1.5 text-xs; }
+  .btn-icon { @apply glass glass--pill grid place-items-center w-10 h-10 text-ink; box-shadow: none; }
+  .btn-icon:hover { background: var(--glass-fill-hover); }
+  .btn-icon svg { width: 18px; height: 18px; }
+
+  /* ------------------------------------------------------------ Chips ---- */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-ink-2;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--glass-edge);
+  }
+  [data-theme="light"] .chip { background: rgba(255,255,255,.55); }
+  .chip-lg { @apply px-4 py-1.5 text-sm; }
+  .chip.is-active, .chip-btn.is-active { background: rgb(var(--accent-strong) / .85); color: #fff; border-color: rgb(var(--accent) / .7); box-shadow: 0 6px 20px -8px rgb(var(--accent-strong)); }
+  .chip-btn { @apply chip chip-lg cursor-pointer transition; }
+  .chip-btn:hover { background: var(--glass-fill-hover); color: rgb(var(--ink)); }
+  .eyebrow { @apply chip text-[11px] uppercase tracking-[.14em] text-ink; padding: 6px 12px; }
+  .dot { @apply inline-block w-2 h-2 rounded-full; background: rgb(var(--ok)); box-shadow: 0 0 0 3px rgb(var(--ok) / .2), 0 0 12px rgb(var(--ok)); }
+
+  /* ------------------------------------------------------------ Badge ---- */
+  .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold; }
+  .badge-ok { color: rgb(var(--ok)); background: rgb(var(--ok) / .14); border: 1px solid rgb(var(--ok) / .35); }
+  .badge-warn { color: rgb(var(--warn)); background: rgb(var(--warn) / .14); border: 1px solid rgb(var(--warn) / .35); }
+  .badge-danger { color: rgb(var(--danger)); background: rgb(var(--danger) / .14); border: 1px solid rgb(var(--danger) / .35); }
+  .badge-info { color: rgb(var(--accent)); background: rgb(var(--accent) / .14); border: 1px solid rgb(var(--accent) / .35); }
+  .badge-violet { color: rgb(var(--violet)); background: rgb(var(--violet) / .14); border: 1px solid rgb(var(--violet) / .35); }
+
+  /* ------------------------------------------------------------ Forms ---- */
+  .field-label { @apply block text-xs font-semibold text-ink-2 mb-1.5; }
+  .field {
+    @apply w-full rounded-xl px-4 py-2.5 text-sm text-ink placeholder:text-ink-3;
+    background: var(--field-fill);
+    border: 1px solid var(--glass-edge);
+    transition: border-color .2s, box-shadow .2s, background .2s;
+  }
+  .field:focus { outline: none; border-color: rgb(var(--accent) / .7); box-shadow: 0 0 0 4px rgb(var(--accent) / .15); }
+  .field-icon { @apply relative; }
+  .field-icon > svg { @apply absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3 pointer-events-none; }
+  .field-icon > .field { @apply pl-10; }
+  textarea.field { @apply min-h-[120px] resize-y; }
+  select.field { @apply appearance-none pr-10; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238c9bbe' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+
+  .otp { @apply flex gap-2 sm:gap-3 justify-center; }
+  .otp input { @apply w-11 h-14 sm:w-14 sm:h-16 text-center text-2xl font-display font-semibold rounded-2xl text-ink; background: var(--field-fill); border: 1px solid var(--glass-edge); }
+  .otp input:focus { outline: none; border-color: rgb(var(--accent)); box-shadow: 0 0 0 4px rgb(var(--accent) / .18); }
+
+  /* -------------------------------------------------------- Navigation ---- */
+  /* Sticky header ortidagi yumshoq blur: aylantirganda kontent menyu orasida ko'rinmasin */
+  .site-header::before {
+    content: ""; position: absolute; inset: 0 0 -24px; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, rgb(var(--sky-950) / .78), rgb(var(--sky-950) / .35) 70%, transparent);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent); mask-image: linear-gradient(180deg, #000 60%, transparent);
+  }
+  .nav-link { @apply rounded-full px-4 py-2 text-[13px] font-medium text-ink-2 transition whitespace-nowrap; }
+  .nav-link:hover { @apply text-ink; background: rgba(255,255,255,.06); }
+  .nav-link.is-active { @apply text-ink; background: var(--glass-fill-strong); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 6px 18px -8px rgba(143,180,255,.6); }
+
+  /* ------------------------------------------------------------ Cards ---- */
+  .media-card { @apply glass glass--sm glass--hover overflow-hidden flex flex-col; }
+  .media-card__img { @apply relative overflow-hidden; aspect-ratio: 16 / 10; }
+  .media-card__img img { @apply w-full h-full object-cover transition duration-500; }
+  .media-card:hover .media-card__img img { transform: scale(1.05); }
+  .stat-num { @apply font-display text-2xl sm:text-3xl font-semibold text-ink; font-variant-numeric: tabular-nums; }
+  .stat-label { @apply text-xs text-ink-3; }
+  .icon-tile { @apply grid place-items-center w-10 h-10 rounded-xl shrink-0 text-ink; background: rgba(255,255,255,.08); border: 1px solid var(--glass-edge); }
+  .icon-tile svg { width: 18px; height: 18px; }
+
+  .quote-card { @apply glass p-6; }
+  .quote-card .mark { @apply font-display text-4xl leading-none text-accent; }
+  .quote-card .rule { @apply mt-4 h-px w-8 bg-ink/60; }
+
+  .divider { @apply h-px w-full; background: linear-gradient(90deg, transparent, var(--glass-edge), transparent); }
+
+  /* ------------------------------------------------------- Home: roles ---- */
+  .role-card { position: relative; overflow: hidden; }
+  .role-card::before { content: ""; position: absolute; width: 180px; height: 180px; right: -60px; top: -60px; border-radius: 9999px; filter: blur(50px); opacity: .45; background: var(--role); transition: opacity .3s, transform .3s; }
+  .role-card:hover::before { opacity: .75; transform: scale(1.15); }
+  .role-card__icon { @apply grid place-items-center w-12 h-12 rounded-2xl; color: var(--role); background: color-mix(in srgb, var(--role) 18%, transparent); border: 1px solid color-mix(in srgb, var(--role) 35%, transparent); }
+  .role-card--blue { --role: rgb(var(--accent)); }
+  .role-card--violet { --role: rgb(var(--violet)); }
+  .role-card--green { --role: rgb(var(--ok)); }
+  .role-card--orange { --role: rgb(var(--warn)); }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .marquee__track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* ----------------------------------------------------- Music player ---- */
+  .player-dock { position: fixed; z-index: 45; left: 50%; transform: translateX(-50%); width: min(1080px, calc(100% - 24px));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .player-bar { @apply glass glass--strong; position: relative; overflow: visible; border-radius: 22px; padding: 0; }
+  .player-pop { @apply glass glass--strong; position: absolute; bottom: calc(100% + 10px); padding: 16px; display: flex; flex-direction: column; gap: 16px; border-radius: 22px; }
+  .player-btn { @apply grid place-items-center w-9 h-9 rounded-full text-ink-2 transition; }
+  .player-btn:hover { @apply text-ink; background: var(--glass-fill-hover); }
+  .player-btn.is-on { color: rgb(var(--accent)); background: rgb(var(--accent-strong) / .16); }
+  .player-play { @apply grid place-items-center w-11 h-11 rounded-full transition active:scale-95; background: var(--btn-light); color: rgb(var(--btn-light-ink));
+    box-shadow: 0 8px 24px -8px rgb(var(--accent) / .8); }
+  .player-progress { position: absolute; left: 18px; right: 18px; top: -1px; height: 4px; cursor: pointer; border-radius: 9999px; background: rgb(var(--ink) / .12); transition: height .15s, top .15s; }
+  .player-progress:hover { height: 6px; top: -2px; }
+  .player-progress__buf, .player-progress__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; }
+  .player-progress__buf { background: rgb(var(--ink) / .18); }
+  .player-progress__fill { background: linear-gradient(90deg, rgb(var(--accent-strong)), rgb(var(--accent))); box-shadow: 0 0 12px rgb(var(--accent) / .7); }
+  .player-volume { -webkit-appearance: none; appearance: none; width: 88px; height: 4px; border-radius: 9999px; cursor: pointer;
+    background: linear-gradient(90deg, rgb(var(--accent)) var(--v, 80%), rgb(var(--ink) / .18) var(--v, 80%)); }
+  .player-volume::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 9999px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+  .player-volume::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 9999px; background: #fff; }
+  .player-spin { animation: player-spin 14s linear infinite; border-radius: 9999px; }
+  @keyframes player-spin { to { transform: rotate(360deg); } }
+  .eq-bar { display: block; width: 2px; height: 30%; border-radius: 9999px; background: #fff; animation: eq .9s ease-in-out infinite; }
+  @keyframes eq { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+  body.has-player { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+  body.has-player #toasts { bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important; }
+
+  /* ------------------------------------------------- Rich text (CKEditor) */
+  .richtext { @apply prose prose-invert max-w-none text-ink-2; --tw-prose-body: rgb(var(--ink-2)); --tw-prose-headings: rgb(var(--ink)); --tw-prose-links: rgb(var(--accent)); --tw-prose-bold: rgb(var(--ink)); --tw-prose-quotes: rgb(var(--ink)); --tw-prose-code: rgb(var(--ink)); --tw-prose-bullets: rgb(var(--ink-3)); --tw-prose-counters: rgb(var(--ink-3)); --tw-prose-hr: var(--glass-edge); --tw-prose-th-borders: var(--glass-edge); --tw-prose-td-borders: var(--glass-edge); }
+  [data-theme="light"] .richtext { @apply prose-slate; }
+  .richtext h2 { @apply text-xl sm:text-2xl mt-10 mb-3 scroll-mt-28; }
+  .richtext h3 { @apply text-lg mt-8 mb-2; }
+  .richtext p { @apply leading-7; }
+  .richtext a { @apply underline decoration-accent/40 underline-offset-4 hover:decoration-accent; }
+  .richtext blockquote { @apply glass glass--sm not-italic px-5 py-4 border-l-0 font-normal; }
+  .richtext blockquote p::before, .richtext blockquote p::after { content: none; }
+  .richtext img { @apply rounded-2xl; }
+  .richtext figure.table { @apply overflow-x-auto; }
+  .richtext :not(pre) > code { @apply rounded-md px-1.5 py-0.5 text-[0.88em] font-medium; background: rgba(255,255,255,.08); }
+  .richtext :not(pre) > code::before, .richtext :not(pre) > code::after { content: none; }
+  .richtext pre { @apply relative rounded-2xl p-0 my-6 overflow-hidden; background: rgba(6, 12, 30, .78); border: 1px solid var(--glass-edge); }
+  .richtext pre code, .richtext pre code.hljs { @apply block overflow-x-auto px-5 pt-12 pb-4 text-[13.5px] leading-6 font-mono; background: transparent !important; }
+  .richtext pre code { scrollbar-width: thin; scrollbar-color: rgb(var(--ink) / .22) transparent; }
+  .richtext pre code::-webkit-scrollbar { height: 6px; }
+  .richtext pre code::-webkit-scrollbar-thumb { background: rgb(var(--ink) / .22); border-radius: 99px; }
+  .richtext .code-head { @apply absolute top-0 inset-x-0 flex items-center justify-between px-4 h-9 text-[11px] text-ink-3 font-mono; border-bottom: 1px solid var(--glass-edge); background: rgba(255,255,255,.03); }
+  .richtext .code-head button { @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 hover:text-ink; }
+  .richtext ul.todo-list { @apply list-none pl-0; }
+  .richtext .media iframe, .richtext oembed { @apply w-full rounded-2xl; aspect-ratio: 16/9; }
+
+  /* -------------------------------------------------------- Scrollbars ---- */
+  .scroll-x { @apply flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2; scrollbar-width: thin; scrollbar-color: rgb(var(--ink) / .25) transparent; }
+  .scroll-x::-webkit-scrollbar { height: 6px; }
+  .scroll-x::-webkit-scrollbar-thumb { background: rgb(var(--ink) / .25); border-radius: 99px; }
+  .scroll-x > * { @apply snap-start shrink-0; }
+}
+
+@layer components {
+  /* ---------------------------------------------------------- Dashboard ---- */
+  .dash {
+    --glass-fill: rgba(12, 26, 66, 0.58);
+    --glass-fill-strong: rgba(16, 34, 84, 0.78);
+    --glass-fill-hover: rgba(24, 46, 110, 0.65);
+    --glass-edge: rgba(96, 140, 255, 0.22);
+    --glass-edge-hi: rgba(140, 180, 255, 0.55);
+    --glass-blur: 20px;
+    --field-fill: rgba(6, 14, 40, 0.6);
+  }
+  [data-theme="light"] .dash {
+    --glass-fill: rgba(255, 255, 255, 0.72);
+    --glass-fill-strong: rgba(255, 255, 255, 0.9);
+    --glass-fill-hover: rgba(240, 245, 255, 0.95);
+    --glass-edge: rgba(60, 100, 200, 0.18);
+    --field-fill: rgba(255, 255, 255, 0.85);
+  }
+  .dash .glass { background: var(--glass-fill); }
+  .dash .glass--strong { background: var(--glass-fill-strong); }
+  .dash-nav { @apply flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-ink-2 transition shrink-0; }
+  .dash-nav:hover { @apply text-ink; background: rgba(90, 130, 255, .12); }
+  .dash-group { @apply px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-[.16em] text-ink-3; }
+  .dash-nav .icon-tile { @apply w-9 h-9 rounded-xl; background: rgba(90,130,255,.12); }
+  .dash-nav.is-active { @apply text-white; background: linear-gradient(135deg, rgb(var(--accent-strong)), rgb(var(--accent-strong) / .7)); box-shadow: 0 10px 30px -10px rgb(var(--accent-strong)), inset 0 1px 0 rgba(255,255,255,.25); }
+  .dash-nav.is-active .icon-tile { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.3); }
+  .kpi-icon { @apply grid place-items-center w-11 h-11 sm:w-14 sm:h-14 rounded-2xl shrink-0; }
+  .kpi-icon svg { width: 22px; height: 22px; }
+  .table-wrap { @apply overflow-x-auto; }
+  .dtable { @apply w-full text-sm; }
+  .dtable th { @apply text-left text-xs font-semibold text-ink-3 px-3 py-3 whitespace-nowrap; border-bottom: 1px solid var(--glass-edge); }
+  .dtable td { @apply px-3 py-3 align-middle; border-bottom: 1px solid rgb(var(--ink) / .06); }
+  .dtable tr:hover td { background: rgba(90,130,255,.05); }
+  .tabs { @apply flex gap-1 p-1 rounded-xl w-fit; background: var(--field-fill); border: 1px solid var(--glass-edge); }
+  .tab { @apply px-3 py-1.5 rounded-lg text-xs font-semibold text-ink-3 transition uppercase; }
+  .tab.is-active { @apply text-white; background: rgb(var(--accent-strong)); }
+  input:checked + .chip { background: rgb(var(--accent-strong) / .85); color: #fff; border-color: rgb(var(--accent) / .7); }
+  .switch { @apply relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition; background: rgb(var(--ink) / .2); }
+  .switch::after { content: ""; @apply absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition; }
+  input:checked + .switch { background: rgb(var(--accent-strong)); box-shadow: 0 0 14px -2px rgb(var(--accent-strong)); }
+  input:checked + .switch::after { transform: translateX(20px); }
+  .dropzone { @apply grid place-items-center text-center rounded-2xl p-6 cursor-pointer transition; border: 1.5px dashed rgb(var(--accent) / .45); background: rgb(var(--accent) / .04); }
+  .dropzone:hover, .dropzone.is-over { background: rgb(var(--accent) / .1); }
+
+  /* CKEditor 5 — liquid glass mavzusiga moslash */
+  .dash .ck.ck-editor__main > .ck-editor__editable, .dash .ck.ck-toolbar { background: var(--field-fill) !important; color: rgb(var(--ink)) !important; border-color: var(--glass-edge) !important; }
+  .dash .ck.ck-toolbar .ck-button, .dash .ck.ck-toolbar .ck-dropdown__button { color: rgb(var(--ink-2)) !important; }
+  .dash .ck.ck-toolbar .ck-button:hover, .dash .ck.ck-toolbar .ck-button.ck-on { background: rgba(90,130,255,.18) !important; color: rgb(var(--ink)) !important; }
+  .dash .ck.ck-editor__editable { min-height: 220px; border-radius: 0 0 14px 14px !important; }
+  .dash .ck.ck-editor__top .ck-sticky-panel .ck-toolbar { border-radius: 14px 14px 0 0 !important; }
+  .dash .ck-content pre { background: rgba(6,12,30,.8) !important; color: #e6edf7 !important; border-radius: 12px; }
+  .dash .ck.ck-dropdown__panel, .dash .ck.ck-list { background: #0e1a40 !important; color: rgb(var(--ink)) !important; }
+  .dash .ck.ck-list__item .ck-button { color: rgb(var(--ink)) !important; }
+}
+
+@layer components {
+  /* -------------------------------------------------- Telegram Mini App ---- */
+  .tma {
+    /* Telegram o'zi --tg-safe-area-inset-* va --tg-content-safe-area-inset-* o'zgaruvchilarini beradi (fullscreen rejim) */
+    --tma-safe-top: calc(var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px)) + var(--tg-content-safe-area-inset-top, 0px));
+    --tma-safe-bottom: max(var(--tg-safe-area-inset-bottom, 0px), env(safe-area-inset-bottom, 0px));
+    font-size: 15px; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent;
+    min-height: var(--tg-viewport-stable-height, 100dvh);
+  }
+  .tma ::-webkit-scrollbar { display: none; }
+  .tma-top {
+    @apply sticky z-30 flex items-center gap-2 px-4 pb-3;
+    top: 0; padding-top: calc(10px + var(--tma-safe-top));
+    background: linear-gradient(180deg, rgb(var(--sky-950) / .85), rgb(var(--sky-950) / .55) 70%, transparent);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  }
+  .tma-title { @apply font-display text-lg font-semibold truncate; letter-spacing: -.01em; }
+  .tma-icon { @apply btn-icon w-10 h-10 shrink-0; }
+  .tma-view { @apply flex flex-col gap-4 px-4 pt-1; padding-bottom: calc(96px + var(--tma-safe-bottom)); }
+  .tma-tabs {
+    @apply fixed z-40 left-3 right-3 grid grid-cols-5 p-1.5 glass glass--strong;
+    bottom: calc(10px + var(--tma-safe-bottom)); border-radius: 24px;
+  }
+  .tma-tab { @apply flex flex-col items-center gap-0.5 rounded-[18px] py-2 text-[10.5px] font-semibold text-ink-3 transition active:scale-95; }
+  .tma-tab svg { width: 21px; height: 21px; }
+  .tma-tab.is-active { @apply text-white; background: linear-gradient(160deg, rgb(var(--accent-strong)), rgb(var(--accent-strong) / .7)); box-shadow: 0 8px 22px -8px rgb(var(--accent-strong)); }
+  [data-theme="light"] .tma-tab.is-active { @apply text-white; }
+  .tma-card { @apply glass glass--sm p-4 active:scale-[.99] transition; }
+  .tma-section-title { @apply flex items-center justify-between text-base font-semibold px-0.5; }
+  .tma-rail { @apply flex gap-3 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-1; scrollbar-width: none; }
+  .tma-rail > * { @apply snap-start shrink-0; }
+  .tma-list-item { @apply flex items-center gap-3 rounded-2xl px-3 py-3 active:bg-ink/10 transition; }
+  .tma .richtext { font-size: 15px; }
+  .tma .richtext pre code { font-size: 12.5px; }
+}
+
+@layer utilities {
+  /* Qora rangli brend logotiplari to'q fonda ko'rinishi uchun */
+  :root:not([data-theme="light"]) img[src*="/icons/django/"], :root:not([data-theme="light"]) img[src*="/icons/github/"], :root:not([data-theme="light"]) img[src*="/icons/nextjs/"] { filter: invert(1) hue-rotate(180deg) brightness(1.3); }
+  [data-theme="light"] .only-dark, :root:not([data-theme="light"]) .only-light { display: none !important; }
+  .text-balance { text-wrap: balance; }
+  .no-scrollbar { scrollbar-width: none; }
+  .thin-scroll { scrollbar-width: thin; scrollbar-color: rgb(var(--ink) / .22) transparent; }
+  .thin-scroll::-webkit-scrollbar { width: 6px; }
+  .thin-scroll::-webkit-scrollbar-thumb { background: rgb(var(--ink) / .22); border-radius: 99px; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .mask-fade-b { -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent); }
+  .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .glow-accent { box-shadow: 0 0 0 1px rgb(var(--accent) / .5), 0 0 30px -6px rgb(var(--accent-strong) / .8); }
+}
+
+/* Xarita (Leaflet) — @layer'dan tashqarida: klasslar JS orqali qo'shiladi, Tailwind ularni o'chirmasligi kerak */
+.wcd-pin { position: relative; }
+.wcd-pin__dot { position: absolute; inset: 7px; border-radius: 9999px; background: rgb(var(--accent-strong)); border: 3px solid #fff; box-shadow: 0 4px 14px rgb(var(--accent-strong) / .6); }
+.wcd-pin__pulse { position: absolute; inset: 0; border-radius: 9999px; background: rgb(var(--accent) / .45); animation: pin-pulse 2s ease-out infinite; }
+@keyframes pin-pulse { from { transform: scale(.4); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
+.leaflet-container { background: rgb(var(--sky-900)); font-family: inherit; border-radius: inherit; }
+[data-theme="dark"] .leaflet-tile-pane { filter: invert(1) hue-rotate(200deg) brightness(.82) contrast(.92) saturate(.55); }
+[data-theme="light"] .leaflet-tile-pane { filter: saturate(.75) contrast(.95); }
+.leaflet-control-attribution { background: rgba(6,12,32,.55) !important; color: rgba(255,255,255,.7) !important; font-size: 9px !important; border-radius: 8px 0 0 0; }
+.leaflet-control-attribution a { color: rgba(255,255,255,.85) !important; }
+.leaflet-bar { border: 1px solid var(--glass-edge) !important; border-radius: 12px !important; overflow: hidden; box-shadow: var(--glass-shadow) !important; }
+.leaflet-bar a { background: var(--glass-fill-strong) !important; color: rgb(var(--ink)) !important; border-color: var(--glass-edge) !important; backdrop-filter: blur(12px); }
+.map-frame { position: relative; isolation: isolate; }
+.map-frame::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 -60px 60px -40px rgba(6,12,32,.6); z-index: 500; }
+
