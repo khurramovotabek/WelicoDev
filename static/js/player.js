@@ -292,14 +292,17 @@
       }
       return el;
     };
-    const api = () => apiReady || (apiReady = new Promise((resolve) => {
+    const api = () => apiReady || (apiReady = new Promise((resolve, reject) => {
       if (window.YT && window.YT.Player) return resolve();
       const prev = window.onYouTubeIframeAPIReady;
       window.onYouTubeIframeAPIReady = () => { if (prev) prev(); resolve(); };
       const s = document.createElement("script");
       s.src = "https://www.youtube.com/iframe_api";
+      s.onerror = () => reject(new Error("YouTube API"));
       document.head.appendChild(s);
-    }));
+      // Sekin tarmoq yoki bloklovchi kengaytma: 15 soniyada yuklanmasa, keyingi bosishda qayta urinadi
+      setTimeout(() => reject(new Error("YouTube API timeout")), 15000);
+    }).catch((e) => { apiReady = null; box().classList.remove("is-on"); emit("error"); throw e; }));
     const startTimer = () => { clearInterval(timer); timer = setInterval(() => emit("timeupdate"), 250); };
     const stopTimer = () => { clearInterval(timer); emit("timeupdate"); };
     function onState(s) {

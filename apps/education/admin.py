@@ -36,7 +36,7 @@ class CourseAdmin(TranslatedAdmin):
     autocomplete_fields = ("technologies",)
     inlines = [ModuleInline, LessonInline]
     fieldsets = (
-        (_("Asosiy"), {"fields": ("title", "slug", "subtitle", "cover", "trailer_url", "level", "technologies"), "classes": ["tab"]}),
+        (_("Asosiy"), {"fields": ("title", "slug", "subtitle", "cover", "trailer_url", "author_name", "author_url", "level", "technologies"), "classes": ["tab"]}),
         (_("Tavsif"), {"fields": ("description", "what_you_learn", "requirements"), "classes": ["tab"]}),
         (_("Qoidalar"), {
             "fields": ("is_free", "price", "old_price", "is_private", "sequential", "require_login_for_preview", "allow_reviews",

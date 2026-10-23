@@ -48,6 +48,11 @@ class Course(TimeStampedModel, SeoModel):
     has_certificate = models.BooleanField(_("sertifikat beriladi"), default=True)
     cover = models.ImageField(_("muqova"), upload_to="courses/covers/")
     trailer_url = models.URLField(_("treyler havolasi"), blank=True)
+    author_name = models.CharField(
+        _("muallif"), max_length=80, blank=True,
+        help_text=_("Boshqa muallifning kursi bo'lsa (masalan YouTube'dagi Bro Code). Bo'sh — o'zimning kursim"),
+    )
+    author_url = models.URLField(_("muallif havolasi"), blank=True, help_text=_("Muallif kanali yoki asl pleylist"))
     level = models.CharField(_("daraja"), max_length=15, choices=Level.choices, default=Level.BEGINNER)
     technologies = models.ManyToManyField("portfolio.Skill", verbose_name=_("texnologiyalar"), blank=True, related_name="courses")
 

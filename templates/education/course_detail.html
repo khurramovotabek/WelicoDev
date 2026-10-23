@@ -11,6 +11,7 @@
     <div class="flex flex-wrap gap-2"><span class="badge badge-info">{{ course.get_level_display }}</span>{% if course.is_free %}<span class="badge badge-ok">{% trans "Bepul" %}</span>{% else %}<span class="badge badge-warn"><i data-lucide="gem" class="w-3 h-3"></i>{% trans "Premium" %}</span>{% endif %}{% if course.is_private %}<span class="badge badge-violet"><i data-lucide="lock" class="w-3 h-3"></i>{% trans "Yopiq kurs" %}</span>{% endif %}{% if course.sequential %}<span class="badge badge-violet"><i data-lucide="list-ordered" class="w-3 h-3"></i>{% trans "Ketma-ket ochiladi" %}</span>{% endif %}</div>
     <h1 class="text-4xl sm:text-5xl font-semibold">{{ course.title }}</h1>
     <p class="text-lg text-ink-2">{{ course.subtitle }}</p>
+    {% if course.author_name %}<p class="text-sm text-ink-3 flex flex-wrap items-center gap-1.5"><i data-lucide="youtube" class="w-4 h-4"></i>{% trans "Muallif:" %} {% if course.author_url %}<a href="{{ course.author_url }}" target="_blank" rel="noopener" class="text-ink hover:underline underline-offset-4 font-medium">{{ course.author_name }}</a>{% else %}<span class="text-ink font-medium">{{ course.author_name }}</span>{% endif %} · {% trans "WeliCoDev tavsiya qiladi" %}</p>{% endif %}
     <div class="flex flex-wrap gap-4 text-sm text-ink-2">
       <span class="flex items-center gap-1.5"><i data-lucide="play-circle" class="w-4 h-4"></i>{{ lessons_total }} {% trans "dars" %}</span>
       <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4"></i>{{ course.total_seconds|seconds_hms }}</span>
