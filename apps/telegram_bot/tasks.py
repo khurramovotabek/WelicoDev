@@ -171,3 +171,93 @@ def indexnow_ping(paths):
         urllib.request.urlopen(req, timeout=10)
     except Exception as e:  # noqa: BLE001 - indekslash xabari muhim emas, sayt ishlashiga ta'sir qilmasin
         log.info("indexnow ping failed: %s", e)
+
+
+def _nudge(user, text, button_text, url):
+    """Eslatmani yuboradi; bot bloklangan bo'lsa belgilab qo'yadi. Muvaffaqiyatli bo'lsa True."""
+    try:
+        api.send_message(user.telegram_id, text, reply_markup=api.url_button(button_text, settings.SITE_URL + url))
+        return True
+    except api.TelegramError as e:
+        if e.code == 403:
+            type(user).objects.filter(pk=user.pk).update(bot_blocked=True)
+        log.warning("nudge %s failed: %s", user.pk, e)
+        return False
+
+
+@shared_task
+def nudge_learners():
+    """Kunlik eslatmalar (Celery beat):
+
+    1) kursga yozilmagan yangi foydalanuvchilarga — 1 va 3 kundan keyin bepul kursni boshlash taklifi;
+    2) kursni boshlab, 3 kundan beri davom ettirmaganlarga — keyingi dars (har yozilishga bir marta).
+    """
+    from datetime import timedelta
+    from html import escape
+
+    from django.db.models import Count, Max, Q
+    from django.utils import translation
+
+    from apps.accounts.models import User
+    from apps.education.models import Course, Enrollment, LessonProgress
+
+    from .bot.texts import t
+
+    now = timezone.now()
+    reachable = User.objects.filter(
+        telegram_id__isnull=False, is_registered=True, is_staff=False,
+        bot_blocked=False, is_blocked=False, notify_news=True,
+    )
+    course = (
+        Course.objects.published().filter(is_free=True, is_private=False)
+        .annotate(n=Count("lessons", filter=Q(lessons__status="published")))
+        .filter(n__gt=0).order_by("-is_featured", "order", "id").first()
+    )
+    sent = 0
+    if course:
+        # (bosqich, ro'yxatdan o'tgandan keyin necha kun) — har biri bir marta
+        for stage, days in ((1, 1), (2, 3)):
+            users = reachable.filter(
+                nudge_stage=stage - 1, enrollments__isnull=True, date_joined__lte=now - timedelta(days=days),
+            ).distinct()
+            for user in users[:500]:
+                lang = user.language or "uz"
+                with translation.override(lang):
+                    text = t(f"nudge_start_{stage}", lang, name=escape(user.first_name or user.display_name),
+                             course=escape(course.title), subtitle=escape(course.subtitle), lessons=course.n)
+                    url = course.get_absolute_url()
+                if _nudge(user, text, t("btn_start_course", lang), url):
+                    sent += 1
+                # Yuborilmasa ham bosqich oshadi — bir xil xabar qayta-qayta urinilmasin
+                User.objects.filter(pk=user.pk).update(nudge_stage=stage)
+                time.sleep(0.05)
+
+    stale = now - timedelta(days=3)
+    enrollments = (
+        Enrollment.objects.filter(
+            user__in=reachable, is_active=True, completed_at__isnull=True, nudged_at__isnull=True,
+            created_at__lte=stale, course__status="published",
+        )
+        .filter(Q(expires_at__isnull=True) | Q(expires_at__gt=now))
+        .select_related("user", "course", "last_lesson")
+    )
+    for e in enrollments[:500]:
+        last = (
+            LessonProgress.objects.filter(user=e.user, lesson__course=e.course)
+            .aggregate(at=Max("updated_at"))["at"]
+        )
+        if last and last > stale:
+            continue
+        lesson = e.last_lesson.next_lesson() if e.last_lesson else e.course.published_lessons().first()
+        if lesson is None:
+            continue
+        lang = e.user.language or "uz"
+        with translation.override(lang):
+            text = t("nudge_continue", lang, name=escape(e.user.first_name or e.user.display_name),
+                     course=escape(e.course.title), lesson=escape(lesson.title))
+            url = lesson.get_absolute_url()
+        if _nudge(e.user, text, t("btn_continue", lang), url):
+            sent += 1
+        Enrollment.objects.filter(pk=e.pk).update(nudged_at=now)
+        time.sleep(0.05)
+    return sent

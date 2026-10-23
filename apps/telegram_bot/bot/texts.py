@@ -105,6 +105,23 @@ TEXTS = {
         "ru": "⛔️ Ваш аккаунт заблокирован.",
         "en": "⛔️ Your account is blocked.",
     },
+    "nudge_start_1": {
+        "uz": "👋 {name}, WeliCoDev'ga xush kelibsiz!\n\nBirinchi qadamni bepul kursdan boshlang:\n<b>{course}</b>\n\n<i>{subtitle}</i>\n\n📚 {lessons} ta dars · o'zbek tilida · o'z tezligingizda.",
+        "ru": "👋 {name}, добро пожаловать в WeliCoDev!\n\nНачните с бесплатного курса:\n<b>{course}</b>\n\n<i>{subtitle}</i>\n\n📚 {lessons} уроков · в своём темпе.",
+        "en": "👋 {name}, welcome to WeliCoDev!\n\nTake your first step with a free course:\n<b>{course}</b>\n\n<i>{subtitle}</i>\n\n📚 {lessons} lessons · at your own pace.",
+    },
+    "nudge_start_2": {
+        "uz": "🚀 {name}, kuniga 15 daqiqa — va bir oyda yangi ko'nikma.\n\n<b>{course}</b> kursining birinchi darsi sizni kutmoqda.",
+        "ru": "🚀 {name}, 15 минут в день — и через месяц новый навык.\n\nПервый урок курса <b>{course}</b> ждёт вас.",
+        "en": "🚀 {name}, 15 minutes a day — a new skill in a month.\n\nThe first lesson of <b>{course}</b> is waiting for you.",
+    },
+    "nudge_continue": {
+        "uz": "📖 {name}, <b>{course}</b> kursini davom ettiramizmi?\n\nKeyingi dars: <b>{lesson}</b>",
+        "ru": "📖 {name}, продолжим курс <b>{course}</b>?\n\nСледующий урок: <b>{lesson}</b>",
+        "en": "📖 {name}, shall we continue <b>{course}</b>?\n\nNext lesson: <b>{lesson}</b>",
+    },
+    "btn_start_course": {"uz": "▶️ Kursni boshlash", "ru": "▶️ Начать курс", "en": "▶️ Start the course"},
+    "btn_continue": {"uz": "▶️ Davom ettirish", "ru": "▶️ Продолжить", "en": "▶️ Continue"},
     "need_register": {
         "uz": "Avval ro'yxatdan o'ting: /start",
         "ru": "Сначала зарегистрируйтесь: /start",

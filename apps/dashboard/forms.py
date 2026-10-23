@@ -45,7 +45,25 @@ class TagField(forms.CharField):
         return [Tag.objects.get_or_create(name=n[:50])[0] for n in names]
 
 
-class ProjectForm(StyledMixin, forms.ModelForm):
+class TagsMixin:
+    """`tags` maydonini taggit'ga saqlaydi (commit=False bo'lsa save_m2m orqali)."""
+
+    def save(self, commit=True):
+        obj = super().save(commit=commit)
+        if commit:
+            obj.tags.set(self.cleaned_data["tags"])
+        else:
+            original = self.save_m2m
+
+            def save_m2m():
+                original()
+                obj.tags.set(self.cleaned_data["tags"])
+
+            self.save_m2m = save_m2m
+        return obj
+
+
+class ProjectForm(TagsMixin, StyledMixin, forms.ModelForm):
     tags = TagField(label=_("Teglar"), required=False, help_text=_("Vergul bilan ajrating"))
 
     class Meta:
@@ -74,22 +92,9 @@ class ProjectForm(StyledMixin, forms.ModelForm):
             self.initial["tags"] = ", ".join(self.instance.tags.values_list("name", flat=True))
         self._style()
 
-    def save(self, commit=True):
-        obj = super().save(commit=commit)
-        if commit:
-            obj.tags.set(self.cleaned_data["tags"])
-        else:
-            original = self.save_m2m
-
-            def save_m2m():
-                original()
-                obj.tags.set(self.cleaned_data["tags"])
-
-            self.save_m2m = save_m2m
-        return obj
 
 
-class ArticleForm(StyledMixin, forms.ModelForm):
+class ArticleForm(TagsMixin, StyledMixin, forms.ModelForm):
     tags = TagField(label=_("Teglar"), required=False)
 
     class Meta:
@@ -114,8 +119,6 @@ class ArticleForm(StyledMixin, forms.ModelForm):
         if self.instance.pk:
             self.initial["tags"] = ", ".join(self.instance.tags.values_list("name", flat=True))
         self._style()
-
-    save = ProjectForm.save
 
 
 class BroadcastForm(StyledMixin, forms.ModelForm):

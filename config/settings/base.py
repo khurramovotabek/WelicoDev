@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import environ
+from celery.schedules import crontab
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -156,6 +157,8 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_ALWAYS_EAGER = False
 CELERY_BEAT_SCHEDULE = {
     "send-due-telegram-posts": {"task": "apps.telegram_bot.tasks.send_due", "schedule": 60.0},
+    # O'quvchilarga eslatmalar — kuniga bir marta, Toshkent vaqti bilan 11:00
+    "nudge-learners": {"task": "apps.telegram_bot.tasks.nudge_learners", "schedule": crontab(hour=11, minute=0)},
 }
 
 # --- Telegram ---

@@ -230,6 +230,7 @@ class Enrollment(models.Model):
     granted_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
                                    related_name="+", verbose_name=_("ruxsat bergan"))
     expires_at = models.DateTimeField(_("ruxsat muddati"), null=True, blank=True, help_text=_("Bo'sh bo'lsa muddatsiz"))
+    nudged_at = models.DateTimeField(_("davom ettirish eslatmasi"), null=True, blank=True, editable=False)
 
     class Meta:
         unique_together = [("user", "course")]

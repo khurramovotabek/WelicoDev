@@ -133,3 +133,23 @@ class LessonAutopostTests(TestCase):
         with self.captureOnCommitCallbacks(execute=True):
             les.save()
         self.assertEqual(call.call_count, 1)
+
+
+class DashboardArticleEditTests(TestCase):
+    """Regressiya: ArticleForm.save ProjectForm'dan qarzga olingan super() tufayli 500 berardi."""
+
+    def test_staff_can_edit_article_with_tags(self):
+        from apps.accounts.models import User
+
+        staff = User.objects.create(username="adm", is_staff=True, is_superuser=True)
+        self.client.force_login(staff)
+        a = Article.objects.create(title_uz="Eski", excerpt_uz="Qisqa", content_uz="<p>x</p>", status="draft",
+                                   cover=SimpleUploadedFile("c.png", PNG))
+        r = self.client.post(f"/uz/dashboard/articles/{a.pk}/", {
+            "title_uz": "Yangi", "excerpt_uz": "Qisqa", "content_uz": "<p>Uzun matn</p>", "status": "draft",
+            "published_at": "2026-10-01T10:00", "tags": "django, celery",
+        })
+        self.assertIn(r.status_code, (200, 302))
+        a.refresh_from_db()
+        self.assertEqual(a.title_uz, "Yangi")
+        self.assertEqual(sorted(a.tags.values_list("name", flat=True)), ["celery", "django"])

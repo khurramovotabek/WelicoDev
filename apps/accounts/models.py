@@ -30,6 +30,10 @@ class User(AbstractUser):
                                       help_text=_("Bot orqali yangi kontent haqida xabar olish"))
     notify_comments = models.BooleanField(_("izohimga javob haqida xabar"), default=True)
     last_bot_activity = models.DateTimeField(_("botdagi oxirgi faollik"), null=True, blank=True)
+    nudge_stage = models.PositiveSmallIntegerField(
+        _("yuborilgan eslatmalar"), default=0, editable=False,
+        help_text=_("Kursga yozilmaganlarga yuborilgan 'kursni boshlang' eslatmalari soni"),
+    )
 
     class Meta:
         verbose_name = _("foydalanuvchi")
