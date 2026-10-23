@@ -83,6 +83,12 @@ BG_PRESETS = [
     ("dawn", _("Bulutlar ustida tong")),
     ("dusk", _("Tog'lar va shahar chiroqlari")),
     ("night", _("Yulduzli tun")),
+    ("galaxy", _("Somon yo'li va qorli cho'qqilar")),
+    ("cosmos", _("Bulutlar ustidagi koinot")),
+    ("aurora", _("Shimoliy yog'du")),
+    ("peaks", _("Moviy soatdagi tog'lar")),
+    ("metropolis", _("Tungi megapolis")),
+    ("workspace", _("Dasturchi ish stoli")),
     ("scene", _("Animatsion tog'lar")),
 ]
 

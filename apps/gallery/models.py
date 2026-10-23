@@ -166,6 +166,18 @@ class Track(TimeStampedModel):
                 return name
         return ""
 
+    @property
+    def youtube_id(self):
+        """YouTube havolasidan video ID (watch?v=, youtu.be/, music.youtube, shorts) — saytda embed orqali ijro uchun."""
+        import re
+
+        m = re.search(r"(?:youtube\.com/(?:watch\?(?:.*&)?v=|shorts/|embed/)|youtu\.be/)([\w-]{11})", self.external_url or "")
+        return m.group(1) if m else ""
+
+    @property
+    def is_playable(self):
+        return bool(self.audio or self.youtube_id)
+
 
 class Playlist(TimeStampedModel):
     title = models.CharField(_("nomi"), max_length=80)

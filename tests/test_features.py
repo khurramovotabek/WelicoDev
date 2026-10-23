@@ -74,3 +74,26 @@ class FeatureTests(TestCase):
         self.client.post(f"/uz/i/comments/project/{p.pk}/add/", {"body": "Rahmat, qo'shilaman", "parent": parent.pk})
         chats = [c.args[0] for c in send.call_args_list]
         self.assertIn(111, chats)
+
+
+class YouTubeTrackTests(TestCase):
+    """YouTube havolali treklar saytdagi pleyerda embed orqali ijro etiladi."""
+
+    def test_youtube_id_and_payload(self):
+        from apps.core.templatetags.wcd import track_payload, tracks_json
+
+        cases = {
+            "https://www.youtube.com/watch?v=7wtfhZwyrcc": "7wtfhZwyrcc",
+            "https://youtu.be/D9G1VOjN_84?si=x": "D9G1VOjN_84",
+            "https://music.youtube.com/watch?v=fKopy74weus&list=RD": "fKopy74weus",
+            "https://open.spotify.com/track/abc": "",
+        }
+        for url, vid in cases.items():
+            self.assertEqual(Track(title="t", artist="a", external_url=url).youtube_id, vid)
+        t = Track.objects.create(title="Believer", artist="Imagine Dragons", external_url="https://www.youtube.com/watch?v=7wtfhZwyrcc")
+        p = track_payload(t)
+        self.assertEqual((p["src"], p["yt"]), ("yt:7wtfhZwyrcc", "7wtfhZwyrcc"))
+        spotify = Track.objects.create(title="x", artist="y", external_url="https://open.spotify.com/track/abc")
+        html = tracks_json([t, spotify], "ids")
+        self.assertIn("7wtfhZwyrcc", html)
+        self.assertNotIn('"title": "x"', html)

@@ -126,7 +126,7 @@ def music(request):
     return render(request, "gallery/music.html", {
         "hero": get_hero("media"),
         "tracks": tracks,
-        "playable": [t for t in tracks if t.audio],
+        "playable": [t for t in tracks if t.is_playable],
         "categories": MediaCategory.objects.filter(kind="music", tracks__is_published=True).distinct(),
         "playlists": Playlist.objects.filter(is_published=True).prefetch_related("tracks"),
         "active": cat, "active_playlist": active_playlist,

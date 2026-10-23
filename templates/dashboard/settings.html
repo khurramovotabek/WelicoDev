@@ -41,7 +41,7 @@
 
   <section x-show="tab === 'look'" x-cloak class="grid xl:grid-cols-[1fr_420px] gap-4"
            x-data="{ preset: '{{ form.background_preset.value }}', dim: {{ form.background_dim.value|default:35 }}, blur: {{ form.background_blur.value|default:0 }}, upload: '{% if form.instance.background_image %}{{ form.instance.background_image.url }}{% endif %}',
-                     src() { if (this.upload) return this.upload; return {'dawn': '{% static "img/bg/dawn-sm.webp" %}', 'dusk': '{% static "img/bg/dusk-sm.webp" %}', 'night': '{% static "img/bg/night-sm.webp" %}'}[this.preset] || '' } }">
+                     src() { if (this.upload) return this.upload; return this.preset && this.preset !== 'scene' ? '{% static "img/bg/" %}' + this.preset + '-sm.webp' : '' } }">
     <div class="panel flex flex-col gap-4">
       <div class="flex items-center gap-3"><span class="icon-tile"><i data-lucide="image"></i></span><div><h2 class="text-lg font-semibold">{% trans "Sayt foni" %}</h2><p class="text-xs text-ink-3">{% trans "Tayyor fonlardan birini tanlang yoki o'zingiznikini yuklang. Sahifalar uchun alohida fonni «Sahifa sarlavhalari» bo'limida berish mumkin." %}</p></div></div>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">

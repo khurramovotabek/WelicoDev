@@ -5,12 +5,17 @@
    - Ekvalayzer: Web Audio API (bass / o'rta / treble) va tayyor presetlar
    - Uyqu taymeri, Media Session (qulf ekrani, klaviatura media tugmalari)
    - Sozlamalar localStorage'da; navbat va joy sahifa almashganda tiklanadi
+   - YouTube treklar (src "yt:<id>") rasmiy IFrame API orqali — <audio> bilan bir xil interfeysdagi dvigatel;
+     YouTube qoidasiga ko'ra video oynasi ko'rinib turadi (#wcd-yt), ekvalayzer/vizualizator faqat audio faylga
    Fayl sifati o'zgartirilmaydi: audio asl faylidan oqim bilan beriladi. */
 (function () {
   const SETTINGS_KEY = "wcd-player";
   const SESSION_KEY = "wcd-player-session";
-  const audio = new Audio();
-  audio.preload = "metadata";
+  const html = new Audio();
+  html.preload = "metadata";
+  const yt = createYouTubeEngine();
+  // Joriy dvigatel: oddiy audio yoki YouTube (trekka qarab almashadi)
+  let audio = html;
 
   const EQ_PRESETS = {
     flat: [0, 0, 0],
@@ -35,7 +40,7 @@
     if (nodes || !(window.AudioContext || window.webkitAudioContext)) return;
     try {
       ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const src = ctx.createMediaElementSource(audio);
+      const src = ctx.createMediaElementSource(html);
       const bass = ctx.createBiquadFilter(); bass.type = "lowshelf"; bass.frequency.value = 200;
       const mid = ctx.createBiquadFilter(); mid.type = "peaking"; mid.frequency.value = 1500; mid.Q.value = 0.9;
       const treble = ctx.createBiquadFilter(); treble.type = "highshelf"; treble.frequency.value = 4500;
@@ -66,17 +71,21 @@
       get presets() { return Object.keys(EQ_PRESETS); },
 
       init() {
-        audio.volume = this.volume;
-        audio.muted = this.muted;
-        audio.addEventListener("timeupdate", () => this.tick());
-        audio.addEventListener("progress", () => this.tickBuffer());
-        audio.addEventListener("loadedmetadata", () => { this.duration = audio.duration; this.total = fmt(audio.duration); audio.playbackRate = this.rate; });
-        audio.addEventListener("play", () => { this.playing = true; this.saveSession(); });
-        audio.addEventListener("pause", () => { this.playing = false; this.saveSession(); });
-        audio.addEventListener("waiting", () => (this.loading = true));
-        audio.addEventListener("playing", () => (this.loading = false));
-        audio.addEventListener("ended", () => this.onEnded());
-        audio.addEventListener("error", () => { this.loading = false; this.playing = false; });
+        for (const el of [html, yt]) {
+          el.volume = this.volume;
+          el.muted = this.muted;
+          // Faqat joriy dvigatel hodisalari hisobga olinadi (almashtirishdagi eski "pause" holatni buzmasin)
+          const on = (type, fn) => el.addEventListener(type, () => { if (el === audio) fn(); });
+          on("timeupdate", () => this.tick());
+          on("progress", () => this.tickBuffer());
+          on("loadedmetadata", () => { this.duration = audio.duration; this.total = fmt(audio.duration); audio.playbackRate = this.rate; });
+          on("play", () => { this.playing = true; this.saveSession(); });
+          on("pause", () => { this.playing = false; this.saveSession(); });
+          on("waiting", () => (this.loading = true));
+          on("playing", () => (this.loading = false));
+          on("ended", () => this.onEnded());
+          on("error", () => { this.loading = false; this.playing = false; });
+        }
         this.mediaSession();
         this.keyboard();
         this.restore();
@@ -99,10 +108,19 @@
         const i = id == null ? 0 : list.findIndex((t) => t.id === id);
         if (i >= 0) this.playList(list, i);
       },
+      /** Trekka mos dvigatelni tanlaydi (YouTube yoki audio fayl). */
+      use(t) {
+        const engine = t && t.yt ? yt : html;
+        if (engine !== audio) { audio.pause(); audio = engine; }
+        if (engine !== yt) yt.hide();
+        engine.volume = this.volume; engine.muted = this.muted;
+      },
+      get isVideo() { return !!(this.track && this.track.yt); },
       play(i) {
         if (!this.queue.length) return;
         this.idx = (i + this.queue.length) % this.queue.length;
         this.dismissed = false;
+        this.use(this.track);
         audio.src = this.track.src;
         audio.playbackRate = this.rate;
         this.pct = 0; this.buffered = 0; this.current = "0:00"; this.total = this.track.duration || "0:00";
@@ -110,8 +128,10 @@
         this.meta();
       },
       start() {
-        ensureGraph(this);
-        if (ctx && ctx.state === "suspended") ctx.resume();
+        if (audio === html) {
+          ensureGraph(this);
+          if (ctx && ctx.state === "suspended") ctx.resume();
+        }
         document.dispatchEvent(new CustomEvent("wcd-audio-play", { detail: audio }));
         this.loading = true;
         return audio.play().catch(() => { this.loading = false; this.playing = false; });
@@ -139,6 +159,7 @@
       },
       close() {
         audio.pause();
+        yt.hide();
         this.dismissed = true; this.panel = ""; this.expanded = false;
         try { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); } catch (e) {}
       },
@@ -168,8 +189,8 @@
       seekBy(sec) { if (audio.duration) audio.currentTime = Math.max(0, Math.min(audio.duration, audio.currentTime + sec)); },
 
       // ------------------------------------------------------------ Ovoz va sozlamalar
-      setVolume(v) { this.volume = Math.max(0, Math.min(1, +v)); audio.volume = this.volume; if (this.volume > 0 && this.muted) this.toggleMute(); this.saveSettings(); },
-      toggleMute() { this.muted = !this.muted; audio.muted = this.muted; this.saveSettings(); },
+      setVolume(v) { this.volume = Math.max(0, Math.min(1, +v)); html.volume = yt.volume = this.volume; if (this.volume > 0 && this.muted) this.toggleMute(); this.saveSettings(); },
+      toggleMute() { this.muted = !this.muted; html.muted = yt.muted = this.muted; this.saveSettings(); },
       get volumeIcon() { return this.muted || this.volume === 0 ? "off" : this.volume < 0.5 ? "low" : "high"; },
       setRate(r) { this.rate = r; audio.playbackRate = r; this.saveSettings(); },
       cycleRepeat() { this.repeat = { off: "all", all: "one", one: "off" }[this.repeat]; this.saveSettings(); },
@@ -206,13 +227,15 @@
         // 6 soatdan eski sessiya tiklanmaydi
         if (!s || !s.queue || !s.queue.length || Date.now() - (s.at || 0) > 6 * 3600 * 1000) return;
         this.queue = s.queue; this.idx = Math.min(s.idx, s.queue.length - 1);
+        this.use(this.track);
         audio.src = this.track.src;
         const resumeAt = s.time || 0;
         audio.addEventListener("loadedmetadata", () => { if (resumeAt < audio.duration - 1) audio.currentTime = resumeAt; }, { once: true });
         this.current = fmt(resumeAt);
         this.meta();
-        // Avvalgi sahifada o'ynayotgan bo'lsa, davom ettirishga harakat (brauzer ruxsat bermasa — pauza holatida qoladi)
-        if (s.playing) audio.play().catch(() => {});
+        // Avvalgi sahifada o'ynayotgan bo'lsa, davom ettirishga harakat (brauzer ruxsat bermasa — pauza holatida qoladi).
+        // YouTube videosi foydalanuvchi bosmaguncha o'zi boshlanmaydi.
+        if (s.playing && audio === html) audio.play().catch(() => {});
       },
 
       // ------------------------------------------------------------ Tizim integratsiyasi
@@ -252,6 +275,89 @@
       },
     });
   });
+
+  /** YouTube IFrame API ustidagi dvigatel: HTMLAudioElement'ning pleyer ishlatadigan qismini takrorlaydi. */
+  function createYouTubeEngine() {
+    const listeners = {};
+    let player = null, apiReady = null, loadedId = "", id = "", state = -1, timer = null, metaSent = false;
+    let vol = 1, mute = false, rate = 1;
+    const emit = (type) => (listeners[type] || []).slice().forEach((fn) => fn());
+    const box = () => {
+      let el = document.getElementById("wcd-yt");
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "wcd-yt";
+        el.innerHTML = '<div id="wcd-yt-frame"></div>';
+        document.body.appendChild(el);
+      }
+      return el;
+    };
+    const api = () => apiReady || (apiReady = new Promise((resolve) => {
+      if (window.YT && window.YT.Player) return resolve();
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { if (prev) prev(); resolve(); };
+      const s = document.createElement("script");
+      s.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(s);
+    }));
+    const startTimer = () => { clearInterval(timer); timer = setInterval(() => emit("timeupdate"), 250); };
+    const stopTimer = () => { clearInterval(timer); emit("timeupdate"); };
+    function onState(s) {
+      state = s;
+      if (s === 1) {
+        if (!metaSent) { metaSent = true; emit("loadedmetadata"); }
+        emit("play"); emit("playing"); startTimer();
+      } else if (s === 2) { stopTimer(); emit("pause"); }
+      else if (s === 0) { stopTimer(); emit("ended"); }
+      else if (s === 3) emit("waiting");
+    }
+    function apply() {
+      if (!player || !player.setVolume) return;
+      player.setVolume(Math.round(vol * 100));
+      mute ? player.mute() : player.unMute();
+      if (player.setPlaybackRate) player.setPlaybackRate(rate);
+    }
+    function load() {
+      box().classList.add("is-on");
+      return api().then(() => new Promise((resolve) => {
+        if (player) {
+          if (loadedId !== id) { loadedId = id; metaSent = false; player.loadVideoById(id); } else player.playVideo();
+          apply();
+          return resolve();
+        }
+        loadedId = id;
+        player = new YT.Player("wcd-yt-frame", {
+          width: "100%", height: "100%", videoId: id,
+          playerVars: { autoplay: 1, playsinline: 1, rel: 0, modestbranding: 1 },
+          events: {
+            onReady: () => { apply(); player.playVideo(); resolve(); },
+            onStateChange: (e) => onState(e.data),
+            onError: () => { stopTimer(); emit("error"); },
+          },
+        });
+      }));
+    }
+    return {
+      addEventListener(type, fn, opts) {
+        const list = (listeners[type] = listeners[type] || []);
+        const wrapped = opts && opts.once ? () => { list.splice(list.indexOf(wrapped), 1); fn(); } : fn;
+        list.push(wrapped);
+      },
+      get src() { return id ? `yt:${id}` : ""; },
+      set src(v) { id = String(v || "").replace(/^yt:/, ""); },
+      play() { return id ? load() : Promise.reject(new Error("no video")); },
+      pause() { if (player && player.pauseVideo) player.pauseVideo(); },
+      hide() { this.pause(); const el = document.getElementById("wcd-yt"); if (el) el.classList.remove("is-on"); },
+      get paused() { return state !== 1 && state !== 3; },
+      get currentTime() { return player && player.getCurrentTime ? player.getCurrentTime() || 0 : 0; },
+      set currentTime(t) { if (player && player.seekTo) player.seekTo(t, true); },
+      get duration() { const d = player && player.getDuration ? player.getDuration() : 0; return d || NaN; },
+      get buffered() { return { length: 0 }; },
+      get volume() { return vol; }, set volume(v) { vol = v; apply(); },
+      get muted() { return mute; }, set muted(v) { mute = !!v; apply(); },
+      get playbackRate() { return rate; }, set playbackRate(v) { rate = v || 1; apply(); },
+    };
+  }
 
   // Boshqa (eski) audio elementlari o'ynasa, global pleyer to'xtaydi
   document.addEventListener("wcd-audio-play", (e) => { if (e.detail !== audio) audio.pause(); });

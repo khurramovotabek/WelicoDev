@@ -207,11 +207,13 @@ def thumb(image, width=640, quality=80):
 
 
 def track_payload(t):
-    """Global pleyer uchun trek ma'lumoti (faqat audio fayli borlar)."""
+    """Global pleyer uchun trek ma'lumoti: audio fayl yoki YouTube video ("yt:<id>" — embed orqali ijro)."""
     from apps.core.thumbs import thumb_url
 
+    yt = "" if t.audio else t.youtube_id
     return {
-        "id": t.pk, "src": t.audio.url, "title": t.title, "artist": t.artist, "album": t.album or "",
+        "id": t.pk, "src": t.audio.url if t.audio else f"yt:{yt}", "yt": yt, "url": t.external_url or "",
+        "title": t.title, "artist": t.artist, "album": t.album or "",
         "note": t.note or "", "duration": t.duration or "", "cover": thumb_url(t.cover, 512) if t.cover else "",
     }
 
@@ -221,7 +223,7 @@ def tracks_json(tracks, element_id):
     """{% tracks_json tracks "music-tracks" %} -> <script type="application/json" id="music-tracks">[...]</script>"""
     from django.utils.html import json_script
 
-    return json_script([track_payload(t) for t in tracks if t.audio], element_id)
+    return json_script([track_payload(t) for t in tracks if t.is_playable], element_id)
 
 
 @register.filter
