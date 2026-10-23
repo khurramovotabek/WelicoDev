@@ -85,7 +85,7 @@ class Command(BaseCommand):
         s.save()
 
         for i, (platform, url) in enumerate([
-            ("github", "https://github.com/"),
+            ("github", "https://github.com/khurramovotabek"),
             ("linkedin", "https://www.linkedin.com/"),
             ("telegram", "https://t.me/welicodevbot"),
             ("youtube", "https://www.youtube.com/"),
