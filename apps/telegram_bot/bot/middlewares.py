@@ -1,3 +1,4 @@
+import re
 from typing import Any, Awaitable, Callable
 
 from aiogram import BaseMiddleware
@@ -22,7 +23,7 @@ class UserMiddleware(BaseMiddleware):
         data["is_new"] = created
 
         if not settings_obj.is_enabled and not user.is_staff:
-            await _answer(event, settings_obj.maintenance_text)
+            await _answer(event, settings_obj.tg_text("maintenance_text", data["lang"]))
             return None
         if user.is_blocked:
             await _answer(event, t("blocked", data["lang"]))
@@ -34,4 +35,5 @@ async def _answer(event, text):
     if isinstance(event, Message):
         await event.answer(text)
     elif isinstance(event, CallbackQuery):
-        await event.answer(text, show_alert=True)
+        # Alert oynasi HTML'ni qo'llamaydi
+        await event.answer(re.sub(r"<[^>]+>", "", text)[:200], show_alert=True)

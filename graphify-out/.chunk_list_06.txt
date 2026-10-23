@@ -1,5 +1,0 @@
-/home/welicodev/Backend/Cloud/portfolio/designs/404-not-found.jpg
-/home/welicodev/Backend/Cloud/portfolio/designs/about.jpg
-/home/welicodev/Backend/Cloud/portfolio/designs/add-blog.jpg
-/home/welicodev/Backend/Cloud/portfolio/designs/add-project.jpg
-/home/welicodev/Backend/Cloud/portfolio/designs/articsles.jpg

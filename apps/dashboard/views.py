@@ -580,7 +580,7 @@ def bot_settings(request):
         form.save()
         messages.success(request, _("Bot sozlamalari saqlandi"))
         return redirect("dashboard:bot_settings")
-    return _render(request, "dashboard/bot_settings.html", {"form": form})
+    return _render(request, "dashboard/bot_settings.html", {"form": form, "langs": settings.LANGUAGES})
 
 
 @staff

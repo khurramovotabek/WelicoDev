@@ -160,7 +160,7 @@
   .btn-primary:hover { box-shadow: 0 14px 40px -8px rgb(var(--accent-strong) / .9), inset 0 1px 0 rgba(255,255,255,.3); }
   .btn-danger { background: rgb(var(--danger) / .14); color: rgb(var(--danger)); border: 1px solid rgb(var(--danger) / .4); }
   .btn-sm { @apply px-3.5 py-1.5 text-xs; }
-  .btn-icon { @apply glass glass--pill grid place-items-center w-10 h-10 text-ink; box-shadow: none; }
+  .btn-icon { @apply glass glass--pill grid place-items-center w-10 h-10 shrink-0 p-0 text-ink; aspect-ratio: 1; box-shadow: none; }
   .btn-icon:hover { background: var(--glass-fill-hover); }
   .btn-icon svg { width: 18px; height: 18px; }
 
@@ -254,7 +254,7 @@
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
   .player-bar { @apply glass glass--strong; position: relative; overflow: visible; border-radius: 22px; padding: 0; }
   .player-pop { @apply glass glass--strong; position: absolute; bottom: calc(100% + 10px); padding: 16px; display: flex; flex-direction: column; gap: 16px; border-radius: 22px; }
-  .player-btn { @apply grid place-items-center w-9 h-9 rounded-full text-ink-2 transition; }
+  .player-btn { @apply grid place-items-center w-9 h-9 shrink-0 rounded-full text-ink-2 transition; }
   .player-btn:hover { @apply text-ink; background: var(--glass-fill-hover); }
   .player-btn.is-on { color: rgb(var(--accent)); background: rgb(var(--accent-strong) / .16); }
   .player-play { @apply grid place-items-center w-11 h-11 rounded-full transition active:scale-95; background: var(--btn-light); color: rgb(var(--btn-light-ink));
@@ -272,6 +272,23 @@
   @keyframes player-spin { to { transform: rotate(360deg); } }
   .eq-bar { display: block; width: 2px; height: 30%; border-radius: 9999px; background: #fff; animation: eq .9s ease-in-out infinite; }
   @keyframes eq { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+  /* Musiqa sahifasi: vinil, vizualizator va sudraladigan progress */
+  .vinyl { position: absolute; inset: 6%; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+  .vinyl.is-out { transform: translateX(36%); }
+  .vinyl__disc { position: absolute; inset: 0; border-radius: 9999px; background: repeating-radial-gradient(circle at 50% 50%, #0b0d14 0 2px, #171b29 2px 4px);
+    box-shadow: 0 20px 50px -15px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.06); }
+  .vinyl__disc::after { content: ""; position: absolute; inset: 34%; border-radius: inherit; background: var(--vinyl-label, rgb(var(--accent-strong))); background-size: cover; background-position: center; box-shadow: inset 0 0 0 3px rgba(0,0,0,.35); }
+  .vinyl.is-spinning .vinyl__disc { animation: player-spin 4s linear infinite; }
+  .music-seek { position: relative; height: 22px; cursor: pointer; touch-action: none; }
+  .music-seek__track { position: absolute; left: 0; right: 0; top: 9px; height: 4px; border-radius: 9999px; background: rgb(var(--ink) / .14); transition: height .15s, top .15s; }
+  .music-seek:hover .music-seek__track, .music-seek.is-drag .music-seek__track { top: 8px; height: 6px; }
+  .music-seek__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: linear-gradient(90deg, rgb(var(--accent-strong)), rgb(var(--violet)), rgb(var(--accent))); box-shadow: 0 0 14px rgb(var(--accent) / .6); }
+  .music-seek__knob { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 9999px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.45); transform: scale(0); transition: transform .15s; }
+  .music-seek:hover .music-seek__knob, .music-seek.is-drag .music-seek__knob { transform: scale(1); }
+  .music-seek__tip { position: absolute; bottom: 100%; transform: translateX(-50%); margin-bottom: 6px; padding: 2px 7px; border-radius: 8px; font-size: 11px; background: rgb(0 0 0 / .75); color: #fff; pointer-events: none; white-space: nowrap; }
+  .music-ctl { @apply grid place-items-center w-11 h-11 shrink-0 rounded-full text-ink-2 transition; }
+  .music-ctl:hover { @apply text-ink; background: var(--glass-fill-hover); }
+  .music-ctl.is-on { color: rgb(var(--accent)); background: rgb(var(--accent-strong) / .16); }
   body.has-player { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
   body.has-player #toasts { bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important; }
 

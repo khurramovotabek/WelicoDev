@@ -37,7 +37,7 @@ async def cmd_start(message: Message, command: CommandObject, state: FSMContext,
 
     if not user.is_registered:
         if is_new:
-            await message.answer(settings_obj.welcome_text)
+            await message.answer(settings_obj.tg_text("welcome_text", lang))
         await state.set_state(Reg.language)
         await message.answer(t("choose_lang", lang), reply_markup=lang_kb())
         return
@@ -48,7 +48,7 @@ async def cmd_start(message: Message, command: CommandObject, state: FSMContext,
         await send_login_confirmation(message, user, lang, data["pending_login"])
         await state.update_data(pending_login=None)
         return
-    await message.answer(settings_obj.welcome_text, reply_markup=main_menu(lang))
+    await message.answer(settings_obj.tg_text("welcome_text", lang), reply_markup=main_menu(lang))
     await message.answer(t("menu", lang), reply_markup=site_kb(lang))
 
 
@@ -102,7 +102,7 @@ async def on_phone(message: Message, state: FSMContext, user, lang):
     await state.set_state(None)
     settings_obj = await db.get_settings()
     await message.answer(t("registered", lang, name=user.first_name), reply_markup=main_menu(lang))
-    await message.answer(settings_obj.registered_text)
+    await message.answer(settings_obj.tg_text("registered_text", lang))
     await fetch_avatar(message.bot, user)
     await notify_new_user(message.bot, user, settings_obj)
     if data.get("pending_login"):

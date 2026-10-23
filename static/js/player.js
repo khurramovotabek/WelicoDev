@@ -39,8 +39,11 @@
       const bass = ctx.createBiquadFilter(); bass.type = "lowshelf"; bass.frequency.value = 200;
       const mid = ctx.createBiquadFilter(); mid.type = "peaking"; mid.frequency.value = 1500; mid.Q.value = 0.9;
       const treble = ctx.createBiquadFilter(); treble.type = "highshelf"; treble.frequency.value = 4500;
-      src.connect(bass).connect(mid).connect(treble).connect(ctx.destination);
-      nodes = { bass, mid, treble };
+      const analyser = ctx.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.82;
+      src.connect(bass).connect(mid).connect(treble).connect(analyser).connect(ctx.destination);
+      nodes = { bass, mid, treble, analyser };
+      // Vizualizatorlar (musiqa sahifasi) shu analizatordan chastota ma'lumotini o'qiydi
+      window.wcdAnalyser = analyser;
       store.applyEq();
     } catch (e) {
       nodes = null;

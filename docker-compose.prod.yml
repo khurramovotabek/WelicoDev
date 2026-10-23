@@ -1,0 +1,90 @@
+name: welicodev-prod
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: welicodev-prod-app
+  restart: unless-stopped
+  init: true
+  env_file:
+    - .env
+  environment:
+    DJANGO_SETTINGS_MODULE: config.settings.prod
+    POSTGRES_HOST: db
+    POSTGRES_PORT: "5432"
+    REDIS_URL: redis://redis:6379/0
+  volumes:
+    - welicodev_media:/app/media
+    - welicodev_protected_media:/app/protected_media
+    - welicodev_staticfiles:/app/staticfiles
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  networks:
+    - internal
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - welicodev_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - internal
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - welicodev_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks:
+      - internal
+
+  web:
+    <<: *app
+    command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput -v0 && exec uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --workers 2 --timeout-keep-alive 30 --proxy-headers --forwarded-allow-ips='*'"]
+    ports:
+      - "127.0.0.1:8010:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/robots.txt', headers={'Host': 'welicodev.uz', 'X-Forwarded-Proto': 'https'}), timeout=5).status == 200 else 1)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+  celery-worker:
+    <<: *app
+    command: ["celery", "-A", "config", "worker", "--loglevel=INFO", "--concurrency=2"]
+
+  celery-beat:
+    <<: *app
+    command: ["celery", "-A", "config", "beat", "--loglevel=INFO", "--schedule=/tmp/celerybeat-schedule"]
+
+volumes:
+  welicodev_postgres_data:
+  welicodev_redis_data:
+  welicodev_media:
+  welicodev_protected_media:
+  welicodev_staticfiles:
+
+networks:
+  internal:
+    driver: bridge

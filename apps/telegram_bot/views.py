@@ -1,9 +1,12 @@
 import json
+import logging
 import secrets
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+
+logger = logging.getLogger(__name__)
 
 
 def _webhook_secret():
@@ -24,6 +27,10 @@ async def webhook(request):
     from .bot.dispatcher import get_bot, get_dispatcher
 
     bot, dp = get_bot(), get_dispatcher()
-    update = Update.model_validate(json.loads(request.body), context={"bot": bot})
-    await dp.feed_update(bot, update)
+    try:
+        update = Update.model_validate(json.loads(request.body), context={"bot": bot})
+        await dp.feed_update(bot, update)
+    except Exception:  # noqa: BLE001
+        # 500 qaytsa Telegram shu update'ni qayta-qayta yuboradi va navbat tiqilib qoladi
+        logger.exception("Telegram update ishlovida xato")
     return HttpResponse("ok")

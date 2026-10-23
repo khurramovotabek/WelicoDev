@@ -10,15 +10,20 @@ class BotSettings(models.Model):
     """@welicodevbot sozlamalari (singleton). Dashboard'dan boshqariladi."""
 
     is_enabled = models.BooleanField(_("bot yoqilgan"), default=True)
-    maintenance_text = models.TextField(_("texnik ishlar matni"), blank=True, default="Bot vaqtincha texnik ishlar sababli to'xtatilgan.")
-    welcome_text = models.TextField(
-        _("salomlashish matni"),
-        default="Assalomu alaykum! WeliCoDev rasmiy botiga xush kelibsiz.\nBu yerda saytga kirish kodini olasiz, kurslar va yangiliklardan xabardor bo'lasiz.",
+    # Matnlar CKEditor (Telegram rejimi) orqali formatlanadi va uz/ru/en tillarida saqlanadi (translation.py)
+    maintenance_text = CKEditor5Field(_("texnik ishlar matni"), config_name="telegram", blank=True,
+                                      default="<p>Bot vaqtincha texnik ishlar sababli to'xtatilgan.</p>")
+    welcome_text = CKEditor5Field(
+        _("salomlashish matni"), config_name="telegram",
+        default="<p>Assalomu alaykum! <b>WeliCoDev</b> rasmiy botiga xush kelibsiz.</p>"
+                "<p>Bu yerda saytga kirish kodini olasiz, kurslar va yangiliklardan xabardor bo'lasiz.</p>",
     )
-    registered_text = models.TextField(_("ro'yxatdan o'tgandan keyingi matn"), default="Ro'yxatdan o'tdingiz! Endi saytga kirishingiz mumkin.")
-    help_text = models.TextField(
-        _("yordam matni"),
-        default="/login — saytga kirish kodi\n/profile — profilim\n/courses — kurslar\n/help — yordam",
+    registered_text = CKEditor5Field(_("ro'yxatdan o'tgandan keyingi matn"), config_name="telegram",
+                                     default="<p>Ro'yxatdan o'tdingiz! Endi saytga kirishingiz mumkin.</p>")
+    help_text = CKEditor5Field(
+        _("yordam matni"), config_name="telegram",
+        default="<ul><li>/login — saytga kirish kodi</li><li>/profile — profilim</li><li>/courses — kurslar</li>"
+                "<li>/help — yordam</li></ul>",
     )
     mini_app_button_text = models.CharField(_("Mini App tugmasi"), max_length=40, default="WeliCoDev")
 
@@ -33,6 +38,15 @@ class BotSettings(models.Model):
     auto_post_lessons = models.BooleanField(_("darslarni kanalga avtomatik joylash"), default=False)
 
     updated_at = models.DateTimeField(auto_now=True)
+
+    RICH_FIELDS = ("maintenance_text", "welcome_text", "registered_text", "help_text")
+
+    def tg_text(self, field, lang="uz"):
+        """Foydalanuvchi tilidagi matn Telegram HTML ko'rinishida (tarjima bo'lmasa o'zbekchasi)."""
+        from .formatting import html_to_telegram
+
+        value = getattr(self, f"{field}_{lang}", None) or getattr(self, f"{field}_uz", None) or getattr(self, field, "")
+        return html_to_telegram(value) or "—"
 
     class Meta:
         verbose_name = _("bot sozlamalari")

@@ -3,40 +3,60 @@
 {% block title %}{% trans "Musiqa" %}{% endblock %}
 {% block meta_description %}{% trans "Ishlayotganda, o'qiyotganda va yo'lda tinglaydigan sevimli musiqalarim." %}{% endblock %}
 {% block content %}
+{% trans "Hozir tinglayapman" as now_label %}{% trans "Tinglashga tayyor" as ready_label %}
 <a href="{% url 'gallery:index' %}" class="inline-flex items-center gap-2 text-sm text-ink-2 hover:text-ink pt-6"><i data-lucide="arrow-left" class="w-4 h-4"></i>Media</a>
 
 <section x-data="musicPlayer()" class="flex flex-col gap-5 pt-4">
   <div class="grid lg:grid-cols-[1.1fr_1fr] gap-5 items-stretch">
     {# ------------------------------------------------ Hozir ijro etilmoqda #}
-    <div class="glass p-5 sm:p-7 flex flex-col sm:flex-row gap-6 relative overflow-hidden">
-      <div class="absolute -left-20 -top-20 w-72 h-72 rounded-full blur-3xl opacity-50 transition-all duration-700" :style="`background: ${glow}`" aria-hidden="true"></div>
-      <div class="relative shrink-0 mx-auto sm:mx-0">
-        <img :src="cur.cover" x-show="cur.cover" alt="" class="w-48 h-48 sm:w-56 sm:h-56 rounded-3xl object-cover shadow-2xl transition duration-500" :class="playing && 'scale-[1.03]'">
-        <span class="absolute -bottom-3 -right-3 grid place-items-center w-12 h-12 rounded-full bg-accent-strong text-white shadow-lg" x-show="playing" x-cloak><span class="flex items-end gap-0.5 h-4"><i class="w-1 bg-white rounded-full animate-[eq_.9s_ease-in-out_infinite]"></i><i class="w-1 bg-white rounded-full animate-[eq_.7s_ease-in-out_infinite_.2s]"></i><i class="w-1 bg-white rounded-full animate-[eq_1s_ease-in-out_infinite_.1s]"></i></span></span>
-      </div>
-      <div class="relative flex-1 min-w-0 flex flex-col">
-        <span class="eyebrow w-fit"><span class="dot"></span>{% trans "Hozir tinglayapman" %}</span>
-        <h1 class="text-3xl sm:text-4xl font-semibold mt-3 leading-tight" x-text="cur.title"></h1>
-        <p class="text-ink-2 mt-1" x-text="cur.artist + (cur.album ? ' · ' + cur.album : '')"></p>
-        <p class="text-sm text-ink-3 mt-2 italic" x-show="cur.note" x-text="'“' + cur.note + '”'"></p>
-        <div class="mt-auto pt-5">
-          <div class="h-1.5 rounded-full bg-ink/15 cursor-pointer group" @click="seek($event)" role="slider" aria-label="{% trans 'Ijro joyi' %}" :aria-valuenow="Math.round(pct)">
-            <div class="h-full rounded-full bg-gradient-to-r from-accent-strong to-accent relative" :style="`width:${pct}%`"><span class="absolute -right-1.5 -top-1 w-3.5 h-3.5 rounded-full bg-white shadow opacity-0 group-hover:opacity-100 transition"></span></div>
+    <div class="glass p-5 sm:p-7 relative overflow-hidden flex flex-col">
+      <div class="absolute -left-24 -top-24 w-80 h-80 rounded-full blur-3xl opacity-50 transition-all duration-700 pointer-events-none" :style="`background: ${glow}`" aria-hidden="true"></div>
+      <canvas x-ref="viz" class="absolute inset-x-0 bottom-0 w-full h-40 opacity-60 pointer-events-none" aria-hidden="true"></canvas>
+      <div class="relative flex flex-col sm:flex-row gap-6 sm:gap-8">
+        {# Muqova + vinil #}
+        <div class="relative shrink-0 mx-auto sm:mx-0 w-52 h-52 sm:w-56 sm:h-56 sm:mr-14">
+          <div class="vinyl" :class="{'is-out': playing, 'is-spinning': playing}" :style="cur.cover && `--vinyl-label: url('${cur.cover}')`" aria-hidden="true"><span class="vinyl__disc"></span></div>
+          <img :src="cur.cover" x-show="cur.cover" alt="" class="relative w-full h-full rounded-3xl object-cover shadow-2xl transition duration-500" :class="playing && 'scale-[1.02]'">
+          <span x-show="!cur.cover" class="relative grid place-items-center w-full h-full rounded-3xl bg-gradient-to-br from-accent-strong/60 to-violet/60"><i data-lucide="music" class="w-12 h-12"></i></span>
+        </div>
+        <div class="flex-1 min-w-0 flex flex-col">
+          <span class="eyebrow w-fit"><span class="dot"></span><span x-text="playing ? '{{ now_label|escapejs }}' : '{{ ready_label|escapejs }}'"></span></span>
+          <h1 class="text-3xl sm:text-4xl font-semibold mt-3 leading-tight line-clamp-2" x-text="cur.title"></h1>
+          <p class="text-ink-2 mt-1 truncate" x-text="cur.artist + (cur.album ? ' · ' + cur.album : '')"></p>
+          <p class="text-sm text-ink-3 mt-2 italic line-clamp-2" x-show="cur.note" x-text="'“' + cur.note + '”'"></p>
+          <div class="flex flex-wrap gap-1.5 mt-3 text-[11px]">
+            <span class="chip !py-0.5" x-show="$store.player.rate !== 1" x-text="$store.player.rate + '×'"></span>
+            <span class="chip !py-0.5" x-show="$store.player.eqPreset !== 'flat'" x-text="'EQ · ' + $store.player.eqPreset"></span>
+            <span class="chip !py-0.5" x-show="$store.player.sleepLeft"><i data-lucide="moon" class="w-3 h-3"></i><span x-text="$store.player.sleepLeft"></span></span>
           </div>
-          <div class="flex justify-between text-[11px] text-ink-3 mt-1.5 tabular"><span x-text="current"></span><span x-text="total"></span></div>
-          <div class="flex items-center justify-center sm:justify-start gap-3 mt-3">
-            <button type="button" class="btn-icon w-10 h-10" :class="$store.player.shuffle && '!text-accent'" @click="$store.player.toggleShuffle()" aria-label="Shuffle"><i data-lucide="shuffle" class="!w-4 !h-4"></i></button>
-            <button type="button" class="btn-icon w-11 h-11" @click="prev()" aria-label="{% trans 'Oldingi' %}"><i data-lucide="skip-back" class="!w-5 !h-5"></i></button>
-            <button type="button" class="grid place-items-center w-16 h-16 rounded-full bg-white text-sky-950 shadow-[0_10px_30px_-8px_rgba(143,180,255,.8)] active:scale-95 transition" @click="toggle()" :aria-label="playing ? 'Pause' : 'Play'">
+        </div>
+      </div>
+
+      <div class="relative mt-6">
+        <div class="music-seek" :class="drag && 'is-drag'" x-ref="seek"
+             @pointerdown="startDrag($event)" @pointermove="hoverAt($event)" @pointerleave="tip = ''"
+             role="slider" tabindex="0" aria-label="{% trans 'Ijro joyi' %}" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="Math.round(shownPct)"
+             @keydown.right.prevent="$store.player.seekBy(5)" @keydown.left.prevent="$store.player.seekBy(-5)">
+          <div class="music-seek__track"><span class="music-seek__fill" :style="`width:${shownPct}%`"></span></div>
+          <span class="music-seek__knob" :style="`left:${shownPct}%`"></span>
+          <span class="music-seek__tip tabular" x-show="tip" x-cloak :style="`left:${tipX}px`" x-text="tip"></span>
+        </div>
+        <div class="flex justify-between text-[11px] text-ink-3 tabular"><span x-text="current"></span><span x-text="total"></span></div>
+
+        <div class="flex items-center justify-center sm:justify-between gap-2 mt-3">
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <button type="button" class="music-ctl" :class="$store.player.shuffle && 'is-on'" @click="$store.player.toggleShuffle()" aria-label="Shuffle" title="Shuffle"><i data-lucide="shuffle" class="w-4 h-4"></i></button>
+            <button type="button" class="music-ctl" @click="prev()" aria-label="{% trans 'Oldingi' %}"><i data-lucide="skip-back" class="w-5 h-5 fill-current"></i></button>
+            <button type="button" class="grid place-items-center w-16 h-16 shrink-0 rounded-full bg-white text-sky-950 shadow-[0_10px_30px_-8px_rgba(143,180,255,.8)] hover:scale-105 active:scale-95 transition" @click="toggle()" :aria-label="playing ? '{% trans "Pauza" %}' : '{% trans "Ijro etish" %}'">
               <span x-show="!playing"><i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i></span><span x-show="playing" x-cloak><i data-lucide="pause" class="w-7 h-7 fill-current"></i></span>
             </button>
-            <button type="button" class="btn-icon w-11 h-11" @click="next()" aria-label="{% trans 'Keyingi' %}"><i data-lucide="skip-forward" class="!w-5 !h-5"></i></button>
-            <button type="button" class="btn-icon w-10 h-10" :class="$store.player.repeat !== 'off' && '!text-accent'" @click="$store.player.cycleRepeat()" aria-label="Repeat"><span x-show="$store.player.repeat !== 'one'"><i data-lucide="repeat" class="!w-4 !h-4"></i></span><span x-show="$store.player.repeat === 'one'" x-cloak><i data-lucide="repeat-1" class="!w-4 !h-4"></i></span></button>
-            <div class="hidden md:flex items-center gap-2 ml-auto text-ink-3">
-              <button type="button" class="hover:text-ink" @click="$store.player.toggleMute()" aria-label="{% trans 'Ovozsiz' %}"><span x-show="$store.player.volumeIcon !== 'off'"><i data-lucide="volume-2" class="w-4 h-4"></i></span><span x-show="$store.player.volumeIcon === 'off'" x-cloak><i data-lucide="volume-x" class="w-4 h-4"></i></span></button>
-              <input type="range" min="0" max="1" step="0.01" :value="$store.player.muted ? 0 : $store.player.volume" @input="$store.player.setVolume($event.target.value)" class="player-volume !w-28" :style="`--v:${($store.player.muted ? 0 : $store.player.volume) * 100}%`" aria-label="{% trans 'Ovoz balandligi' %}">
-              <button type="button" class="btn-icon w-9 h-9" @click.stop="$store.player.track || $store.player.playFrom('music-tracks'); $nextTick(() => $store.player.panel = 'settings')" aria-label="{% trans 'Ovoz sozlamalari' %}" title="{% trans 'Ovoz sozlamalari' %}"><i data-lucide="sliders-horizontal" class="w-4 h-4"></i></button>
-            </div>
+            <button type="button" class="music-ctl" @click="next()" aria-label="{% trans 'Keyingi' %}"><i data-lucide="skip-forward" class="w-5 h-5 fill-current"></i></button>
+            <button type="button" class="music-ctl" :class="$store.player.repeat !== 'off' && 'is-on'" @click="$store.player.cycleRepeat()" :title="'Repeat: ' + $store.player.repeat" aria-label="Repeat"><span x-show="$store.player.repeat !== 'one'"><i data-lucide="repeat" class="w-4 h-4"></i></span><span x-show="$store.player.repeat === 'one'" x-cloak><i data-lucide="repeat-1" class="w-4 h-4"></i></span></button>
+          </div>
+          <div class="hidden md:flex items-center gap-2 text-ink-3">
+            <button type="button" class="music-ctl !w-9 !h-9" @click="$store.player.toggleMute()" aria-label="{% trans 'Ovozsiz' %}"><span x-show="$store.player.volumeIcon !== 'off'"><i data-lucide="volume-2" class="w-4 h-4"></i></span><span x-show="$store.player.volumeIcon === 'off'" x-cloak><i data-lucide="volume-x" class="w-4 h-4"></i></span></button>
+            <input type="range" min="0" max="1" step="0.01" :value="$store.player.muted ? 0 : $store.player.volume" @input="$store.player.setVolume($event.target.value)" class="player-volume" :style="`--v:${($store.player.muted ? 0 : $store.player.volume) * 100}%`" aria-label="{% trans 'Ovoz balandligi' %}">
+            <button type="button" class="music-ctl !w-9 !h-9" @click.stop="$store.player.track || $store.player.playFrom('music-tracks'); $nextTick(() => $store.player.panel = 'settings')" aria-label="{% trans 'Ovoz sozlamalari' %}" title="{% trans 'Ovoz sozlamalari' %}"><i data-lucide="sliders-horizontal" class="w-4 h-4"></i></button>
           </div>
         </div>
       </div>
@@ -93,20 +113,76 @@
   document.addEventListener("alpine:init", () => {
     // Sahifa ko'rinishi global pleyer (static/js/player.js) holatini aks ettiradi
     Alpine.data("musicPlayer", () => ({
-      list: [],
+      list: [], drag: false, dragPct: 0, tip: "", tipX: 0, raf: 0,
       get p() { return Alpine.store("player"); },
       get playing() { return this.p.playing; },
       get pct() { return this.p.pct; },
+      get shownPct() { return this.drag ? this.dragPct : this.pct; },
       get current() { return this.p.current; },
       get total() { return this.p.track ? this.p.total : (this.list[0] && this.list[0].duration) || "0:00"; },
       get cur() { return this.p.track || this.list[0] || { title: "{{ pick_label|escapejs }}", artist: "", cover: "" }; },
       get glow() { return this.playing ? "rgb(var(--violet))" : "rgb(var(--accent-strong))"; },
-      init() { this.list = window.wcdTracks("music-tracks"); },
+      init() {
+        this.list = window.wcdTracks("music-tracks");
+        this.draw = this.draw.bind(this);
+        this.raf = requestAnimationFrame(this.draw);
+      },
+      destroy() { cancelAnimationFrame(this.raf); },
+      // Spektr vizualizatori: player.js dagi AnalyserNode'dan chastotalarni chizadi
+      draw() {
+        this.raf = requestAnimationFrame(this.draw);
+        const c = this.$refs.viz, an = window.wcdAnalyser;
+        if (!c) return;
+        const dpr = window.devicePixelRatio || 1, w = c.clientWidth, h = c.clientHeight;
+        if (c.width !== w * dpr) { c.width = w * dpr; c.height = h * dpr; }
+        const g = c.getContext("2d");
+        g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        g.clearRect(0, 0, w, h);
+        if (!an || !this.playing || document.hidden) return;
+        const data = this.buf || (this.buf = new Uint8Array(an.frequencyBinCount));
+        an.getByteFrequencyData(data);
+        const bars = 48, gap = 3, bw = (w - gap * (bars - 1)) / bars;
+        const css = getComputedStyle(document.documentElement);
+        const grad = g.createLinearGradient(0, h, 0, 0);
+        grad.addColorStop(0, `rgb(${css.getPropertyValue("--accent-strong")} / .9)`);
+        grad.addColorStop(1, `rgb(${css.getPropertyValue("--violet")} / .15)`);
+        g.fillStyle = grad;
+        for (let i = 0; i < bars; i++) {
+          const v = data[Math.floor((i / bars) * data.length * 0.75)] / 255;
+          const bh = Math.max(2, v * v * h);
+          g.beginPath();
+          g.roundRect(i * (bw + gap), h - bh, bw, bh, [bw / 2, bw / 2, 0, 0]);
+          g.fill();
+        }
+      },
+      pctAt(ev) {
+        const r = this.$refs.seek.getBoundingClientRect();
+        return { pct: Math.max(0, Math.min(100, ((ev.clientX - r.left) / r.width) * 100)), x: ev.clientX - r.left };
+      },
+      hoverAt(ev) {
+        const { pct, x } = this.pctAt(ev);
+        if (this.drag) this.dragPct = pct;
+        const d = this.p.audio && this.p.audio.duration;
+        this.tipX = x;
+        this.tip = d ? `${Math.floor((pct / 100) * d / 60)}:${String(Math.floor(((pct / 100) * d) % 60)).padStart(2, "0")}` : "";
+      },
+      startDrag(ev) {
+        if (!this.p.track) { this.p.playFrom("music-tracks"); return; }
+        this.drag = true;
+        this.dragPct = this.pctAt(ev).pct;
+        ev.currentTarget.setPointerCapture(ev.pointerId);
+        const up = () => {
+          const a = this.p.audio;
+          if (a && a.duration) a.currentTime = (this.dragPct / 100) * a.duration;
+          this.drag = false;
+          window.removeEventListener("pointerup", up);
+        };
+        window.addEventListener("pointerup", up);
+      },
       playId(id) { this.p.playFrom("music-tracks", id); },
       toggle() { this.p.track ? this.p.toggle() : this.p.playFrom("music-tracks"); },
       next() { this.p.track ? this.p.next() : this.p.playFrom("music-tracks"); },
       prev() { this.p.track ? this.p.prev() : this.p.playFrom("music-tracks"); },
-      seek(ev) { this.p.seekTo(ev); },
     }));
   });
 </script>

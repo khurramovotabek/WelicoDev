@@ -7,3 +7,6 @@ staticfiles/
 node_modules/
 static/dist/
 *.sqlite3
+protected_media/
+graphify-out/
+.idea/

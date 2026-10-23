@@ -110,7 +110,7 @@ msgstr "Требуется одобрение админа"
 msgid "Admin: tasdiqlash"
 msgstr "Админ: подтверждение"
 
-#: templates/dashboard/bot_settings.html:22
+#: templates/dashboard/bot_settings.html:25
 msgid "Adminga bildirishnomalar"
 msgstr "Уведомления админу"
 
@@ -122,16 +122,16 @@ msgstr "Отличные идеи"
 msgid "Albomlar"
 msgstr "Альбомы"
 
-#: templates/404.html:17 templates/core/contact.html:3
+#: templates/404.html:17 templates/core/contact.html:5
 #: templates/dashboard/settings.html:16
 msgid "Aloqa"
 msgstr "Контакты"
 
-#: templates/dashboard/bot_settings.html:26
+#: templates/dashboard/bot_settings.html:29
 msgid "Aloqa formasi va botga xabarlar"
 msgstr "Форма связи и сообщения боту"
 
-#: templates/core/contact.html:24
+#: templates/core/contact.html:26
 msgid "Aloqa ma'lumotlari"
 msgstr "Контактная информация"
 
@@ -216,11 +216,11 @@ msgstr ""
 msgid "Audio fayl"
 msgstr "Аудиофайл"
 
-#: apps/dashboard/forms.py:287
+#: apps/dashboard/forms.py:286
 msgid "Audio fayl 30 MB dan oshmasin"
 msgstr "Аудиофайл не более 30 МБ"
 
-#: apps/dashboard/forms.py:295
+#: apps/dashboard/forms.py:294
 msgid "Audio fayl yuklang yoki tashqi havola kiriting"
 msgstr "Загрузите аудиофайл или укажите внешнюю ссылку"
 
@@ -236,7 +236,7 @@ msgstr "Аватар"
 msgid "Avtomatik joylash"
 msgstr "Автопубликация"
 
-#: templates/core/contact.html:75
+#: templates/core/contact.html:77
 msgid "Ba'zan tezkor suhbat eng yaxshi boshlanish. Telegram orqali yozing."
 msgstr "Иногда быстрый разговор — лучшее начало. Напишите в Telegram."
 
@@ -244,7 +244,7 @@ msgstr "Иногда быстрый разговор — лучшее начал
 msgid "Barcha darajalar"
 msgstr "Все уровни"
 
-#: apps/telegram_bot/models.py:59
+#: apps/telegram_bot/models.py:73
 msgid "Barcha foydalanuvchilar"
 msgstr "Все пользователи"
 
@@ -565,7 +565,7 @@ msgstr "Токен бота ещё не указан"
 msgid "Bot tokeni sozlanmagan (.env → TELEGRAM_BOT_TOKEN)"
 msgstr "Токен бота не настроен (.env → TELEGRAM_BOT_TOKEN)"
 
-#: templates/dashboard/bot_settings.html:18
+#: templates/dashboard/bot_settings.html:21
 msgid "Bot yoqilgan"
 msgstr "Бот включён"
 
@@ -675,7 +675,7 @@ msgstr "Скачать CV"
 msgid "Chiqish"
 msgstr "Выйти"
 
-#: apps/telegram_bot/models.py:102
+#: apps/telegram_bot/models.py:116
 msgid "Chiquvchi"
 msgstr "Исходящее"
 
@@ -687,7 +687,7 @@ msgstr "Уровень"
 msgid "Daraja (Bakalavr, o'rta ma'lumot...)"
 msgstr "Степень (бакалавр, среднее образование...)"
 
-#: templates/dashboard/courses.html:26 apps/telegram_bot/models.py:156
+#: templates/dashboard/courses.html:26 apps/telegram_bot/models.py:170
 msgid "Dars"
 msgstr "Урок"
 
@@ -708,7 +708,7 @@ msgstr ""
 "Уроки открываются по порядку. Пройдёте все — получите проверяемый "
 "сертификат."
 
-#: templates/dashboard/bot_settings.html:33
+#: templates/dashboard/bot_settings.html:36
 msgid "Darslarni avtomatik joylash"
 msgstr "Автопубликация уроков"
 
@@ -806,11 +806,11 @@ msgstr "Моя активность"
 msgid "Faollik"
 msgstr "Активность"
 
-#: apps/dashboard/forms.py:220
+#: apps/dashboard/forms.py:219
 msgid "Faqat Telegram username: harf, raqam va _"
 msgstr "Только Telegram username: буквы, цифры и _"
 
-#: apps/telegram_bot/models.py:63
+#: apps/telegram_bot/models.py:77
 msgid "Faqat adminlar (test)"
 msgstr "Только админы (тест)"
 
@@ -883,7 +883,7 @@ msgstr "Текст футера"
 msgid "Formada xatolar bor. Belgilangan maydonlarni tekshiring."
 msgstr "В форме есть ошибки. Проверьте отмеченные поля."
 
-#: templates/core/contact.html:19
+#: templates/core/contact.html:21
 msgid "Formani to'ldiring, imkon qadar tez javob beraman."
 msgstr "Заполните форму, и я отвечу как можно скорее."
 
@@ -981,10 +981,6 @@ msgid "Google Maps'da joyni o'ng tugma bilan bosing va birinchi raqamni oling"
 msgstr ""
 "В Google Maps кликните правой кнопкой по месту и возьмите первое число"
 
-#: templates/core/contact.html:46
-msgid "Google Maps'da ochish"
-msgstr "Открыть в Google Maps"
-
 #: apps/core/models.py:158
 msgid "Google Search Console kodi"
 msgstr "Код Google Search Console"
@@ -1073,7 +1069,7 @@ msgstr "Пока нет премиум-курсов"
 msgid "Hali sharh yo'q."
 msgstr "Отзывов пока нет."
 
-#: templates/gallery/music.html:83 templates/dashboard/music.html:20
+#: templates/gallery/music.html:103 templates/dashboard/music.html:20
 #: templates/gallery/partials/music-list.html:37
 msgid "Hali trek yo'q"
 msgstr "Треков пока нет"
@@ -1106,6 +1102,14 @@ msgid ""
 msgstr ""
 "Каждый урок короткий и практичный. Прогресс сохраняется автоматически."
 
+#: templates/dashboard/bot_settings.html:11
+msgid ""
+"Har bir matn foydalanuvchi tanlagan tilda yuboriladi. Formatlash (qalin, "
+"kursiv, havola, kod, ro'yxat, iqtibos) Telegram'da aynan shunday ko'rinadi."
+msgstr ""
+"Каждый текст отправляется на языке пользователя. Форматирование (жирный, "
+"курсив, ссылка, код, список, цитата) в Telegram выглядит так же."
+
 #: templates/dashboard/home.html:10
 msgid "Har kuni bir qadam."
 msgstr "Шаг за шагом."
@@ -1118,7 +1122,7 @@ msgstr "Ссылка"
 msgid "Havola (GitHub)"
 msgstr "Ссылка (GitHub)"
 
-#: apps/dashboard/forms.py:236
+#: apps/dashboard/forms.py:235
 msgid "Havola https://, mailto: yoki tel: bilan boshlanishi kerak"
 msgstr "Ссылка должна начинаться с https://, mailto: или tel:"
 
@@ -1193,7 +1197,7 @@ msgid "Hodisalar yo'q"
 msgstr "Событий нет"
 
 #: templates/dashboard/skills.html:15 templates/dashboard/articles.html:17
-#: templates/dashboard/bot_settings.html:17
+#: templates/dashboard/bot_settings.html:20
 msgid "Holat"
 msgstr "Статус"
 
@@ -1225,7 +1229,7 @@ msgstr "Сейчас изучаю"
 msgid "Hozir shu yerda"
 msgstr "Сейчас здесь"
 
-#: templates/gallery/music.html:18
+#: templates/gallery/music.html:6
 #: templates/gallery/partials/mini_player.html:7
 msgid "Hozir tinglayapman"
 msgstr "Сейчас слушаю"
@@ -1268,16 +1272,16 @@ msgstr "Документ"
 msgid "Ijro etilmoqda"
 msgstr "Играет"
 
-#: templates/partials/player_dock.html:86
+#: templates/gallery/music.html:50 templates/partials/player_dock.html:86
 #: templates/gallery/partials/mini_player.html:13
 msgid "Ijro etish"
 msgstr "Воспроизвести"
 
-#: templates/gallery/music.html:23 templates/partials/player_dock.html:66
+#: templates/gallery/music.html:38 templates/partials/player_dock.html:66
 msgid "Ijro joyi"
 msgstr "Позиция воспроизведения"
 
-#: templates/core/contact.html:34 templates/dashboard/settings.html:15
+#: templates/core/contact.html:36 templates/dashboard/settings.html:15
 #: templates/dashboard/settings.html:99
 msgid "Ijtimoiy tarmoqlar"
 msgstr "Соцсети"
@@ -1343,7 +1347,7 @@ msgstr "Опыт работы"
 msgid "Ish vaqt chizig'i"
 msgstr "Хронология работы"
 
-#: templates/core/contact.html:29 templates/dashboard/settings.html:140
+#: templates/core/contact.html:31 templates/dashboard/settings.html:140
 msgid "Ish vaqti"
 msgstr "Часы работы"
 
@@ -1510,7 +1514,7 @@ msgstr "Демо"
 msgid "Jonli ko'rinish"
 msgstr "Предпросмотр"
 
-#: apps/telegram_bot/models.py:150
+#: apps/telegram_bot/models.py:164
 msgid "Joylandi"
 msgstr "Опубликовано"
 
@@ -1576,7 +1580,7 @@ msgstr "Камера"
 msgid "Kamida 2 ta belgi kiriting"
 msgstr "Введите минимум 2 символа"
 
-#: templates/dashboard/bot_settings.html:30 templates/dashboard/bot.html:42
+#: templates/dashboard/bot_settings.html:33 templates/dashboard/bot.html:42
 #: apps/telegram_bot/admin.py:20
 msgid "Kanal"
 msgstr "Канал"
@@ -1672,7 +1676,7 @@ msgstr "Найдите нужное"
 msgid "Ketma-ket ochiladi"
 msgstr "Открывается по порядку"
 
-#: templates/gallery/photo_detail.html:23 templates/gallery/music.html:33
+#: templates/gallery/photo_detail.html:23 templates/gallery/music.html:53
 #: templates/partials/player_dock.html:91
 msgid "Keyingi"
 msgstr "Следующая"
@@ -1725,7 +1729,7 @@ msgstr "Входы (30 дней)"
 msgid "Kirishni tasdiqlang yoki kodni kiriting"
 msgstr "Подтвердите вход или введите код"
 
-#: apps/telegram_bot/models.py:101
+#: apps/telegram_bot/models.py:115
 msgid "Kiruvchi"
 msgstr "Входящее"
 
@@ -1770,7 +1774,7 @@ msgstr "Навыки и технологии"
 msgid "Ko'nikmani tahrirlash"
 msgstr "Редактировать навык"
 
-#: templates/core/contact.html:61
+#: templates/core/contact.html:63
 msgid "Ko'p beriladigan savollar"
 msgstr "Частые вопросы"
 
@@ -1950,7 +1954,7 @@ msgstr "Доступ к курсам"
 msgid "Kursga yozildingiz! Birinchi darsdan boshlang."
 msgstr "Вы записаны! Начните с первого урока."
 
-#: apps/telegram_bot/models.py:61
+#: apps/telegram_bot/models.py:75
 msgid "Kursga yozilganlar"
 msgstr "Записавшиеся на курсы"
 
@@ -2189,7 +2193,7 @@ msgstr "Имя иконки Lucide: code-xml, rocket, trending-up, clapperboard"
 msgid "MP3, M4A, OGG · 30 MB gacha"
 msgstr "MP3, M4A, OGG · до 30 МБ"
 
-#: apps/dashboard/forms.py:289
+#: apps/dashboard/forms.py:288
 msgid "MP3, M4A, OGG, WAV, AAC yoki FLAC fayl yuklang"
 msgstr "Загрузите MP3, M4A, OGG, WAV, AAC или FLAC"
 
@@ -2197,7 +2201,7 @@ msgstr "Загрузите MP3, M4A, OGG, WAV, AAC или FLAC"
 msgid "MP3/M4A/OGG. Fayl bo'lmasa, tashqi havola ishlatiladi"
 msgstr "MP3/M4A/OGG. Без файла используется внешняя ссылка"
 
-#: apps/telegram_bot/models.py:62
+#: apps/telegram_bot/models.py:76
 msgid "Ma'lum kurs o'quvchilari"
 msgstr "Студенты определённого курса"
 
@@ -2205,7 +2209,7 @@ msgstr "Студенты определённого курса"
 msgid "Ma'lumot"
 msgstr "Информация"
 
-#: templates/core/home.html:170
+#: templates/core/contact.html:49 templates/core/home.html:170
 msgid "Mahalliy vaqt"
 msgstr "Местное время"
 
@@ -2217,7 +2221,7 @@ msgstr "Для показа местного времени: Asia/Tashkent"
 msgid "Mahsulotlar"
 msgstr "Продукты"
 
-#: templates/core/contact.html:28 templates/dashboard/settings.html:124
+#: templates/core/contact.html:30 templates/dashboard/settings.html:124
 msgid "Manzil"
 msgstr "Адрес"
 
@@ -2256,7 +2260,7 @@ msgstr "Написать статью"
 msgid "Maqolalar"
 msgstr "Статьи"
 
-#: templates/dashboard/bot_settings.html:32
+#: templates/dashboard/bot_settings.html:35
 msgid "Maqolalarni avtomatik joylash"
 msgstr "Автопубликация статей"
 
@@ -2348,7 +2352,7 @@ msgstr ""
 msgid "Matn o'qilishi uchun: 0–80"
 msgstr "Для читаемости текста: 0–80"
 
-#: templates/dashboard/bot_settings.html:9 apps/telegram_bot/admin.py:15
+#: templates/dashboard/bot_settings.html:10 apps/telegram_bot/admin.py:15
 msgid "Matnlar"
 msgstr "Тексты"
 
@@ -2400,11 +2404,11 @@ msgstr "Полный список технологий, с которыми я �
 msgid "Men —"
 msgstr "Я —"
 
-#: templates/core/contact.html:34
+#: templates/core/contact.html:36
 msgid "Meni boshqa platformalarda toping"
 msgstr "Найдите меня на других платформах"
 
-#: templates/core/contact.html:43
+#: templates/core/contact.html:45
 msgid "Meni bu yerda toping"
 msgstr "Где меня найти"
 
@@ -2430,7 +2434,7 @@ msgstr "Meta-описание: 110–160 символов (сейчас %(n)s)"
 msgid "Meta tavsif uzunligi yaxshi (%(n)s belgi)"
 msgstr "Длина meta-описания в норме (%(n)s)"
 
-#: apps/telegram_bot/models.py:23
+#: templates/dashboard/bot_settings.html:16 apps/telegram_bot/models.py:28
 msgid "Mini App tugmasi"
 msgstr "Кнопка Mini App"
 
@@ -2552,7 +2556,7 @@ msgstr "Название"
 msgid "Nomi yoki ijrochi..."
 msgstr "Название или исполнитель..."
 
-#: apps/dashboard/forms.py:214
+#: apps/dashboard/forms.py:213
 msgid "Noto'g'ri vaqt zonasi. Masalan: Asia/Tashkent"
 msgstr "Неверный часовой пояс. Например: Asia/Tashkent"
 
@@ -2577,7 +2581,7 @@ msgstr "Удалено"
 msgid "O'chirilsa, foydalanuvchi kursni ko'ra olmaydi"
 msgstr "Если выключить, пользователь не увидит курс"
 
-#: templates/dashboard/bot_settings.html:18
+#: templates/dashboard/bot_settings.html:21
 msgid "O'chirilsa, foydalanuvchilarga texnik ishlar matni ko'rsatiladi"
 msgstr "Если выключить, пользователи увидят текст о техработах"
 
@@ -2739,7 +2743,7 @@ msgstr "Объектив"
 msgid "Ochish"
 msgstr "Открыть"
 
-#: templates/core/contact.html:52
+#: templates/core/contact.html:54
 msgid "Odatda javob beraman"
 msgstr "Обычно отвечаю в течение"
 
@@ -2751,7 +2755,7 @@ msgstr "Обычный"
 msgid "Oldindan ko'rish"
 msgstr "Предпросмотр"
 
-#: templates/gallery/photo_detail.html:22 templates/gallery/music.html:29
+#: templates/gallery/photo_detail.html:22 templates/gallery/music.html:49
 #: templates/partials/player_dock.html:85
 msgid "Oldingi"
 msgstr "Предыдущая"
@@ -2788,11 +2792,11 @@ msgstr "Рассылки"
 msgid "Orqaga"
 msgstr "Назад"
 
-#: templates/gallery/music.html:37 templates/partials/player_dock.html:106
+#: templates/gallery/music.html:58 templates/partials/player_dock.html:106
 msgid "Ovoz balandligi"
 msgstr "Громкость"
 
-#: templates/gallery/music.html:38 templates/gallery/music.html:38
+#: templates/gallery/music.html:59 templates/gallery/music.html:59
 #: templates/partials/player_dock.html:9
 msgid "Ovoz sozlamalari"
 msgstr "Настройки звука"
@@ -2801,7 +2805,7 @@ msgstr "Настройки звука"
 msgid "Ovozni yoqish"
 msgstr "Включить звук"
 
-#: templates/gallery/music.html:36 templates/partials/player_dock.html:101
+#: templates/gallery/music.html:57 templates/partials/player_dock.html:101
 msgid "Ovozsiz"
 msgstr "Без звука"
 
@@ -2841,7 +2845,7 @@ msgstr "Пароля нет: вход только через Telegram."
 msgid "Pastdagi tugmani bosing yoki QR kodni telefoningizda skanerlang"
 msgstr "Нажмите кнопку ниже или отсканируйте QR-код телефоном"
 
-#: templates/partials/player_dock.html:86
+#: templates/gallery/music.html:50 templates/partials/player_dock.html:86
 #: templates/gallery/partials/mini_player.html:13
 msgid "Pauza"
 msgstr "Пауза"
@@ -2874,11 +2878,11 @@ msgstr "Плейлист"
 msgid "Pleylist saqlandi"
 msgstr "Плейлист сохранён"
 
-#: templates/gallery/music.html:56 templates/dashboard/music.html:26
+#: templates/gallery/music.html:76 templates/dashboard/music.html:26
 msgid "Pleylist yo'q"
 msgstr "Плейлистов нет"
 
-#: templates/gallery/music.html:47 templates/dashboard/music.html:10
+#: templates/gallery/music.html:67 templates/dashboard/music.html:10
 #: templates/dashboard/music.html:24
 msgid "Pleylistlar"
 msgstr "Плейлисты"
@@ -3092,7 +3096,7 @@ msgstr "Любопытство"
 msgid "Qo'lda ruxsat berish"
 msgstr "Выдать доступ вручную"
 
-#: apps/telegram_bot/models.py:154
+#: apps/telegram_bot/models.py:168
 msgid "Qo'lda yozilgan"
 msgstr "Написан вручную"
 
@@ -3191,8 +3195,8 @@ msgstr "Сменить фото"
 msgid "Rejalashtirildi: %(t)s"
 msgstr "Запланировано: %(t)s"
 
-#: templates/dashboard/channel.html:18 apps/telegram_bot/models.py:67
-#: apps/telegram_bot/models.py:149
+#: templates/dashboard/channel.html:18 apps/telegram_bot/models.py:81
+#: apps/telegram_bot/models.py:163
 msgid "Rejalashtirilgan"
 msgstr "Запланировано"
 
@@ -3213,7 +3217,11 @@ msgstr ""
 msgid "Ro'yxatdan o'tgan"
 msgstr "Зарегистрирован"
 
-#: apps/telegram_bot/models.py:60
+#: templates/dashboard/bot_settings.html:14
+msgid "Ro'yxatdan o'tgandan keyingi matn"
+msgstr "Текст после регистрации"
+
+#: apps/telegram_bot/models.py:74
 msgid "Ro'yxatdan o'tganlar"
 msgstr "Зарегистрированные"
 
@@ -3304,6 +3312,10 @@ msgstr "Привет,"
 #, python-format
 msgid "Salom, men %(name)s."
 msgstr "Привет, я %(name)s."
+
+#: templates/dashboard/bot_settings.html:13
+msgid "Salomlashish matni"
+msgstr "Приветствие"
 
 #: templates/dashboard/articles.html:17
 #: templates/education/certificate.html:14
@@ -3477,7 +3489,7 @@ msgstr "Поделитесь любимым медиа"
 msgid "Sevimli musiqalarim"
 msgstr "Моя любимая музыка"
 
-#: templates/gallery/index.html:54 templates/gallery/music.html:66
+#: templates/gallery/index.html:54 templates/gallery/music.html:86
 #: templates/dashboard/music.html:9
 msgid "Sevimlilar"
 msgstr "Избранное"
@@ -3525,7 +3537,7 @@ msgstr "Личное фото (главная)"
 msgid "Shior"
 msgstr "Слоган"
 
-#: templates/core/contact.html:52
+#: templates/core/contact.html:54
 msgid "Shoshilinch masalalar uchun Telegram yoki telefon orqali yozing."
 msgstr "По срочным вопросам пишите в Telegram или звоните."
 
@@ -3658,7 +3670,7 @@ msgstr "Стартап"
 msgid "Statistika"
 msgstr "Статистика"
 
-#: templates/core/contact.html:76
+#: templates/core/contact.html:78
 msgid "Suhbatni boshlash"
 msgstr "Начать чат"
 
@@ -3824,7 +3836,7 @@ msgstr "На проверке"
 msgid "Tekshiruv o'zbekcha matn bo'yicha, saqlagandan keyin yangilanadi."
 msgstr "Проверка по узбекскому тексту, обновляется после сохранения."
 
-#: templates/core/contact.html:27 templates/dashboard/users.html:27
+#: templates/core/contact.html:29 templates/dashboard/users.html:27
 #: templates/dashboard/partials/user_panel.html:11
 msgid "Telefon"
 msgstr "Телефон"
@@ -3919,6 +3931,10 @@ msgstr "Написать в Telegram"
 msgid "Texnik ishlar"
 msgstr "Техработы"
 
+#: templates/dashboard/bot_settings.html:22
+msgid "Texnik ishlar matni"
+msgstr "Текст техработ"
+
 #: templates/portfolio/skills.html:13
 msgid "Texnologiya"
 msgstr "Технология"
@@ -3941,11 +3957,11 @@ msgstr "Технологии и инструменты"
 msgid "Texnologiyalar, daraja va o'rganish jarayoni."
 msgstr "Технологии, уровень и прогресс изучения."
 
-#: templates/core/contact.html:50
+#: templates/core/contact.html:52
 msgid "Tez javob"
 msgstr "Быстрый ответ"
 
-#: templates/core/contact.html:61
+#: templates/core/contact.html:63
 msgid "Tez-tez so'raladigan savollarga javoblar"
 msgstr "Ответы на частые вопросы"
 
@@ -3966,6 +3982,10 @@ msgstr "Восстановить"
 msgid "Til"
 msgstr "Язык"
 
+#: templates/gallery/music.html:6
+msgid "Tinglashga tayyor"
+msgstr "Готово к прослушиванию"
+
 #: templates/dashboard/base.html:39
 msgid "Tizim"
 msgstr "Система"
@@ -3974,7 +3994,7 @@ msgstr "Система"
 msgid "Tizim holati"
 msgstr "Состояние системы"
 
-#: templates/core/contact.html:74
+#: templates/core/contact.html:76
 msgid "To'g'ridan-to'g'ri yozmoqchimisiz?"
 msgstr "Хотите написать напрямую?"
 
@@ -4103,11 +4123,11 @@ msgstr "Добавить трек"
 msgid "Trek saqlandi"
 msgstr "Трек сохранён"
 
-#: templates/gallery/music.html:90
+#: templates/gallery/music.html:110
 msgid "Trek tanlang"
 msgstr "Выберите трек"
 
-#: templates/gallery/music.html:64 templates/dashboard/music.html:8
+#: templates/gallery/music.html:84 templates/dashboard/music.html:8
 #: templates/dashboard/playlist_form.html:10
 msgid "Treklar"
 msgstr "Треки"
@@ -4138,7 +4158,7 @@ msgstr "Пройденные уроки"
 msgid "Tugma matni"
 msgstr "Текст кнопки"
 
-#: apps/dashboard/forms.py:137 apps/dashboard/forms.py:268
+#: apps/dashboard/forms.py:137 apps/dashboard/forms.py:267
 msgid "Tugma uchun matn va havola birga kiritilishi kerak"
 msgstr "Текст и ссылка кнопки указываются вместе"
 
@@ -4241,7 +4261,7 @@ msgstr "Попытки исчерпаны. Войдите заново."
 msgid "Uyga vazifa"
 msgstr "Домашнее задание"
 
-#: templates/dashboard/bot_settings.html:27
+#: templates/dashboard/bot_settings.html:30
 msgid "Uyga vazifa topshirildi"
 msgstr "Домашнее задание сдано"
 
@@ -4371,11 +4391,11 @@ msgstr "Сообщение поставлено в очередь"
 msgid "Xabar yo'q"
 msgstr "Сообщений нет"
 
-#: apps/dashboard/forms.py:164
+#: apps/dashboard/forms.py:163
 msgid "Xabar yozing..."
 msgstr "Напишите сообщение..."
 
-#: templates/core/contact.html:19
+#: templates/core/contact.html:21
 msgid "Xabar yuborish"
 msgstr "Отправить сообщение"
 
@@ -4409,7 +4429,7 @@ msgstr "Карта: %(place)s"
 msgid "Xaritada"
 msgstr "На карте"
 
-#: templates/gallery/photo_detail.html:40 templates/core/contact.html:43
+#: templates/gallery/photo_detail.html:40 templates/core/contact.html:45
 #: templates/portfolio/experience_detail.html:76
 msgid "Xaritada ochish"
 msgstr "Открыть на карте"
@@ -4426,8 +4446,8 @@ msgstr ""
 "Кликните по карте или перетащите маркер — координаты заполнятся сами. "
 "Показывается на главной и в контактах."
 
-#: templates/dashboard/channel.html:19 apps/telegram_bot/models.py:70
-#: apps/telegram_bot/models.py:151
+#: templates/dashboard/channel.html:19 apps/telegram_bot/models.py:84
+#: apps/telegram_bot/models.py:165
 msgid "Xato"
 msgstr "Ошибка"
 
@@ -4472,7 +4492,7 @@ msgstr "Новые уроки и статьи первыми"
 msgid "Yangi darslar"
 msgstr "Новые уроки"
 
-#: templates/dashboard/bot_settings.html:23 apps/dashboard/views.py:120
+#: templates/dashboard/bot_settings.html:26 apps/dashboard/views.py:120
 msgid "Yangi foydalanuvchi"
 msgstr "Новый пользователь"
 
@@ -4492,11 +4512,11 @@ msgstr "Новые возможности"
 msgid "Yangi imkoniyatlar, hamkorlik va qiziqarli loyihalarga ochiqman."
 msgstr "Открыт к новым возможностям, сотрудничеству и интересным проектам."
 
-#: templates/core/contact.html:14
+#: templates/core/contact.html:16
 msgid "Yangi imkoniyatlarga ochiqman"
 msgstr "Открыт к новым возможностям"
 
-#: templates/dashboard/bot_settings.html:24 apps/dashboard/views.py:122
+#: templates/dashboard/bot_settings.html:27 apps/dashboard/views.py:122
 msgid "Yangi izoh"
 msgstr "Новый комментарий"
 
@@ -4540,7 +4560,7 @@ msgstr "Добавить новую статью"
 msgid "Yangi maqola va darslar birinchi bo'lib kanalda"
 msgstr "Новые статьи и уроки — сначала в канале"
 
-#: apps/telegram_bot/models.py:31
+#: apps/telegram_bot/models.py:36
 msgid "Yangi maqola va darslar shu kanalga e'lon qilinadi"
 msgstr "Новые статьи и уроки публикуются в этом канале"
 
@@ -4572,7 +4592,7 @@ msgstr "Не пропустите новые посты"
 msgid "Yangi sahifalar Yandex va Bing'ga darhol yuboriladi"
 msgstr "Новые страницы сразу отправляются в Яндекс и Bing"
 
-#: templates/dashboard/bot_settings.html:25 apps/dashboard/views.py:124
+#: templates/dashboard/bot_settings.html:28 apps/dashboard/views.py:124
 msgid "Yangi sharh"
 msgstr "Новый отзыв"
 
@@ -4648,6 +4668,10 @@ msgstr "Лет опыта"
 msgid "Yo'lim haqida ko'proq"
 msgstr "Подробнее о моём пути"
 
+#: templates/core/contact.html:49
+msgid "Yo'nalish"
+msgstr "Направление"
+
 #: templates/dashboard/experience_form.html:17
 msgid "Yo'nalish / fakultet"
 msgstr "Направление / факультет"
@@ -4685,6 +4709,10 @@ msgid ""
 "ko'rinadi."
 msgstr "Любимая музыка: показывается с плеером в разделе Медиа → Музыка."
 
+#: templates/dashboard/bot_settings.html:15
+msgid "Yordam matni (/help)"
+msgstr "Текст помощи (/help)"
+
 #: apps/gallery/models.py:102
 msgid "YouTube havolasi"
 msgstr "Ссылка YouTube"
@@ -4701,11 +4729,11 @@ msgstr "Ваши курсы и прогресс."
 msgid "Yozish yo'lim"
 msgstr "Мой путь в писательстве"
 
-#: apps/telegram_bot/models.py:69
+#: apps/telegram_bot/models.py:83
 msgid "Yuborildi"
 msgstr "Отправлено"
 
-#: apps/telegram_bot/models.py:68
+#: apps/telegram_bot/models.py:82
 msgid "Yuborilmoqda"
 msgstr "Отправляется"
 
@@ -4794,7 +4822,7 @@ msgstr "основные продукты"
 msgid "audio fayl"
 msgstr "аудиофайл"
 
-#: apps/telegram_bot/models.py:77
+#: apps/telegram_bot/models.py:91
 msgid "auditoriya"
 msgstr "аудитория"
 
@@ -4862,23 +4890,23 @@ msgstr "этап"
 msgid "bosqichlar"
 msgstr "этапы"
 
-#: apps/telegram_bot/models.py:141
+#: apps/telegram_bot/models.py:155
 msgid "bot hodisalari"
 msgstr "события бота"
 
-#: apps/telegram_bot/models.py:140
+#: apps/telegram_bot/models.py:154
 msgid "bot hodisasi"
 msgstr "событие бота"
 
-#: apps/telegram_bot/models.py:38 apps/telegram_bot/models.py:39
+#: apps/telegram_bot/models.py:52 apps/telegram_bot/models.py:53
 msgid "bot sozlamalari"
 msgstr "настройки бота"
 
-#: apps/telegram_bot/models.py:114
+#: apps/telegram_bot/models.py:128
 msgid "bot xabari"
 msgstr "сообщение бота"
 
-#: apps/telegram_bot/models.py:115
+#: apps/telegram_bot/models.py:129
 msgid "bot xabarlari"
 msgstr "сообщения бота"
 
@@ -4894,7 +4922,7 @@ msgstr "последняя активность в боте"
 msgid "botni bloklagan"
 msgstr "заблокировал бота"
 
-#: apps/telegram_bot/models.py:131
+#: apps/telegram_bot/models.py:145
 msgid "botni bloklash"
 msgstr "блокировка бота"
 
@@ -4906,7 +4934,7 @@ msgstr "название бренда"
 msgid "brend shiori"
 msgstr "слоган бренда"
 
-#: apps/telegram_bot/models.py:129
+#: apps/telegram_bot/models.py:143
 msgid "buyruq"
 msgstr "команда"
 
@@ -4914,7 +4942,7 @@ msgstr "команда"
 msgid "contact sahifasida"
 msgstr "на странице контактов"
 
-#: apps/telegram_bot/models.py:28
+#: apps/telegram_bot/models.py:33
 msgid "contact xabari haqida xabar"
 msgstr "уведомлять о сообщениях с сайта"
 
@@ -4953,7 +4981,7 @@ msgstr "язык курса"
 msgid "darslar"
 msgstr "уроки"
 
-#: apps/telegram_bot/models.py:33
+#: apps/telegram_bot/models.py:38
 msgid "darslarni kanalga avtomatik joylash"
 msgstr "автопубликация уроков в канал"
 
@@ -5060,7 +5088,7 @@ msgstr "Значение content из мета-тега google-site-verification
 msgid "havola"
 msgstr "ссылка"
 
-#: apps/telegram_bot/models.py:166
+#: apps/telegram_bot/models.py:180
 msgid "havola previewsiz"
 msgstr "без превью ссылок"
 
@@ -5110,7 +5138,7 @@ msgstr "текущие статусы"
 msgid "https://... yoki mailto:..."
 msgstr "https://... или mailto:..."
 
-#: apps/telegram_bot/models.py:72 apps/telegram_bot/models.py:161
+#: apps/telegram_bot/models.py:86 apps/telegram_bot/models.py:175
 msgid "ichki nomi"
 msgstr "внутреннее название"
 
@@ -5187,7 +5215,7 @@ msgstr "комментарии"
 msgid "izohlarga ruxsat"
 msgstr "разрешить комментарии"
 
-#: apps/telegram_bot/models.py:81
+#: apps/telegram_bot/models.py:95
 msgid "jami"
 msgstr "всего"
 
@@ -5216,7 +5244,7 @@ msgstr "время ответа"
 msgid "joy"
 msgstr "место"
 
-#: apps/telegram_bot/models.py:172
+#: apps/telegram_bot/models.py:186
 msgid "joylangan"
 msgstr "опубликовано"
 
@@ -5228,19 +5256,19 @@ msgstr "местоположение"
 msgid "kamera"
 msgstr "камера"
 
-#: apps/telegram_bot/models.py:31
+#: apps/telegram_bot/models.py:36
 msgid "kanal ID / @username"
 msgstr "ID канала / @username"
 
-#: apps/telegram_bot/models.py:179
+#: apps/telegram_bot/models.py:193
 msgid "kanal posti"
 msgstr "пост канала"
 
-#: apps/telegram_bot/models.py:180
+#: apps/telegram_bot/models.py:194
 msgid "kanal postlari"
 msgstr "посты канала"
 
-#: apps/telegram_bot/models.py:168
+#: apps/telegram_bot/models.py:182
 msgid "kanalda qadash"
 msgstr "закрепить в канале"
 
@@ -5260,7 +5288,7 @@ msgstr "последовательное открытие"
 msgid "kichik yozuv"
 msgstr "надзаголовок"
 
-#: apps/accounts/models.py:96 apps/telegram_bot/models.py:127
+#: apps/accounts/models.py:96 apps/telegram_bot/models.py:141
 msgid "kirish kodi"
 msgstr "код входа"
 
@@ -5276,7 +5304,7 @@ msgstr "запрос на вход"
 msgid "kirish so'rovlari"
 msgstr "запросы на вход"
 
-#: apps/telegram_bot/models.py:128
+#: apps/telegram_bot/models.py:142
 msgid "kirishni tasdiqlash"
 msgstr "подтверждение входа"
 
@@ -5440,7 +5468,7 @@ msgstr "категории статей"
 msgid "maqolalar"
 msgstr "статьи"
 
-#: apps/telegram_bot/models.py:32
+#: apps/telegram_bot/models.py:37
 msgid "maqolalarni kanalga avtomatik joylash"
 msgstr "автопубликация статей в канал"
 
@@ -5515,7 +5543,7 @@ msgstr "чему вы научитесь"
 msgid "nomi"
 msgstr "название"
 
-#: apps/telegram_bot/models.py:108
+#: apps/telegram_bot/models.py:122
 msgid "o'qilgan"
 msgstr "прочитано"
 
@@ -5565,15 +5593,15 @@ msgstr "назад"
 msgid "olingan vaqt"
 msgstr "время съёмки"
 
-#: apps/telegram_bot/models.py:90
+#: apps/telegram_bot/models.py:104
 msgid "ommaviy xabar"
 msgstr "рассылка"
 
-#: apps/telegram_bot/models.py:91
+#: apps/telegram_bot/models.py:105
 msgid "ommaviy xabarlar"
 msgstr "рассылки"
 
-#: apps/telegram_bot/models.py:167
+#: apps/telegram_bot/models.py:181
 msgid "ovozsiz yuborish"
 msgstr "без звука"
 
@@ -5593,7 +5621,7 @@ msgstr "плейлист"
 msgid "pleylistlar"
 msgstr "плейлисты"
 
-#: apps/telegram_bot/models.py:162
+#: apps/telegram_bot/models.py:176
 msgid "post matni"
 msgstr "текст поста"
 
@@ -5683,11 +5711,11 @@ msgstr "ресурсы"
 msgid "ro'yxatdan o'tgan"
 msgstr "зарегистрирован"
 
-#: apps/telegram_bot/models.py:18
+#: apps/telegram_bot/models.py:21
 msgid "ro'yxatdan o'tgandan keyingi matn"
 msgstr "текст после регистрации"
 
-#: apps/telegram_bot/models.py:126
+#: apps/telegram_bot/models.py:140
 msgid "ro'yxatdan o'tish"
 msgstr "регистрация"
 
@@ -5727,7 +5755,7 @@ msgstr "заголовки страниц"
 msgid "sahifa sarlavhasi"
 msgstr "заголовок страницы"
 
-#: apps/telegram_bot/models.py:15
+#: apps/telegram_bot/models.py:17
 msgid "salomlashish matni"
 msgstr "приветствие"
 
@@ -5886,7 +5914,7 @@ msgstr "проверено"
 msgid "telefon"
 msgstr "телефон"
 
-#: apps/telegram_bot/models.py:13
+#: apps/telegram_bot/models.py:14
 msgid "texnik ishlar matni"
 msgstr "текст о техработах"
 
@@ -5915,7 +5943,7 @@ msgstr "комментарий об оплате"
 msgid "to'lov uchun Telegram"
 msgstr "Telegram для оплаты"
 
-#: templates/gallery/index.html:19 templates/gallery/music.html:53
+#: templates/gallery/index.html:19 templates/gallery/music.html:73
 #: templates/dashboard/music.html:26
 msgid "trek"
 msgstr "трек"
@@ -5940,11 +5968,11 @@ msgstr "завершили"
 msgid "tugatilgan"
 msgstr "завершён"
 
-#: apps/telegram_bot/models.py:76 apps/telegram_bot/models.py:165
+#: apps/telegram_bot/models.py:90 apps/telegram_bot/models.py:179
 msgid "tugma havolasi"
 msgstr "ссылка кнопки"
 
-#: apps/telegram_bot/models.py:75 apps/telegram_bot/models.py:164
+#: apps/telegram_bot/models.py:89 apps/telegram_bot/models.py:178
 msgid "tugma matni"
 msgstr "текст кнопки"
 
@@ -5974,7 +6002,7 @@ msgstr "имя пользователя"
 msgid "uyga vazifa"
 msgstr "домашнее задание"
 
-#: apps/telegram_bot/models.py:29
+#: apps/telegram_bot/models.py:34
 msgid "uyga vazifa haqida xabar"
 msgstr "уведомлять о домашних заданиях"
 
@@ -6056,8 +6084,8 @@ msgstr "ссылка на карту"
 msgid "xarita yaqinligi"
 msgstr "масштаб карты"
 
-#: templates/dashboard/bot.html:57 apps/telegram_bot/models.py:83
-#: apps/telegram_bot/models.py:173
+#: templates/dashboard/bot.html:57 apps/telegram_bot/models.py:97
+#: apps/telegram_bot/models.py:187
 msgid "xato"
 msgstr "ошибок"
 
@@ -6070,11 +6098,11 @@ msgstr "завершён"
 msgid "yakunlangan yil"
 msgstr "год завершения"
 
-#: apps/telegram_bot/models.py:25
+#: apps/telegram_bot/models.py:30
 msgid "yangi foydalanuvchi haqida xabar"
 msgstr "уведомлять о новых пользователях"
 
-#: apps/telegram_bot/models.py:26
+#: apps/telegram_bot/models.py:31
 msgid "yangi izoh haqida xabar"
 msgstr "уведомлять о новых комментариях"
 
@@ -6082,7 +6110,7 @@ msgstr "уведомлять о новых комментариях"
 msgid "yangi kurs va maqolalar haqida xabar"
 msgstr "уведомлять о новых курсах и статьях"
 
-#: apps/telegram_bot/models.py:27
+#: apps/telegram_bot/models.py:32
 msgid "yangi sharh haqida xabar"
 msgstr "уведомлять о новых отзывах"
 
@@ -6131,7 +6159,7 @@ msgstr "закрытый"
 msgid "yopiq kurs"
 msgstr "закрытый курс"
 
-#: apps/telegram_bot/models.py:20
+#: apps/telegram_bot/models.py:24
 msgid "yordam matni"
 msgstr "текст помощи"
 
@@ -6139,11 +6167,11 @@ msgstr "текст помощи"
 msgid "yozilgan"
 msgstr "записан"
 
-#: apps/telegram_bot/models.py:82
+#: apps/telegram_bot/models.py:96
 msgid "yuborildi"
 msgstr "отправлено"
 
-#: apps/telegram_bot/models.py:79 apps/telegram_bot/models.py:169
+#: apps/telegram_bot/models.py:93 apps/telegram_bot/models.py:183
 msgid "yuborish vaqti"
 msgstr "время отправки"
 

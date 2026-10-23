@@ -147,13 +147,12 @@ class BroadcastForm(StyledMixin, forms.ModelForm):
 class BotSettingsForm(StyledMixin, forms.ModelForm):
     class Meta:
         model = BotSettings
-        exclude = []
-        widgets = {
-            "welcome_text": forms.Textarea(attrs={"rows": 4}),
-            "registered_text": forms.Textarea(attrs={"rows": 2}),
-            "help_text": forms.Textarea(attrs={"rows": 5}),
-            "maintenance_text": forms.Textarea(attrs={"rows": 2}),
-        }
+        fields = [
+            "is_enabled", *tr(*BotSettings.RICH_FIELDS, "mini_app_button_text"),
+            "notify_new_user", "notify_new_comment", "notify_new_review", "notify_contact_message", "notify_homework",
+            "channel_id", "auto_post_articles", "auto_post_lessons",
+        ]
+        widgets = {f: CKEditor5Widget(config_name="telegram") for f in tr(*BotSettings.RICH_FIELDS)}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

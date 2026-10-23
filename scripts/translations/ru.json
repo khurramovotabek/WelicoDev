@@ -1443,5 +1443,12 @@
  "xarita yaqinligi": "масштаб карты",
  "yil tajriba": "лет опыта",
  "yopiq": "закрытый",
- "yopiq kurs": "закрытый курс"
+ "yopiq kurs": "закрытый курс",
+ "Har bir matn foydalanuvchi tanlagan tilda yuboriladi. Formatlash (qalin, kursiv, havola, kod, ro'yxat, iqtibos) Telegram'da aynan shunday ko'rinadi.": "Каждый текст отправляется на языке пользователя. Форматирование (жирный, курсив, ссылка, код, список, цитата) в Telegram выглядит так же.",
+ "Ro'yxatdan o'tgandan keyingi matn": "Текст после регистрации",
+ "Salomlashish matni": "Приветствие",
+ "Texnik ishlar matni": "Текст техработ",
+ "Tinglashga tayyor": "Готово к прослушиванию",
+ "Yo'nalish": "Направление",
+ "Yordam matni (/help)": "Текст помощи (/help)"
 }

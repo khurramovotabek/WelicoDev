@@ -26,7 +26,7 @@ def _btn(key):
 @router.message(Command("help"))
 async def cmd_help(message: Message, lang):
     settings_obj = await db.get_settings()
-    await message.answer(settings_obj.help_text, reply_markup=main_menu(lang))
+    await message.answer(settings_obj.tg_text("help_text", lang), reply_markup=main_menu(lang))
 
 
 @router.message(Command("profile"))

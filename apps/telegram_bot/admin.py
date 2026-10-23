@@ -3,13 +3,13 @@ from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.decorators import display
 
-from apps.core.admin_mixins import SingletonAdminMixin
+from apps.core.admin_mixins import SingletonAdminMixin, TranslatedAdmin
 
 from .models import BotEvent, BotMessage, BotSettings, Broadcast
 
 
 @admin.register(BotSettings)
-class BotSettingsAdmin(SingletonAdminMixin, ModelAdmin):
+class BotSettingsAdmin(SingletonAdminMixin, TranslatedAdmin):
     fieldsets = (
         (_("Holat"), {"fields": ("is_enabled", "maintenance_text"), "classes": ["tab"]}),
         (_("Matnlar"), {"fields": ("welcome_text", "registered_text", "help_text", "mini_app_button_text"), "classes": ["tab"]}),

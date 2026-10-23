@@ -7,6 +7,8 @@ Takror ishga tushirilsa ma'lumotlarni yangilaydi (dublikat yaratmaydi). Demo loy
 
 from datetime import date
 
+from django.conf import settings
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -317,6 +319,11 @@ class Command(BaseCommand):
                "To'lov Click, Payme yoki bank kartasi orqali qabul qilinadi. To'lovdan so'ng chekni Telegram'da yuboring — kurs 1–2 soat ichida ochiladi.",
                "Payment via Click, Payme or bank card. Send the receipt on Telegram after paying — the course opens within 1–2 hours.",
                "Оплата через Click, Payme или банковскую карту. Отправьте чек в Telegram — курс откроется в течение 1–2 часов.")
+        # Shaxsiy rasm: designs/ dagi fotodan (faqat hali yuklanmagan bo'lsa)
+        for field, name in (("portrait", "portrait.jpg"), ("avatar", "avatar.jpg")):
+            src = settings.BASE_DIR / "designs" / name
+            if not getattr(s, field) and src.exists():
+                getattr(s, field).save(f"otabek-{name}", File(src.open("rb")), save=False)
         s.save()
         hero = PageHero.objects.filter(page="home").first()
         if hero:

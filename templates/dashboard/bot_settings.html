@@ -4,19 +4,22 @@
 {% block dash %}
 {% trans "Bot sozlamalari" as t %}{% url 'dashboard:bot' as parent_url %}
 {% include "dashboard/partials/page_head.html" with title=t parent="Telegram bot" parent_url=parent_url %}
-<form method="post" class="grid xl:grid-cols-2 gap-4">{% csrf_token %}
+<form method="post" class="grid xl:grid-cols-2 gap-4">{% csrf_token %}{{ form.media }}
   <section class="panel flex flex-col gap-4">
-    <h2 class="text-lg font-semibold">{% trans "Matnlar" %}</h2>
-    {% include "dashboard/partials/field.html" with field=form.welcome_text %}
-    {% include "dashboard/partials/field.html" with field=form.registered_text %}
-    {% include "dashboard/partials/field.html" with field=form.help_text %}
-    {% include "dashboard/partials/field.html" with field=form.mini_app_button_text %}
+    <div>
+      <h2 class="text-lg font-semibold">{% trans "Matnlar" %}</h2>
+      <p class="text-xs text-ink-3 mt-1">{% trans "Har bir matn foydalanuvchi tanlagan tilda yuboriladi. Formatlash (qalin, kursiv, havola, kod, ro'yxat, iqtibos) Telegram'da aynan shunday ko'rinadi." %}</p>
+    </div>
+    {% trans "Salomlashish matni" as l %}{% include "dashboard/partials/tr_field.html" with name="welcome_text" label=l required=True %}
+    {% trans "Ro'yxatdan o'tgandan keyingi matn" as l %}{% include "dashboard/partials/tr_field.html" with name="registered_text" label=l required=True %}
+    {% trans "Yordam matni (/help)" as l %}{% include "dashboard/partials/tr_field.html" with name="help_text" label=l required=True %}
+    {% trans "Mini App tugmasi" as l %}{% include "dashboard/partials/tr_field.html" with name="mini_app_button_text" label=l required=True %}
   </section>
   <div class="flex flex-col gap-4">
     <section class="panel flex flex-col gap-1">
       <h2 class="text-lg font-semibold mb-2">{% trans "Holat" %}</h2>
       {% trans "Bot yoqilgan" as l %}{% trans "O'chirilsa, foydalanuvchilarga texnik ishlar matni ko'rsatiladi" as h %}{% include "dashboard/partials/toggle.html" with field=form.is_enabled label=l hint=h %}
-      {% include "dashboard/partials/field.html" with field=form.maintenance_text %}
+      {% trans "Texnik ishlar matni" as l %}{% include "dashboard/partials/tr_field.html" with name="maintenance_text" label=l %}
     </section>
     <section class="panel flex flex-col gap-1">
       <h2 class="text-lg font-semibold mb-2">{% trans "Adminga bildirishnomalar" %}</h2>

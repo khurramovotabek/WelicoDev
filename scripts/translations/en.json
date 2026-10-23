@@ -1443,5 +1443,12 @@
  "xarita yaqinligi": "map zoom",
  "yil tajriba": "years of experience",
  "yopiq": "private",
- "yopiq kurs": "private course"
+ "yopiq kurs": "private course",
+ "Har bir matn foydalanuvchi tanlagan tilda yuboriladi. Formatlash (qalin, kursiv, havola, kod, ro'yxat, iqtibos) Telegram'da aynan shunday ko'rinadi.": "Each text is sent in the user's language. Formatting (bold, italic, link, code, list, quote) looks exactly the same in Telegram.",
+ "Ro'yxatdan o'tgandan keyingi matn": "Text after registration",
+ "Salomlashish matni": "Welcome text",
+ "Texnik ishlar matni": "Maintenance text",
+ "Tinglashga tayyor": "Ready to play",
+ "Yo'nalish": "Direction",
+ "Yordam matni (/help)": "Help text (/help)"
 }

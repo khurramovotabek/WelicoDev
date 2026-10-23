@@ -1,5 +1,11 @@
-// node_modules'dagi brauzer kutubxonalarini static/vendor ga ko'chiradi (CDN'ga bog'liq bo'lmaslik uchun)
-import { copyFileSync, mkdirSync } from "node:fs";
+// Browser kutubxonalarini static/vendor ichiga ko'chiradi.
+import {
+  copyFileSync,
+  readFileSync,
+  writeFileSync,
+  cpSync,
+  mkdirSync,
+} from "node:fs";
 import { dirname } from "node:path";
 
 const files = {
@@ -13,10 +19,27 @@ const files = {
   "node_modules/@highlightjs/cdn-assets/styles/tokyo-night-dark.min.css": "static/vendor/hljs-tokyo-night.min.css",
   "node_modules/qrcode-generator/qrcode.js": "static/vendor/qrcode.js",
   "node_modules/chart.js/dist/chart.umd.js": "static/vendor/chart.umd.js",
+  "node_modules/leaflet/dist/leaflet.js": "static/vendor/leaflet/leaflet.js",
+  "node_modules/leaflet/dist/leaflet.css": "static/vendor/leaflet/leaflet.css",
 };
 
 for (const [src, dst] of Object.entries(files)) {
   mkdirSync(dirname(dst), { recursive: true });
   copyFileSync(src, dst);
+
+  // Remove source-map references from copied JS files.
+  if (dst.endsWith(".js")) {
+    const content = readFileSync(dst, "utf8")
+      .replace(/\/\/[#@]\s*sourceMappingURL=.*$/gm, "")
+      .replace(/\/\*[#@]\s*sourceMappingURL=.*?\*\//gs, "");
+    writeFileSync(dst, content);
+  }
 }
-console.log(`vendor: ${Object.keys(files).length} files copied`);
+
+cpSync(
+  "node_modules/leaflet/dist/images",
+  "static/vendor/leaflet/images",
+  { recursive: true },
+);
+
+console.log(`vendor: ${Object.keys(files).length} files copied; Leaflet images copied`);
