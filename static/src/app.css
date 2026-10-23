@@ -173,7 +173,7 @@
   [data-theme="light"] .chip { background: rgba(255,255,255,.55); }
   .chip-lg { @apply px-4 py-1.5 text-sm; }
   .chip.is-active, .chip-btn.is-active { background: rgb(var(--accent-strong) / .85); color: #fff; border-color: rgb(var(--accent) / .7); box-shadow: 0 6px 20px -8px rgb(var(--accent-strong)); }
-  .chip-btn { @apply chip chip-lg cursor-pointer transition; }
+  .chip-btn { @apply chip chip-lg cursor-pointer transition whitespace-nowrap shrink-0; }
   .chip-btn:hover { background: var(--glass-fill-hover); color: rgb(var(--ink)); }
   .eyebrow { @apply chip text-[11px] uppercase tracking-[.14em] text-ink; padding: 6px 12px; }
   .dot { @apply inline-block w-2 h-2 rounded-full; background: rgb(var(--ok)); box-shadow: 0 0 0 3px rgb(var(--ok) / .2), 0 0 12px rgb(var(--ok)); }
