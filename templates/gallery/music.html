@@ -148,7 +148,8 @@
         grad.addColorStop(1, `rgb(${css.getPropertyValue("--violet")} / .15)`);
         g.fillStyle = grad;
         for (let i = 0; i < bars; i++) {
-          const v = data[Math.floor((i / bars) * data.length * 0.75)] / 255;
+          // logarifmik taqsimot: bass ham, baland chastotalar ham ko'rinsin
+          const v = data[Math.min(data.length - 1, Math.floor(Math.pow(i / bars, 1.7) * data.length * 0.85))] / 255;
           const bh = Math.max(2, v * v * h);
           g.beginPath();
           g.roundRect(i * (bw + gap), h - bh, bw, bh, [bw / 2, bw / 2, 0, 0]);
