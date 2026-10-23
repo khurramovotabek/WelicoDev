@@ -32,7 +32,7 @@ def _clean_name(text):
 @router.message(CommandStart())
 async def cmd_start(message: Message, command: CommandObject, state: FSMContext, user, lang, is_new):
     payload = command.args or ""
-    await state.update_data(pending_login=payload[6:] if payload.startswith("login_") else None)
+    await state.update_data(pending_login=payload[6:] if payload.startswith("login_") else None, from_edu=payload == "edu")
     settings_obj = await db.get_settings()
 
     if not user.is_registered:
@@ -48,8 +48,21 @@ async def cmd_start(message: Message, command: CommandObject, state: FSMContext,
         await send_login_confirmation(message, user, lang, data["pending_login"])
         await state.update_data(pending_login=None)
         return
+    if data.get("from_edu"):
+        await send_back_to_edu(message, lang)
+        return
     await message.answer(settings_obj.tg_text("welcome_text", lang), reply_markup=main_menu(lang))
     await message.answer(t("menu", lang), reply_markup=site_kb(lang))
+
+
+async def send_back_to_edu(message, lang):
+    """Ta'lim botidan ro'yxatdan o'tishga kelganlarni u yerga qaytaradi."""
+    from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+    from django.conf import settings
+
+    kb = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
+        text=t("btn_back_to_edu", lang), url=f"https://t.me/{settings.TELEGRAM_EDU_BOT_USERNAME}?start=ready")]])
+    await message.answer(t("back_to_edu", lang), reply_markup=kb)
 
 
 @router.callback_query(F.data.startswith("lang:"))
@@ -108,6 +121,8 @@ async def on_phone(message: Message, state: FSMContext, user, lang):
     if data.get("pending_login"):
         await state.update_data(pending_login=None)
         await send_login_confirmation(message, user, lang, data["pending_login"])
+    elif data.get("from_edu"):
+        await send_back_to_edu(message, lang)
     else:
         await message.answer(t("menu", lang), reply_markup=site_kb(lang))
 

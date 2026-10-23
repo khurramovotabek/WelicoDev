@@ -105,6 +105,12 @@ TEXTS = {
         "ru": "⛔️ Ваш аккаунт заблокирован.",
         "en": "⛔️ Your account is blocked.",
     },
+    "back_to_edu": {
+        "uz": "✅ Tayyor! Endi ta'lim botiga qayting — kurslar o'sha yerda.",
+        "ru": "✅ Готово! Возвращайтесь в учебный бот — курсы там.",
+        "en": "✅ All set! Head back to the education bot — the courses are there.",
+    },
+    "btn_back_to_edu": {"uz": "🎓 Ta'lim botiga o'tish", "ru": "🎓 Перейти в учебный бот", "en": "🎓 Open the education bot"},
     "nudge_start_1": {
         "uz": "👋 {name}, WeliCoDev'ga xush kelibsiz!\n\nBirinchi qadamni bepul kursdan boshlang:\n<b>{course}</b>\n\n<i>{subtitle}</i>\n\n📚 {lessons} ta dars · o'zbek tilida · o'z tezligingizda.",
         "ru": "👋 {name}, добро пожаловать в WeliCoDev!\n\nНачните с бесплатного курса:\n<b>{course}</b>\n\n<i>{subtitle}</i>\n\n📚 {lessons} уроков · в своём темпе.",

@@ -20,8 +20,9 @@ class TelegramError(Exception):
         self.retry_after = retry_after
 
 
-def call(method, payload=None, files=None, timeout=15):
-    token = settings.TELEGRAM_BOT_TOKEN
+def call(method, payload=None, files=None, timeout=15, token=None):
+    """`token` berilmasa asosiy bot (TELEGRAM_BOT_TOKEN) ishlatiladi; ta'lim boti uchun EDU token uzatiladi."""
+    token = token or settings.TELEGRAM_BOT_TOKEN
     if not token:
         raise TelegramError("TELEGRAM_BOT_TOKEN is not configured")
     url = f"https://api.telegram.org/bot{token}/{method}"
@@ -63,14 +64,19 @@ def _multipart(fields, files):
     return b"".join(parts), f"multipart/form-data; boundary={boundary}"
 
 
-def send_message(chat_id, text, reply_markup=None, disable_preview=True):
+def send_message(chat_id, text, reply_markup=None, disable_preview=True, token=None):
     return call("sendMessage", {
         "chat_id": chat_id,
         "text": text,
         "parse_mode": "HTML",
         "link_preview_options": {"is_disabled": disable_preview},
         "reply_markup": reply_markup,
-    })
+    }, token=token)
+
+
+def edu_token():
+    """Ta'lim boti tokeni (bo'sh bo'lsa ta'lim xabarlari asosiy botdan boradi)."""
+    return settings.TELEGRAM_EDU_BOT_TOKEN
 
 
 def send_photo(chat_id, photo_bytes, filename, caption, reply_markup=None):

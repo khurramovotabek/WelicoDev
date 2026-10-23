@@ -6,4 +6,5 @@ app_name = "telegram_bot"
 
 urlpatterns = [
     path("webhook/", views.webhook, name="webhook"),
+    path("edu-webhook/", views.edu_webhook, name="edu_webhook"),
 ]

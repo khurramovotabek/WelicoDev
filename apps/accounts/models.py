@@ -30,6 +30,10 @@ class User(AbstractUser):
                                       help_text=_("Bot orqali yangi kontent haqida xabar olish"))
     notify_comments = models.BooleanField(_("izohimga javob haqida xabar"), default=True)
     last_bot_activity = models.DateTimeField(_("botdagi oxirgi faollik"), null=True, blank=True)
+    edu_bot_started = models.BooleanField(
+        _("ta'lim botini ochgan"), default=False, help_text=_("@welicodev_educationbot'da /start bosgan — xabar yuborish mumkin"),
+    )
+    edu_bot_blocked = models.BooleanField(_("ta'lim botini bloklagan"), default=False)
     nudge_stage = models.PositiveSmallIntegerField(
         _("yuborilgan eslatmalar"), default=0, editable=False,
         help_text=_("Kursga yozilmaganlarga yuborilgan 'kursni boshlang' eslatmalari soni"),

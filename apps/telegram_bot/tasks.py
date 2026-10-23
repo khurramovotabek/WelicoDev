@@ -11,22 +11,55 @@ log = logging.getLogger(__name__)
 
 
 @shared_task(bind=True, max_retries=3, default_retry_delay=10)
-def notify_admins(self, text, button_text=None, button_url=None):
-    """Adminlarga (TELEGRAM_ADMIN_IDS va botdan ro'yxatdan o'tgan staff) xabar yuboradi."""
+def notify_admins(self, text, button_text=None, button_url=None, bot="main", edu_markup=None):
+    """Adminlarga (TELEGRAM_ADMIN_IDS va botdan ro'yxatdan o'tgan staff) xabar yuboradi.
+
+    bot="edu" — avval ta'lim botidan `edu_markup` (callback tugmalari) bilan; admin u botni ochmagan bo'lsa,
+    asosiy botdan faqat URL tugmasi bilan (callback'lar asosiy botda ishlamaydi).
+    """
     from apps.accounts.models import User
 
     chat_ids = set(settings.TELEGRAM_ADMIN_IDS)
     chat_ids.update(User.objects.filter(is_staff=True, telegram_id__isnull=False).values_list("telegram_id", flat=True))
     markup = api.url_button(button_text, button_url) if button_text and button_url else None
+    use_edu = bot == "edu" and api.edu_token()
     for chat_id in chat_ids:
+        if use_edu:
+            try:
+                api.send_message(chat_id, text, reply_markup=edu_markup or markup, token=api.edu_token())
+                continue
+            except api.TelegramError as e:
+                log.info("edu admin notify fell back to main bot for %s: %s", chat_id, e)
         try:
             api.send_message(chat_id, text, reply_markup=markup)
         except api.TelegramError as e:
             log.warning("admin notify failed for %s: %s", chat_id, e)
 
 
+def deliver(user, text, markup=None, bot="main"):
+    """Foydalanuvchiga xabar: bot="edu" va u ta'lim botini ochgan bo'lsa — ta'lim botidan, aks holda asosiy botdan.
+
+    Natija: Telegram javobi. 403 bo'lsa tegishli "bloklangan" belgisi qo'yiladi va xato qayta ko'tariladi.
+    """
+    from apps.accounts.models import User
+
+    if bot == "edu" and api.edu_token() and user.edu_bot_started and not user.edu_bot_blocked:
+        try:
+            return api.send_message(user.telegram_id, text, reply_markup=markup, token=api.edu_token())
+        except api.TelegramError as e:
+            if e.code != 403:
+                raise
+            User.objects.filter(pk=user.pk).update(edu_bot_blocked=True)
+    try:
+        return api.send_message(user.telegram_id, text, reply_markup=markup)
+    except api.TelegramError as e:
+        if e.code == 403:
+            User.objects.filter(pk=user.pk).update(bot_blocked=True)
+        raise
+
+
 @shared_task
-def send_to_user(user_id, text, button_text=None, button_url=None, sent_by_id=None):
+def send_to_user(user_id, text, button_text=None, button_url=None, sent_by_id=None, bot="main"):
     from apps.accounts.models import User
 
     from .models import BotMessage
@@ -36,14 +69,12 @@ def send_to_user(user_id, text, button_text=None, button_url=None, sent_by_id=No
         return
     markup = api.url_button(button_text, button_url) if button_text and button_url else None
     try:
-        result = api.send_message(user.telegram_id, text, reply_markup=markup)
+        result = deliver(user, text, markup, bot=bot)
         BotMessage.objects.create(
             user=user, direction=BotMessage.Direction.OUT, text=text, telegram_message_id=result.get("message_id"),
             is_read=True, sent_by_id=sent_by_id,
         )
     except api.TelegramError as e:
-        if e.code == 403:
-            User.objects.filter(pk=user.pk).update(bot_blocked=True)
         log.warning("send_to_user %s failed: %s", user_id, e)
 
 
@@ -174,13 +205,11 @@ def indexnow_ping(paths):
 
 
 def _nudge(user, text, button_text, url):
-    """Eslatmani yuboradi; bot bloklangan bo'lsa belgilab qo'yadi. Muvaffaqiyatli bo'lsa True."""
+    """Eslatmani (imkon bo'lsa ta'lim botidan) yuboradi. Muvaffaqiyatli bo'lsa True."""
     try:
-        api.send_message(user.telegram_id, text, reply_markup=api.url_button(button_text, settings.SITE_URL + url))
+        deliver(user, text, api.url_button(button_text, settings.SITE_URL + url), bot="edu")
         return True
     except api.TelegramError as e:
-        if e.code == 403:
-            type(user).objects.filter(pk=user.pk).update(bot_blocked=True)
         log.warning("nudge %s failed: %s", user.pk, e)
         return False
 

@@ -185,7 +185,14 @@ def request_access(user, course, note=""):
             + (f" · @{escape(user.telegram_username)}" if getattr(user, "telegram_username", "") else "")
             + (f"\n📝 {escape(note)}" if note else "")
         )
-        _notify(notify_admins, text, "Dashboard", f"{settings.SITE_URL}{reverse('dashboard:access')}")
+        url = f"{settings.SITE_URL}{reverse('dashboard:access')}"
+        # Ta'lim botida admin to'g'ridan-to'g'ri tasdiqlaydi yoki rad etadi
+        markup = {"inline_keyboard": [
+            [{"text": "✅ Ruxsat berish", "callback_data": f"ar:ok:{req.pk}"},
+             {"text": "❌ Rad etish", "callback_data": f"ar:no:{req.pk}"}],
+            [{"text": "📊 Dashboard", "url": url}],
+        ]}
+        _notify(notify_admins, text, "Dashboard", url, bot="edu", edu_markup=markup)
     return req, created
 
 
@@ -215,7 +222,7 @@ def grant_access(course, user, by=None, expires_at=None, access_request=None, am
         first = course.published_lessons().first()
         url = f"{settings.SITE_URL}{(first or course).get_absolute_url()}"
         _notify(send_to_user, user.pk, f"🎉 <b>{escape(course.title)}</b> kursiga ruxsat berildi!\n\nO'qishni boshlashingiz mumkin.",
-                "Kursni ochish", url, by.pk if by else None)
+                "Kursni ochish", url, by.pk if by else None, bot="edu")
     return enrollment
 
 
@@ -232,7 +239,24 @@ def reject_access(access_request, by=None, admin_note=""):
     text = f"«{escape(access_request.course.title)}» kursi bo'yicha so'rovingiz rad etildi."
     if admin_note:
         text += f"\n\n{escape(admin_note)}"
-    _notify(send_to_user, access_request.user_id, text)
+    _notify(send_to_user, access_request.user_id, text, bot="edu")
+
+
+def notify_homework_result(sub):
+    """O'quvchiga uyga vazifa natijasi (ta'lim botidan, bo'lmasa asosiy botdan)."""
+    from html import escape
+
+    from django.conf import settings
+    from django.utils import translation
+
+    from apps.telegram_bot.tasks import send_to_user
+
+    with translation.override(sub.user.language or "uz"):
+        verdict = "✅ qabul qilindi" if sub.status == "approved" else "🔁 qayta ishlash kerak"
+        text = f"📝 <b>{escape(sub.lesson.title)}</b> — uyga vazifangiz {verdict}."
+        if sub.feedback:
+            text += f"\n\n💬 {escape(sub.feedback)}"
+        _notify(send_to_user, sub.user_id, text, "Darsni ochish", settings.SITE_URL + sub.lesson.get_absolute_url(), bot="edu")
 
 
 def revoke_access(enrollment):

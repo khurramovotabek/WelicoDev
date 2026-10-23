@@ -17,7 +17,7 @@ from django.db.models.functions import TruncDate
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils import timezone, translation
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
@@ -402,20 +402,13 @@ def homework(request):
 @staff
 @require_POST
 def homework_review(request, pk):
-    from apps.telegram_bot.tasks import send_to_user
-
     sub = get_object_or_404(HomeworkSubmission.objects.select_related("user", "lesson__course"), pk=pk)
     status = request.POST.get("status")
     if status not in ("approved", "rejected"):
         return HttpResponse(status=400)
     sub.mark_reviewed(status, request.POST.get("feedback", "").strip())
     edu.try_complete(sub.user, sub.lesson)
-    with translation.override(sub.user.language or "uz"):
-        verdict = "✅ qabul qilindi" if status == "approved" else "🔁 qayta ishlash kerak"
-        text = f"📝 <b>{sub.lesson.title}</b> — uyga vazifangiz {verdict}."
-        if sub.feedback:
-            text += f"\n\n💬 {sub.feedback}"
-        send_to_user.delay(sub.user_id, text, "Darsni ochish", settings.SITE_URL + sub.lesson.get_absolute_url())
+    edu.notify_homework_result(sub)
     cache.delete("dash:badges")
     if request.htmx:
         return render(request, "dashboard/partials/homework_row.html", {"s": sub})
@@ -535,6 +528,10 @@ def bot(request):
         "bot_settings": BotSettings.load(),
         "bot_username": settings.TELEGRAM_BOT_USERNAME,
         "admin_ids": settings.TELEGRAM_ADMIN_IDS,
+        "edu_bot": {
+            "ok": bool(settings.TELEGRAM_EDU_BOT_TOKEN), "username": settings.TELEGRAM_EDU_BOT_USERNAME,
+            "users": tg_users.filter(edu_bot_started=True, edu_bot_blocked=False).count(),
+        },
     })
 
 

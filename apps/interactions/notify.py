@@ -7,10 +7,10 @@ from apps.telegram_bot.models import BotSettings
 from apps.telegram_bot.tasks import notify_admins
 
 
-def _enqueue(text, url=None, button=None):
+def _enqueue(text, url=None, button=None, **kwargs):
     if not settings.TELEGRAM_BOT_TOKEN:
         return
-    notify_admins.delay(text, button, url)
+    notify_admins.delay(text, button, url, **kwargs)
 
 
 def notify_admins_contact(msg):
@@ -45,7 +45,12 @@ def notify_admins_homework(sub):
         f"📝 <b>Uyga vazifa topshirildi</b>\n\n<b>{escape(sub.user.display_name)}</b>\n"
         f"{escape(sub.lesson.course.title)} → {escape(sub.lesson.title)}"
     )
-    _enqueue(text, f"{settings.SITE_URL}/admin/education/homeworksubmission/{sub.pk}/change/", "Tekshirish")
+    url = f"{settings.SITE_URL}/admin/education/homeworksubmission/{sub.pk}/change/"
+    markup = {"inline_keyboard": [
+        [{"text": "✅ Qabul", "callback_data": f"hw:ok:{sub.pk}"}, {"text": "🔁 Qayta ishlash", "callback_data": f"hw:no:{sub.pk}"}],
+        [{"text": "🔗 Ochish", "url": url}],
+    ]}
+    _enqueue(text, url, "Tekshirish", bot="edu", edu_markup=markup)
 
 
 def notify_reply(parent, reply, url):

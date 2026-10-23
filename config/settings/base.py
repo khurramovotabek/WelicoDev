@@ -165,6 +165,9 @@ CELERY_BEAT_SCHEDULE = {
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", default="")
 TELEGRAM_BOT_USERNAME = env("TELEGRAM_BOT_USERNAME", default="welicodevbot")
 TELEGRAM_ADMIN_IDS = [int(x) for x in env("TELEGRAM_ADMIN_IDS") if str(x).strip()]
+# Ta'lim boti: bo'sh bo'lsa ta'lim xabarlari asosiy botdan boradi
+TELEGRAM_EDU_BOT_TOKEN = env("TELEGRAM_EDU_BOT_TOKEN", default="")
+TELEGRAM_EDU_BOT_USERNAME = env("TELEGRAM_EDU_BOT_USERNAME", default="welicodev_educationbot")
 LOGIN_CODE_TTL_SECONDS = 120
 LOGIN_CODE_MAX_ATTEMPTS = 5
 
