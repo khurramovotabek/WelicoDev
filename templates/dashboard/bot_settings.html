@@ -34,6 +34,7 @@
       {% include "dashboard/partials/field.html" with field=form.channel_id %}
       {% trans "Maqolalarni avtomatik joylash" as l %}{% include "dashboard/partials/toggle.html" with field=form.auto_post_articles label=l %}
       {% trans "Darslarni avtomatik joylash" as l %}{% include "dashboard/partials/toggle.html" with field=form.auto_post_lessons label=l %}
+      {% include "dashboard/partials/field.html" with field=form.edu_channel_id %}
     </section>
     <button class="btn btn-primary py-3"><i data-lucide="save"></i>{% trans "Saqlash" %}</button>
   </div>

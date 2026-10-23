@@ -177,3 +177,52 @@ def review_homework(admin, sub_id, approve):
     services.try_complete(sub.user, sub.lesson)
     services.notify_homework_result(sub)
     return sub
+
+
+# --------------------------------------------------------------------------- Kanal
+
+def edu_channel():
+    from apps.telegram_bot import channel
+
+    return channel.channel_id("edu") if channel.edu_ready() else ""
+
+
+def unannounced(kind):
+    """Kanalga hali chiqmagan e'lon qilingan darslar (videosi bor) yoki kurslar."""
+    from apps.education.models import Lesson
+    from apps.telegram_bot.models import ChannelPost
+
+    if kind == "lesson":
+        qs = (Lesson.objects.filter(status="published", course__status="published", posted_to_channel_at__isnull=True)
+              .exclude(video="", video_url="").select_related("course").order_by("-created_at")[:8])
+        return [(x.pk, f"{x.course.title[:20]} · {x.order}. {x.title}"[:60]) for x in qs]
+    sent = ChannelPost.objects.filter(kind="course", status="sent").values_list("object_id", flat=True)
+    return [(c.pk, c.title[:60]) for c in Course.objects.listed().exclude(pk__in=list(sent)).order_by("-created_at")[:8]]
+
+
+def announce(kind, pk, admin):
+    """Dars yoki kursni ta'lim kanaliga e'lon qiladi. Natija: ChannelPost yoki None."""
+    from apps.education.models import Lesson
+    from apps.telegram_bot import channel
+
+    model = Lesson if kind == "lesson" else Course
+    obj = model.objects.filter(pk=pk).first()
+    if obj is None:
+        return None
+    post = channel.post_object(obj, user=admin)
+    if post.status == "sent" and kind == "lesson":
+        Lesson.objects.filter(pk=pk).update(posted_to_channel_at=timezone.now())
+    return post
+
+
+def record_manual_post(admin, html, message_id):
+    """Botdan qo'lda joylangan postni dashboard tarixida ko'rinishi uchun saqlaydi."""
+    import re
+
+    from apps.telegram_bot.models import ChannelPost
+
+    plain = re.sub(r"<[^>]+>", "", html or "").strip()
+    return ChannelPost.objects.create(
+        kind="manual", target="edu", title=(plain[:60] or "Bot orqali post"), body=html or "<p>📎</p>",
+        status="sent", message_id=message_id, sent_at=timezone.now(), created_by=admin,
+    )

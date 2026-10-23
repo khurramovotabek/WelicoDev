@@ -94,6 +94,29 @@ TEXTS = {
     "v_rejected": {"uz": "❌ Rad etildi", "ru": "❌ Отклонено", "en": "❌ Rejected"},
     "v_hw_ok": {"uz": "✅ Vazifa qabul qilindi", "ru": "✅ Задание принято", "en": "✅ Homework accepted"},
     "v_hw_redo": {"uz": "🔁 Qayta ishlashga qaytarildi", "ru": "🔁 Отправлено на доработку", "en": "🔁 Sent back for rework"},
+    # --- Kanal
+    "btn_adm_post": {"uz": "📢 Kanalga post", "ru": "📢 Пост в канал", "en": "📢 Channel post"},
+    "btn_adm_lessons": {"uz": "🎬 Darsni e'lon qilish", "ru": "🎬 Анонс урока", "en": "🎬 Announce a lesson"},
+    "btn_adm_courses": {"uz": "🎓 Kursni e'lon qilish", "ru": "🎓 Анонс курса", "en": "🎓 Announce a course"},
+    "no_channel": {
+        "uz": "⚠️ Ta'lim kanali sozlanmagan: Dashboard → Bot sozlamalari → «Ta'lim kanali» (masalan @welicodev_education). Bot kanalda admin bo'lishi kerak.",
+        "ru": "⚠️ Учебный канал не настроен: Дашборд → Настройки бота → «Учебный канал». Бот должен быть админом канала.",
+        "en": "⚠️ Education channel isn't set: Dashboard → Bot settings → “Education channel”. The bot must be a channel admin.",
+    },
+    "post_prompt": {
+        "uz": "📢 <b>{channel}</b> kanaliga joylanadigan xabarni yuboring: matn, rasm, video yoki fayl — formatlash va tugmalar saqlanadi.\n\nBekor qilish: /cancel",
+        "ru": "📢 Отправьте сообщение для канала <b>{channel}</b>: текст, фото, видео или файл — форматирование сохранится.\n\nОтмена: /cancel",
+        "en": "📢 Send the message for <b>{channel}</b>: text, photo, video or file — formatting is kept.\n\nCancel: /cancel",
+    },
+    "post_preview": {"uz": "👆 Kanalda shunday ko'rinadi. Joylaymizmi?", "ru": "👆 Так будет в канале. Публикуем?", "en": "👆 This is how it will look. Publish?"},
+    "btn_publish": {"uz": "📢 Joylash", "ru": "📢 Опубликовать", "en": "📢 Publish"},
+    "btn_publish_silent": {"uz": "🔕 Ovozsiz joylash", "ru": "🔕 Без звука", "en": "🔕 Publish silently"},
+    "btn_cancel": {"uz": "❌ Bekor qilish", "ru": "❌ Отмена", "en": "❌ Cancel"},
+    "post_done": {"uz": "✅ Kanalga joylandi: {link}", "ru": "✅ Опубликовано: {link}", "en": "✅ Published: {link}"},
+    "post_failed": {"uz": "❌ Joylab bo'lmadi: {error}\n\nBot kanalda admin ekanini va «Xabar yuborish» huquqini tekshiring.", "ru": "❌ Не удалось: {error}\n\nПроверьте, что бот — админ канала.", "en": "❌ Failed: {error}\n\nMake sure the bot is a channel admin."},
+    "cancelled": {"uz": "Bekor qilindi.", "ru": "Отменено.", "en": "Cancelled."},
+    "nothing_to_announce": {"uz": "E'lon qilinmagan narsa yo'q ✨", "ru": "Нечего анонсировать ✨", "en": "Nothing left to announce ✨"},
+    "pick_announce": {"uz": "Kanalga e'lon qilish uchun tanlang:", "ru": "Выберите, что анонсировать:", "en": "Pick what to announce:"},
 }
 
 LEVELS = {

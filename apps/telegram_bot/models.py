@@ -36,6 +36,10 @@ class BotSettings(models.Model):
     channel_id = models.CharField(_("kanal ID / @username"), max_length=64, blank=True, help_text=_("Yangi maqola va darslar shu kanalga e'lon qilinadi"))
     auto_post_articles = models.BooleanField(_("maqolalarni kanalga avtomatik joylash"), default=False)
     auto_post_lessons = models.BooleanField(_("darslarni kanalga avtomatik joylash"), default=False)
+    edu_channel_id = models.CharField(
+        _("ta'lim kanali"), max_length=64, blank=True,
+        help_text=_("Masalan @welicodev_education. Darslar va kurslar shu kanalga ta'lim boti orqali joylanadi (bot kanalda admin bo'lishi kerak)"),
+    )
 
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -171,7 +175,12 @@ class ChannelPost(TimeStampedModel):
         COURSE = "course", _("Kurs")
         PROJECT = "project", _("Loyiha")
 
+    class Target(models.TextChoices):
+        MAIN = "main", _("Asosiy kanal")
+        EDU = "edu", _("Ta'lim kanali")
+
     kind = models.CharField(_("turi"), max_length=10, choices=Kind.choices, default=Kind.MANUAL)
+    target = models.CharField(_("kanal"), max_length=5, choices=Target.choices, default=Target.MAIN)
     title = models.CharField(_("ichki nomi"), max_length=150)
     body = CKEditor5Field(_("post matni"), config_name="telegram")
     image = models.ImageField(_("rasm"), upload_to="channel/", blank=True)

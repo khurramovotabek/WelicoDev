@@ -47,8 +47,12 @@ def get_bot() -> Bot:
 def get_dispatcher() -> Dispatcher:
     global _dp
     if _dp is None:
-        # Holat (FSM) kerak emas: hamma amal tugma/buyruq orqali
-        dp = Dispatcher()
+        # Admin post yozish holati Redis'da: uvicorn bir nechta worker'da ishlaydi
+        from aiogram.fsm.storage.base import DefaultKeyBuilder
+        from aiogram.fsm.storage.redis import RedisStorage
+
+        storage = RedisStorage.from_url(settings.REDIS_URL.rsplit("/", 1)[0] + "/2", key_builder=DefaultKeyBuilder(prefix="edufsm"))
+        dp = Dispatcher(storage=storage)
         dp.message.outer_middleware(EduUserMiddleware())
         dp.callback_query.outer_middleware(EduUserMiddleware())
         dp.include_router(handlers.router)

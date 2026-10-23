@@ -16,8 +16,21 @@ CAPTION_LIMIT = 1024
 TEXT_LIMIT = 4096
 
 
-def channel_id():
-    return BotSettings.load().channel_id.strip()
+def channel_id(target="main"):
+    s = BotSettings.load()
+    return (s.edu_channel_id if target == "edu" else s.channel_id).strip()
+
+
+def edu_ready():
+    """Ta'lim kanali va ta'lim boti ikkalasi sozlangan."""
+    return bool(api.edu_token() and channel_id("edu"))
+
+
+def _route(post):
+    """(chat, token): ta'lim kanaliga — ta'lim botidan, aks holda asosiy kanalga asosiy botdan."""
+    if post.target == ChannelPost.Target.EDU and edu_ready():
+        return channel_id("edu"), api.edu_token()
+    return channel_id("main"), None
 
 
 def render(post):
@@ -32,8 +45,8 @@ def _markup(post):
 
 def publish(post):
     """Postni kanalga yuboradi. Muvaffaqiyatli bo'lsa True."""
-    chat = channel_id()
-    if not chat or not settings.TELEGRAM_BOT_TOKEN:
+    chat, token = _route(post)
+    if not chat or not (token or settings.TELEGRAM_BOT_TOKEN):
         post.status, post.error = ChannelPost.Status.FAILED, "Kanal yoki bot tokeni sozlanmagan"
         post.save(update_fields=["status", "error", "updated_at"])
         return False
@@ -45,16 +58,16 @@ def publish(post):
                     "sendPhoto",
                     {"chat_id": chat, "caption": text, "parse_mode": "HTML", "reply_markup": _markup(post),
                      "disable_notification": post.silent},
-                    files={"photo": (post.image.name.rsplit("/", 1)[-1], f.read())},
+                    files={"photo": (post.image.name.rsplit("/", 1)[-1], f.read())}, token=token,
                 )
         else:
             result = api.call("sendMessage", {
                 "chat_id": chat, "text": text, "parse_mode": "HTML", "reply_markup": _markup(post),
                 "disable_notification": post.silent, "link_preview_options": {"is_disabled": post.disable_preview},
-            })
+            }, token=token)
         if post.pin:
             try:
-                api.call("pinChatMessage", {"chat_id": chat, "message_id": result["message_id"], "disable_notification": True})
+                api.call("pinChatMessage", {"chat_id": chat, "message_id": result["message_id"], "disable_notification": True}, token=token)
             except api.TelegramError as e:
                 log.info("pin failed: %s", e)
     except api.TelegramError as e:
@@ -71,15 +84,15 @@ def edit(post):
     """Kanalda allaqachon turgan postni yangilaydi (matn/izoh va tugma)."""
     if not post.message_id:
         return False
-    chat, text = channel_id(), render(post)
+    (chat, token), text = _route(post), render(post)
     try:
         if post.image:
             api.call("editMessageCaption", {"chat_id": chat, "message_id": post.message_id, "caption": text,
-                                            "parse_mode": "HTML", "reply_markup": _markup(post)})
+                                            "parse_mode": "HTML", "reply_markup": _markup(post)}, token=token)
         else:
             api.call("editMessageText", {"chat_id": chat, "message_id": post.message_id, "text": text, "parse_mode": "HTML",
                                          "reply_markup": _markup(post),
-                                         "link_preview_options": {"is_disabled": post.disable_preview}})
+                                         "link_preview_options": {"is_disabled": post.disable_preview}}, token=token)
     except api.TelegramError as e:
         if "message is not modified" in str(e):
             return True
@@ -92,7 +105,8 @@ def edit(post):
 def delete(post):
     if post.message_id:
         try:
-            api.call("deleteMessage", {"chat_id": channel_id(), "message_id": post.message_id})
+            chat, token = _route(post)
+            api.call("deleteMessage", {"chat_id": chat, "message_id": post.message_id}, token=token)
         except api.TelegramError as e:
             log.info("delete failed: %s", e)
 
@@ -144,7 +158,9 @@ def build_from(obj):
 def post_object(obj, publish_now=True, user=None):
     data = build_from(obj)
     image = data.pop("image")
-    post = ChannelPost(object_id=obj.pk, created_by=user, **data)
+    # Darslar va kurslar — ta'lim kanaliga (sozlangan bo'lsa)
+    target = ChannelPost.Target.EDU if data["kind"] in ("lesson", "course") and edu_ready() else ChannelPost.Target.MAIN
+    post = ChannelPost(object_id=obj.pk, created_by=user, target=target, **data)
     if image:
         post.image.name = image.name  # mavjud faylga havola (nusxalanmaydi)
     post.save()

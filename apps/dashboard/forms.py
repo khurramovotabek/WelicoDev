@@ -153,7 +153,7 @@ class BotSettingsForm(StyledMixin, forms.ModelForm):
         fields = [
             "is_enabled", *tr(*BotSettings.RICH_FIELDS, "mini_app_button_text"),
             "notify_new_user", "notify_new_comment", "notify_new_review", "notify_contact_message", "notify_homework",
-            "channel_id", "auto_post_articles", "auto_post_lessons",
+            "channel_id", "auto_post_articles", "auto_post_lessons", "edu_channel_id",
         ]
         widgets = {f: CKEditor5Widget(config_name="telegram") for f in tr(*BotSettings.RICH_FIELDS)}
 
@@ -254,7 +254,7 @@ AUDIO_EXT = (".mp3", ".m4a", ".ogg", ".wav", ".aac", ".flac")
 class ChannelPostForm(StyledMixin, forms.ModelForm):
     class Meta:
         model = ChannelPost
-        fields = ["title", "body", "image", "button_text", "button_url", "disable_preview", "silent", "pin", "scheduled_at"]
+        fields = ["title", "target", "body", "image", "button_text", "button_url", "disable_preview", "silent", "pin", "scheduled_at"]
         widgets = {
             "body": CKEditor5Widget(config_name="telegram"),
             "scheduled_at": forms.DateTimeInput(attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"),
@@ -262,10 +262,15 @@ class ChannelPostForm(StyledMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["target"].required = False
+        if self.instance.message_id:
+            # Joylangan postni boshqa kanalga ko'chirib bo'lmaydi
+            self.fields["target"].disabled = True
         self._style()
 
     def clean(self):
         data = super().clean()
+        data["target"] = data.get("target") or ChannelPost.Target.MAIN
         if bool(data.get("button_text")) != bool(data.get("button_url")):
             raise forms.ValidationError(_("Tugma uchun matn va havola birga kiritilishi kerak"))
         return data

@@ -151,7 +151,8 @@ def post_to_channel(model_label, pk):
     if ChannelPost.objects.filter(kind=kind, object_id=pk, status=ChannelPost.Status.SENT).exists():
         model.objects.filter(pk=pk).update(posted_to_channel_at=timezone.now())
         return
-    if not channel.channel_id() or not settings.TELEGRAM_BOT_TOKEN:
+    target = "edu" if kind == "lesson" and channel.edu_ready() else "main"
+    if not channel.channel_id(target) or not settings.TELEGRAM_BOT_TOKEN:
         return
     post = channel.post_object(obj)
     if post.status == "sent" and hasattr(obj, "posted_to_channel_at"):

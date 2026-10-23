@@ -4,7 +4,9 @@ import re
 from html import escape
 
 from aiogram import F, Router
-from aiogram.filters import Command, CommandStart
+from aiogram.filters import Command, CommandStart, StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import (
     CallbackQuery, ChatMemberUpdated, InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, Message,
     ReplyKeyboardMarkup,
@@ -17,6 +19,10 @@ from . import db
 from .texts import TEXTS, t
 
 router = Router(name="edu")
+
+
+class ComposePost(StatesGroup):
+    waiting = State()
 
 
 def _btn(key):
@@ -206,9 +212,106 @@ async def cmd_admin(message: Message, user, lang):
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=t("btn_adm_requests", lang, n=s["requests"]), callback_data="adm:req"),
          InlineKeyboardButton(text=t("btn_adm_homework", lang, n=s["homework"]), callback_data="adm:hw")],
+        [InlineKeyboardButton(text=t("btn_adm_post", lang), callback_data="adm:post")],
+        [InlineKeyboardButton(text=t("btn_adm_lessons", lang), callback_data="adm:an:lesson"),
+         InlineKeyboardButton(text=t("btn_adm_courses", lang), callback_data="adm:an:course")],
         [InlineKeyboardButton(text=t("btn_dashboard", lang), url=f"{settings.SITE_URL}/{lang}/dashboard/courses/")],
     ])
     await message.answer(t("admin_panel", lang, **s), reply_markup=kb)
+
+
+# --------------------------------------------------------------------------- Kanal: post va e'lonlar
+
+@router.callback_query(F.data == "adm:post")
+async def on_compose(cb: CallbackQuery, state: FSMContext, user, lang):
+    if not await _staff_only(cb, user, lang):
+        return
+    await cb.answer()
+    chat = await sync_to_async(db.edu_channel)()
+    if not chat:
+        await cb.message.answer(t("no_channel", lang))
+        return
+    await state.set_state(ComposePost.waiting)
+    await cb.message.answer(t("post_prompt", lang, channel=escape(chat)))
+
+
+@router.message(Command("cancel"))
+async def cmd_cancel(message: Message, state: FSMContext, user, lang):
+    await state.clear()
+    await message.answer(t("cancelled", lang), reply_markup=menu(lang, user.is_staff))
+
+
+@router.message(StateFilter(ComposePost.waiting))
+async def on_post_draft(message: Message, state: FSMContext, user, lang):
+    if not user.is_staff:
+        await state.clear()
+        return
+    html = message.html_text if (message.text or message.caption) else ""
+    await state.update_data(src_chat=message.chat.id, src_id=message.message_id, html=html)
+    # Admin chatiga nusxa — kanalda qanday ko'rinishini oldindan ko'rish
+    await message.bot.copy_message(message.chat.id, message.chat.id, message.message_id)
+    await message.answer(t("post_preview", lang), reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=t("btn_publish", lang), callback_data="pub:go"),
+         InlineKeyboardButton(text=t("btn_publish_silent", lang), callback_data="pub:silent")],
+        [InlineKeyboardButton(text=t("btn_cancel", lang), callback_data="pub:no")],
+    ]))
+
+
+@router.callback_query(F.data.in_({"pub:go", "pub:silent", "pub:no"}))
+async def on_publish(cb: CallbackQuery, state: FSMContext, user, lang):
+    if not await _staff_only(cb, user, lang):
+        return
+    data = await state.get_data()
+    await state.clear()
+    await cb.answer()
+    if cb.data == "pub:no" or not data.get("src_id"):
+        await cb.message.edit_text(t("cancelled", lang))
+        return
+    chat = await sync_to_async(db.edu_channel)()
+    try:
+        sent = await cb.bot.copy_message(chat, data["src_chat"], data["src_id"], disable_notification=cb.data == "pub:silent")
+    except Exception as e:  # noqa: BLE001 — Telegram xatosi adminga ko'rsatiladi
+        await cb.message.edit_text(t("post_failed", lang, error=escape(str(e)[:200])))
+        return
+    await sync_to_async(db.record_manual_post)(user, data.get("html", ""), sent.message_id)
+    link = f"https://t.me/{chat.lstrip('@')}/{sent.message_id}" if chat.startswith("@") else chat
+    await cb.message.edit_text(t("post_done", lang, link=link))
+
+
+@router.callback_query(F.data.regexp(r"^adm:an:(lesson|course)$"))
+async def on_announce_list(cb: CallbackQuery, user, lang):
+    if not await _staff_only(cb, user, lang):
+        return
+    await cb.answer()
+    if not await sync_to_async(db.edu_channel)():
+        await cb.message.answer(t("no_channel", lang))
+        return
+    kind = cb.data.rsplit(":", 1)[1]
+    items = await sync_to_async(db.unannounced)(kind)
+    if not items:
+        await cb.message.answer(t("nothing_to_announce", lang))
+        return
+    prefix = "pl" if kind == "lesson" else "pc"
+    await cb.message.answer(t("pick_announce", lang), reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=title, callback_data=f"{prefix}:{pk}")] for pk, title in items
+    ]))
+
+
+@router.callback_query(F.data.regexp(r"^p[lc]:\d+$"))
+async def on_announce(cb: CallbackQuery, user, lang):
+    if not await _staff_only(cb, user, lang):
+        return
+    kind = "lesson" if cb.data.startswith("pl:") else "course"
+    post = await sync_to_async(db.announce)(kind, int(cb.data[3:]), user)
+    await cb.answer()
+    if post is None:
+        await cb.message.answer(t("not_found", lang))
+    elif post.status == "sent":
+        chat = await sync_to_async(db.edu_channel)()
+        link = f"https://t.me/{chat.lstrip('@')}/{post.message_id}" if chat.startswith("@") else chat
+        await cb.message.answer(t("post_done", lang, link=link))
+    else:
+        await cb.message.answer(t("post_failed", lang, error=escape(post.error or "?")))
 
 
 @router.callback_query(F.data == "adm:req")

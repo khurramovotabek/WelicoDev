@@ -13,6 +13,17 @@ from apps.accounts.models import User
 from apps.education.models import AccessRequest, Course, Enrollment, HomeworkSubmission, Lesson
 
 from .test_bot import FakeSession, _ids
+
+
+class EduSession(FakeSession):
+    async def make_request(self, bot, method, timeout=None):
+        from aiogram.methods import CopyMessage
+        from aiogram.types import MessageId
+
+        if isinstance(method, CopyMessage):
+            self.calls.append(method)
+            return MessageId(message_id=4242)
+        return await super().make_request(bot, method, timeout)
 from .test_education import PNG
 
 STUDENT = TgUser(id=701, is_bot=False, first_name="Aziz", username="aziz", language_code="uz")
@@ -22,11 +33,14 @@ ADMIN = TgUser(id=702, is_bot=False, first_name="Otabek", username="otabek", lan
 @override_settings(TELEGRAM_BOT_TOKEN="1:MAIN", TELEGRAM_EDU_BOT_TOKEN="2:EDU", TELEGRAM_ADMIN_IDS=[], SITE_URL="https://welicodev.uz")
 class EduBotTests(TransactionTestCase):
     def setUp(self):
+        from aiogram.fsm.storage.memory import MemoryStorage
+
         from apps.telegram_bot.edu import dispatcher as d
 
-        self.session = FakeSession()
+        self.session = EduSession()
         self.bot = Bot("2:EDU", session=self.session)
         self.dp = d.get_dispatcher()
+        self.dp.fsm.storage = MemoryStorage()
         self.free = Course.objects.create(title_uz="Python", title_en="Python", subtitle="Asoslar", status="published",
                                           is_free=True, cover=SimpleUploadedFile("c.png", PNG))
         self.paid = Course.objects.create(title_uz="Django", title_en="Django", subtitle="Pro", status="published",
@@ -111,6 +125,48 @@ class EduBotTests(TransactionTestCase):
         self.feed(ADMIN, callback=f"hw:ok:{sub.pk}")
         sub.refresh_from_db()
         self.assertEqual(sub.status, "approved")
+
+    def test_admin_composes_and_publishes_channel_post(self):
+        from aiogram.methods import CopyMessage
+
+        from apps.telegram_bot.models import BotSettings, ChannelPost
+
+        bs = BotSettings.load()
+        bs.edu_channel_id = "@welicodev_education"
+        bs.save()
+        self.register(ADMIN, is_staff=True)
+        self.feed(ADMIN, callback="adm:post")
+        self.assertIn("@welicodev_education", self.last())
+        self.feed(ADMIN, text="<b>Yangi</b> kurs tez orada!")
+        self.feed(ADMIN, callback="pub:go")
+        copies = [c for c in self.session.calls if isinstance(c, CopyMessage)]
+        self.assertEqual(copies[-1].chat_id, "@welicodev_education")
+        self.assertIn("t.me/welicodev_education/4242", self.last())
+        self.assertTrue(ChannelPost.objects.filter(target="edu", message_id=4242, status="sent").exists())
+
+    def test_students_cannot_post_and_missing_channel_is_explained(self):
+        self.register()
+        self.feed(callback="adm:post")
+        self.register(ADMIN, is_staff=True)
+        self.feed(ADMIN, callback="adm:post")
+        self.assertIn("sozlanmagan", self.last())
+
+    @mock.patch("apps.telegram_bot.api.call", return_value={"message_id": 77})
+    def test_announce_lesson_goes_to_edu_channel_with_edu_token(self, call):
+        from apps.telegram_bot.models import BotSettings
+
+        bs = BotSettings.load()
+        bs.edu_channel_id = "@welicodev_education"
+        bs.save()
+        Lesson.objects.filter(pk=self.lesson.pk).update(video_url="https://youtu.be/abcdefghijk")
+        self.register(ADMIN, is_staff=True)
+        self.feed(ADMIN, callback="adm:an:lesson")
+        self.feed(ADMIN, callback=f"pl:{self.lesson.pk}")
+        payload, kwargs = call.call_args.args[1], call.call_args.kwargs
+        self.assertEqual(payload["chat_id"], "@welicodev_education")
+        self.assertEqual(kwargs["token"], "2:EDU")
+        self.lesson.refresh_from_db()
+        self.assertIsNotNone(self.lesson.posted_to_channel_at)
 
 
 @override_settings(TELEGRAM_BOT_TOKEN="1:MAIN", TELEGRAM_EDU_BOT_TOKEN="2:EDU")
