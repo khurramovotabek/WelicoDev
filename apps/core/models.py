@@ -122,7 +122,8 @@ class SiteSettings(models.Model):
     available_for_work = models.BooleanField(_("ishga ochiq"), default=True)
 
     years_experience = models.PositiveSmallIntegerField(_("tajriba (yil)"), default=3)
-    people_impacted = models.CharField(_("ta'sir qilingan odamlar"), max_length=20, blank=True, default="50K+")
+    people_impacted = models.CharField(_("ta'sir qilingan odamlar"), max_length=20, blank=True, default="",
+                                       help_text=_("Faqat haqiqiy raqam (masalan, mahsulotlaringiz foydalanuvchilari). Bo'sh — ko'rsatilmaydi"))
 
     email = models.EmailField(_("email"), blank=True)
     phone = models.CharField(_("telefon"), max_length=30, blank=True)

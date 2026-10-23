@@ -18,6 +18,7 @@ def about(request):
         "interests": Interest.objects.all()[:6],
         "journey": JourneyStep.objects.all(),
         "projects_count": Project.objects.published().count(),
+        "skills_count": Skill.objects.count(),
     })
 
 

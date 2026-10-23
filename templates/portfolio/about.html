@@ -28,7 +28,8 @@
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
       <div class="panel !p-4"><i data-lucide="coffee" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ site.years_experience }}+</div><div class="stat-label">{% trans "Yillik tajriba" %}</div></div>
       <div class="panel !p-4"><i data-lucide="file-check-2" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ projects_count }}+</div><div class="stat-label">{% trans "Yakunlangan loyihalar" %}</div></div>
-      <div class="panel !p-4"><i data-lucide="users-round" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ site.people_impacted|default:"—" }}</div><div class="stat-label">{% trans "Foydalanuvchilar" %}</div></div>
+      {% if site.people_impacted %}<div class="panel !p-4"><i data-lucide="users-round" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ site.people_impacted }}</div><div class="stat-label">{% trans "Foydalanuvchilar" %}</div></div>
+      {% else %}<div class="panel !p-4"><i data-lucide="cpu" class="w-6 h-6 mb-3"></i><div class="stat-num">{{ skills_count }}+</div><div class="stat-label">{% trans "Texnologiyalar" %}</div></div>{% endif %}
       <div class="panel !p-4"><i data-lucide="infinity" class="w-6 h-6 mb-3"></i><div class="stat-num">∞</div><div class="stat-label">{% trans "Qiziquvchanlik" %}</div></div>
     </div>
   </div>

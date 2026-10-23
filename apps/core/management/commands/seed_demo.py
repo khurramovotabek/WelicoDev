@@ -271,7 +271,8 @@ class Command(BaseCommand):
                     c = ProjectChallenge(project=p, order=j)
                     tr(c, "text", t)
                     c.save()
-                for j, (v, lbl, ic) in enumerate([("10K+", "Active users", "users"), ("50K+", "Products", "package"), ("99.9%", "Uptime", "activity"), ("4.9/5", "User rating", "star")]):
+                # Faqat haqiqiy ko'rsatkichlar (prod baza, 2026-10-23)
+                for j, (v, lbl, ic) in enumerate([("15", "Branches", "map-pin"), ("40", "Brands", "badge-check"), ("73", "Flavours", "candy"), ("23", "Backend modules", "boxes")]):
                     r = ProjectResult(project=p, order=j, value=v, icon=ic)
                     tr(r, "label", lbl)
                     r.save()
