@@ -9,8 +9,9 @@ import wave
 from django.core.files.base import ContentFile
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-FONT_BOLD = "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"
-FONT_REG = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf"
+# Ubuntu — lokal mashinada; DejaVu — Docker image'da (fonts-dejavu-core)
+FONT_BOLD = ("/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
+FONT_REG = ("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
 
 PALETTES = [
     ((12, 22, 54), (46, 86, 180), (120, 170, 255)),
@@ -22,11 +23,13 @@ PALETTES = [
 ]
 
 
-def _font(path, size):
-    try:
-        return ImageFont.truetype(path, size)
-    except OSError:
-        return ImageFont.load_default()
+def _font(paths, size):
+    for path in paths:
+        try:
+            return ImageFont.truetype(path, size)
+        except OSError:
+            continue
+    return ImageFont.load_default(size)
 
 
 def landscape(seed, size=(1600, 1000), title=None):
@@ -132,12 +135,22 @@ def ambient_wav(seed, seconds=18, rate=22050):
 
 
 def logo_tile(seed, text, size=256):
+    """Kompaniya monogrammasi: gradient fon, yumshoq yorug'lik va katta harflar."""
     top, mid, glow = PALETTES[seed % len(PALETTES)]
-    img = Image.new("RGB", (size, size), (250, 250, 255))
+    img = Image.new("RGB", (size, size), top)
     d = ImageDraw.Draw(img)
-    f = _font(FONT_BOLD, int(size * 0.36))
+    for y in range(size):
+        k = y / size
+        d.line([(0, y), (size, y)], fill=tuple(int(mid[i] + (top[i] - mid[i]) * k) for i in range(3)))
+    halo = Image.new("L", (size, size), 0)
+    ImageDraw.Draw(halo).ellipse([-size * 0.3, -size * 0.4, size * 0.8, size * 0.6], fill=120)
+    img = Image.composite(Image.new("RGB", (size, size), glow), img, halo.filter(ImageFilter.GaussianBlur(size // 5)))
+    d = ImageDraw.Draw(img)
+    f = _font(FONT_BOLD, int(size * (0.42 if len(text) <= 2 else 0.3)))
     bbox = d.textbbox((0, 0), text, font=f)
-    d.text(((size - bbox[2]) / 2, (size - bbox[3]) / 2 - 10), text, font=f, fill=top)
+    x = (size - (bbox[2] - bbox[0])) / 2 - bbox[0]
+    y = (size - (bbox[3] - bbox[1])) / 2 - bbox[1]
+    d.text((x, y), text, font=f, fill=(255, 255, 255))
     return _jpeg(img)
 
 

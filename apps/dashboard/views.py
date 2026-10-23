@@ -69,7 +69,8 @@ def _kpi(model, date_field="created_at", qs=None):
 
 
 def _daily(qs, field, start):
-    rows = qs.filter(**{f"{field}__date__gte": start}).annotate(d=TruncDate(field)).values("d").annotate(n=Count("id"))
+    # order_by() — Meta.ordering (created_at) GROUP BY'ni kun o'rniga yozuv bo'yicha bo'lib yubormasin
+    rows = qs.filter(**{f"{field}__date__gte": start}).order_by().annotate(d=TruncDate(field)).values("d").annotate(n=Count("id"))
     return {r["d"]: r["n"] for r in rows}
 
 
@@ -112,7 +113,7 @@ def home(request):
         "users": [new_users.get(d, 0) for d, _v in visits],
         "comments": [new_comments.get(d, 0) for d, _v in visits],
     }
-    langs = dict(User.objects.filter(is_staff=False).values_list("language").annotate(n=Count("id")))
+    langs = dict(User.objects.filter(is_staff=False).order_by().values_list("language").annotate(n=Count("id")))
     lang_donut = donut([("O'zbekcha", langs.get("uz", 0)), ("Русский", langs.get("ru", 0)), ("English", langs.get("en", 0))])
 
     activity = []
@@ -510,7 +511,7 @@ def bot(request):
     since = timezone.now() - timedelta(days=30)
     start = timezone.localdate() - timedelta(days=13)
     events = BotEvent.objects.filter(created_at__gte=since)
-    by_kind = dict(events.values_list("kind").annotate(n=Count("id")))
+    by_kind = dict(events.order_by().values_list("kind").annotate(n=Count("id")))
     daily_starts = _daily(BotEvent.objects.filter(kind="start"), "created_at", start)
     daily_logins = _daily(BotEvent.objects.filter(kind__in=["login_code", "login_confirm"]), "created_at", start)
     labels = [start + timedelta(days=i) for i in range(14)]

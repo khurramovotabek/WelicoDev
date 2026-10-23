@@ -113,7 +113,8 @@ def experience_list(request):
         # Ta'lim alohida bo'limda ko'rsatiladi
         items = items.exclude(kind=Experience.Kind.EDUCATION)
     all_items = Experience.objects.filter(is_published=True)
-    by_kind = all_items.values("kind").annotate(n=Count("id"))
+    # order_by() — Meta.ordering GROUP BY'ga qo'shilib, har yozuvni alohida guruh qilmasin
+    by_kind = all_items.order_by().values("kind").annotate(n=Count("id")).order_by("-n")
     distribution = donut([(Experience.Kind(r["kind"]).label, r["n"]) for r in by_kind])
     return render(request, "portfolio/experience.html", {
         "hero": get_hero("experience"),
