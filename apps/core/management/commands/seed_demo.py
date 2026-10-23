@@ -72,15 +72,16 @@ class Command(BaseCommand):
             "Я Отабек, Python Backend Engineer. Строю масштабируемые системы, решаю сложные задачи и превращаю идеи в реальные продукты.",
         )
         tr(s, "hero_badges", "Dasturchi, Inson, Kashfiyotchi", "Developer, Human, Explorer", "Разработчик, Человек, Исследователь")
-        tr(s, "location", "Toshkent, O'zbekiston", "Tashkent, Uzbekistan", "Ташкент, Узбекистан")
+        tr(s, "location", "Toshkent, Shayxontohur, Qoratosh 60B", "Tashkent, Shaykhantakhur, Qoratosh 60B", "Ташкент, Шайхантахур, Караташ 60Б")
         tr(s, "working_hours", "Du - Ju, 9:00 - 18:00", "Mon - Fri, 9:00 - 18:00", "Пн - Пт, 9:00 - 18:00")
         tr(s, "response_time", "24 soat", "24 hours", "24 часа")
         tr(s, "meta_description", "Otabek — Python Backend Engineer. Loyihalar, maqolalar va video kurslar.",
            "Otabek — Python Backend Engineer. Projects, articles and video courses.",
            "Отабек — Python Backend Engineer. Проекты, статьи и видеокурсы.")
-        s.email = "hello@welicodev.uz"
-        s.phone = "+998 90 123 45 67"
-        s.map_url = "https://maps.google.com/?q=Tashkent"
+        s.email = "xurramovotabek568@gmail.com"
+        s.phone = "+998 94 275 56 38"
+        s.latitude, s.longitude, s.map_zoom = 41.317029, 69.239155, 15
+        s.map_url = "https://maps.google.com/?q=41.317029,69.239155"
         s.years_experience = 3
         s.save()
 
